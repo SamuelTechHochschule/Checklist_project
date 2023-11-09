@@ -7,13 +7,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "test": "mocha"
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "chai": "^4.3.10",
-    "mocha": "^10.2.0",
+    "test": "mocha test",
     "nuxt": "^3.8.1",
     "ts-node": "^10.9.1",
     "vue": "^3.3.8",
