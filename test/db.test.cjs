@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const db = require('../server/db');
+const db = require('../server/db.cjs');
 
 describe('Datenbankverbindung', () => {
     it('Sollte eine erfolgreiche Verbindung zur Datenbank herstellen', async () => {

@@ -1,5 +1,4 @@
 const pgp = require('pg-promise')();
-const { init } = require('pg-promise-transaction');
 
 require('dotenv').config();
 
@@ -14,9 +13,8 @@ const connectionOptions = {
 };
 
 const pgpConfig = pgp({ capSQL: true });
-const pgpWithTransaction = init(pgpConfig);
 
-const db = pgpWithTransaction(connectionOptions);
+const db = pgp(connectionOptions);
 
 db.connect()
     .then((obj) => {
