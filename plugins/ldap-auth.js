@@ -6,9 +6,9 @@ const ldapClient = ldap.createClient({
 
 export default({ app }, inject => {
     inject('ldapAuth', {
-        async authenticate(email, password) {
+        async authenticate(username, password) {
             return new Promise((resolve, reject) => {
-                const bindDN = `uid=${email}, ou=users, dc=example, dc=com`;
+                const bindDN = `uid=${username}, ou=users, dc=example, dc=com`;
 
                 ldapClient.bind(bindDN, password, (err) => {
                     if(err){

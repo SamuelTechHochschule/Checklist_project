@@ -8,8 +8,8 @@
     <div class="login-box">
         <div class="email">
             <form @submit.prevent="onSubmit">
-                <label for="email">Email:</label>
-                <input v-model="email" type="text" id="email" required>
+                <label for="username">Email:</label>
+                <input v-model="username" type="text" id="username" required>
 
                 <label for="password">Password:</label>
                 <input v-model="password" type="password" id="password" required>
@@ -24,14 +24,14 @@
     export default{
         data(){
             return{
-                email: '',
+                username: '',
                 password: '',
             };
         },
         methods: {
             async onSubmit(){
                 try{
-                    await this.$ldapAuth.authenticate(this.email, this.password);
+                    await this.$ldapAuth.authenticate(this.username, this.password);
                     this.$router.push('#');
                 } catch (error){
                     console.error('LDAP Login error:', error.message);
