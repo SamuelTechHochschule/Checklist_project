@@ -21,8 +21,6 @@
 </template>
 
 <script>
-    import { useAuthStore } from '~/store/auth';
-
     export default{
         data(){
             return{
@@ -33,9 +31,10 @@
         methods: {
             async onSubmit(){
                 try{
-                    await useAuthStore.login(this.email, this.password);
-                }catch(error){
-                    console.error('Login error:', error.message);
+                    await this.$ldapAuth.authenticate(this.email, this.password);
+                    this.$router.push('#');
+                } catch (error){
+                    console.error('LDAP Login error:', error.message);
                 }
             }
         }

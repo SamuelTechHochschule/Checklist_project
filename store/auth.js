@@ -1,4 +1,3 @@
-import { createPinia } from 'pinia';
 import { pinia } from './index';
 import db from '~/server/db.cjs';
 
