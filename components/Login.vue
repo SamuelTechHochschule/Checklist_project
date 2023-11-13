@@ -21,24 +21,30 @@
 </template>
 
 <script>
+    import { useAuthStore } from '~/store/auth';
+
     export default{
-        data(){
-            return{
-                username: '',
-                password: '',
+        setup() {
+            const authStore = useAuthStore();
+
+            const username = ref('');
+            const password = ref('');
+
+            const login = async () => {
+                try{
+                    await authStore.loginUser(username.value, password.value);
+                    console.log('Anmeldung erfolgreich');
+                } catch (error) {
+                    console.error('Login error:', error);
+                }
+            };
+            return {
+                username, 
+                password,
+                login,
             };
         },
-        methods: {
-            async onSubmit(){
-                try{
-                    await this.$ldapAuth.authenticate(this.username, this.password);
-                    this.$router.push('#');
-                } catch (error){
-                    console.error('LDAP Login error:', error.message);
-                }
-            }
-        }
-    }
+    };
 </script>
 
 <style scoped>

@@ -1,33 +1,23 @@
-import { pinia } from './index';
-import db from '~/server/db.cjs';
+import { defineStore } from "pinia";
+import axios from 'axios';
 
-export const useAuthStore = pinia.defineStore({
-    id: 'auth',
-    state: () => ({
-        isAuthenticated: false,
-        user: null,
-    }),
-    actions:{
-        async login(email, password){
+export const useAuthStore = defineStore('auth', {
+    state: () => ({}),
+
+    actions: {
+        async loginUser(username, password) {
             try{
-                const user = await db.oneOrNone('SELECT * FROM coworker WHERE email = $1 AND password = $2', [email, password]);
+                const response = await axios.post('http://localhost:8080/auth/login', {
+                    username: username,
+                    password: password,
+                });
 
-                if(user){
-                    this.isAuthenticated = true;
-                    this.user = user;
-                }else{
-                    throw new Error('Invalid credentials');
-                }
-            }catch(error){
-                console.error('Login error', error.message);
-                throw new Error('Login failed');
+                console.log(response.data);
+            } catch (error) {
+                console.error('Authentication error', error);
             }
         },
 
-        logout(){
-            this.isAuthenticated = false;
-            this.user = null;
-        },
+        
     },
 });
-
