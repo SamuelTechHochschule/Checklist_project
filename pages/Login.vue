@@ -85,4 +85,15 @@
     .email{
         margin-top: 15px
     }
+    input{
+        display: block;
+        margin-bottom: 30px;
+    }
+    label{
+        display: block;
+        margin-bottom: 5px;
+    }
+    button{
+        text-align: right;
+    }
 </style>
