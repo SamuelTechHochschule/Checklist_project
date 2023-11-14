@@ -14,7 +14,7 @@
                 <label for="password">Password:</label>
                 <input v-model="password" type="password" id="password" required>
 
-                <button type="submit">Weiter</button>
+                <button type="submit" @click="login">Weiter</button>
             </form>
         </div>
     </div>
@@ -34,11 +34,13 @@
                 try{
                     await authStore.loginUser(username.value, password.value);
                     console.log('Anmeldung erfolgreich');
+                    this.$route.push('/Checklist');
                 } catch (error) {
                     console.error('Login error:', error);
                 }
             };
             return {
+                authStore,
                 username, 
                 password,
                 login,
@@ -95,5 +97,9 @@
     }
     button{
         text-align: right;
+    }
+    .Meldung{
+        display: block;
+        margin-bottom: 30px;
     }
 </style>
