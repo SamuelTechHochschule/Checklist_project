@@ -7,20 +7,59 @@
     </div>
     <div class="login-box">
         <div class="email">
-            <form @submit.prevent="onSubmit">
+            <form @submit.prevent="loginUser">
                 <label for="username">Email:</label>
                 <input v-model="username" type="text" id="username" required>
 
                 <label for="password">Password:</label>
                 <input v-model="password" type="password" id="password" required>
 
-                <button type="submit" @click="login">Weiter</button>
+                <button type="submit">Weiter</button>
             </form>
         </div>
     </div>
 </template>
 
 <script>
+
+    export default{
+        data(){
+            return {
+                username: '',
+                password: '',
+                loginToken: '',
+            };
+        },
+        methods: {
+            async loginUser() {
+                try {
+                    const response = await fetch('http://localhost:3000/login', {
+                        method: 'POST', 
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: this.username,
+                            password: this.password,
+                        }),
+                    });
+
+                    if (response.ok){
+                        const user = await response.json();
+                        this.loginToken = user.loginToken;
+
+                        console.log('Login successful:', user);
+                    } else {
+                        console.error('Login error:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Network error:', error);
+                }
+            },
+        },
+    };
+
+/*
     import { useAuthStore } from '~/store/auth';
 
     export default{
@@ -47,6 +86,7 @@
             };
         },
     };
+*/   
 </script>
 
 <style scoped>
