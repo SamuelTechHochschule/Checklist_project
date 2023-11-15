@@ -95,9 +95,6 @@
 
 <style scoped>
 
-    body{
-
-    }
     .navbar{
         display: flex;
         justify-content: center;
