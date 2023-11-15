@@ -9,12 +9,14 @@
         <div class="email">
             <form @submit.prevent="loginUser">
                 <label for="username">Email:</label>
-                <input v-model="username" type="text" id="username" required>
+                <input v-model="username" type="text" id="username" placeholder="Your Email" required>
 
                 <label for="password">Password:</label>
-                <input v-model="password" type="password" id="password" required>
+                <input v-model="password" type="password" id="password" placeholder="Your password" required>
 
-                <button type="submit">Weiter</button>
+                <p class="forgotpw">Forgot your password?</p>
+
+                <button class="weiter-button" type="submit">Weiter</button>
             </form>
         </div>
     </div>
@@ -92,6 +94,10 @@
 </script>
 
 <style scoped>
+
+    body{
+
+    }
     .navbar{
         display: flex;
         justify-content: center;
@@ -127,21 +133,52 @@
     }
 
     .email{
-        margin-top: 15px
+        margin-top: 15px;
+        width: 300px;
     }
     input{
         display: block;
-        margin-bottom: 30px;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        width: 300px;
+        height: 25px;
+        border: none;
+        border-bottom: 3px solid #71A2D2;
+        background-color: #D6D6D6;
+        font-size: small;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
     label{
+        text-align: left;
         display: block;
-        margin-bottom: 5px;
+        margin-bottom: 13px;
+        color: #7C97AE;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
-    button{
+    .weiter-button{
+        background-color: #71A2D2;
+        border: none;
+        color: white;
+        padding: 8px 30px;
+        text-decoration: none;
+        display: flex;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 30px;
+        margin-left: 200px;
+        border-radius: 4px;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .weiter-button:hover{
+        background-color: #447bb3;
+
+    }
+    .forgotpw{
         text-align: right;
-    }
-    .Meldung{
-        display: block;
-        margin-bottom: 30px;
+        color: #7C97AE;
+        font-size: x-small;
+        margin-bottom: 10px;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
 </style>
