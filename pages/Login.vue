@@ -35,7 +35,7 @@
         methods: {
             async loginUser() {
                 try {
-                    const response = await fetch('http://localhost:8080/auth/login', {
+                    const response = await fetch('/login', {
                         method: 'POST', 
 //                        mode: 'no-cors',
                         headers: {
@@ -49,10 +49,17 @@
                     });
 
                     if (response.ok){
-                        const user = await response.json();
-                        this.loginToken = user.loginToken;
+                        try {
+                            
+                            const user = await response.json();
+                            this.loginToken = user.loginToken;
 
-                        console.log('Login successful:', user);
+                            console.log('Login successful:', user);
+                        } catch (jsonError) {
+
+                            console.error('Error parsing json:', jsonError);
+                        }
+
                     } else {
                         console.error('Login error:', response.statusText);
                     }
