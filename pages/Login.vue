@@ -35,7 +35,7 @@
         methods: {
             async loginUser() {
                 try {
-                    const response = await fetch('http://localhost:5500/', {
+                    const response = await fetch('http://localhost:5500/login', {
                         method: 'POST', 
 //                        mode: 'no-cors',
                         headers: {
