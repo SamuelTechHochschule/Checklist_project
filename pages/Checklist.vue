@@ -73,24 +73,31 @@ export default {
         max-height: 100%;
         width: 30px;
         height: 50px;
+        margin-top: 15px;
     }
     .view{
         max-width: 100%;
         max-height: 100%;
         width: 55px;
         height: 50px;
+        margin-top: 15px;
     }
     .filter{
         max-width: 100%;
         max-height: 100%;
         width: 50px;
         height: 45px; 
+        margin-top: 15px;
     }
     .user{
         max-width: 100%;
         max-height: 100%;
         width: 50px;
         height: 50px;  
+        margin-top: 15px;
+    }
+    .filter-block p{
+        margin-bottom: 10px;
     }
     
 </style>
