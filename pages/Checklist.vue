@@ -20,6 +20,12 @@
                     <p>Filter</p>
                 </div>
             </li>
+            <li>
+                <div class="account-block">
+                    <img src="~/assets/User.png" alt="User" class="user">
+                    <p>User</p>
+                </div>
+            </li>
         </ul>
     </div>
 </template>
@@ -57,6 +63,12 @@ export default {
         max-height: 100%;
         width: 60px;
         height: 55px; 
+    }
+    .user{
+        max-width: 100%;
+        max-height: 100%;
+        width: 60px;
+        height: 60px;  
     }
     
 </style>
