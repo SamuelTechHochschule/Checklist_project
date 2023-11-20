@@ -44,13 +44,17 @@ export default {
         max-height: 100%;
         width: 125px;
         height: 125px;
+        position: absolute;
+        left: 0;
     }
     ul{
         list-style-type: none;
         margin: 0;
         padding: 0;
         overflow: hidden;
+
     }
+
     li{
         float: right;
     }
@@ -67,17 +71,14 @@ export default {
     .version{
         max-width: 100%;
         max-height: 100%;
-        width: 40px;
-        height: 60px;
-    }
-    .version-block{
-        color: #00315E;
+        width: 30px;
+        height: 50px;
     }
     .view{
         max-width: 100%;
         max-height: 100%;
-        width: 65px;
-        height: 60px;
+        width: 55px;
+        height: 50px;
     }
     .filter{
         max-width: 100%;
