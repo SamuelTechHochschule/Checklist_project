@@ -70,13 +70,13 @@ export default {
             checklistItems: [],
         };
     },
-    asynch fetch(){
+    async fetch(){
         await this.fetchChecklistItems();
     },
     methods: {
         async fetchChecklistItems() {
             try{
-                const response = await fetch('/api/checklist');
+                const response = await fetch('http://localhost:5500/api/checklist');
                 const data = await response.json();
                 this.checklistItems = data;
             } catch (error) {
@@ -146,5 +146,40 @@ export default {
     }
     h2{
         color:#00315E;
+    }
+    *{
+            box-sizing: border-box;
+        }
+    .row{
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+    .column{
+        float: left;
+        width: 50%;
+        padding:5px;
+    }
+    .row::after{
+        content: "";
+        clear: both;
+        display: table;
+    }
+    table{
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        border: 1px solid #000000;
+    }
+    th, td{
+        text-align: left;
+        padding: 16px;
+    }
+    tr:nth-child(even){
+        background-color: #cccccc;
+        border: 1px solid #000000;
+    }
+    tr:nth-child(odd){
+        background-color: #f2f2f2;
+        border: 1px solid #000000;
     }
 </style>
