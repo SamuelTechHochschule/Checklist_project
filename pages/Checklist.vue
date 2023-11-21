@@ -31,6 +31,7 @@
             </li>
         </ul>
         <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
+        <h2>Abteilung: R&D</h2>
 </template>
 
 <script>
