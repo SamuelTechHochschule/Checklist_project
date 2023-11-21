@@ -71,15 +71,29 @@ export default {
         };
     },
     async fetch(){
-        await this.fetchChecklistItems();
+        try{
+            await this.fetchChecklistItems();
+        } catch (error) {
+            console.error("Error in fetch hook:", error);
+        }
     },
     methods: {
         async fetchChecklistItems() {
             try{
                 const response = await fetch('http://localhost:5500/api/checklist');
+
+                if(!response.ok){
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+
                 const data = await response.json();
+
+                if(!data || !Array.isArray(data)) {
+                    throw new Error('Invalid response format');
+                }
+                
                 this.checklistItems = data;
-            } catch (error) {
+            } catch (error) {ö
                 console.error('Error fetching checklist items:', error);
             }
         },
