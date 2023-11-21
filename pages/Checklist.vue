@@ -1,14 +1,14 @@
 <template>
-        <ul>
+        <ul class="nav-bar">
             <li>
                 <div class="logo-block" href="/">
                     <img src="~/assets/Logo.png" alt="Logo" class="logo">
                 </div>
             </li>
             <li>
-                <div class="account-block">
-                    <img src="~/assets/User.png" alt="User" class="user">
-                    <p>User</p>
+                <div class="version-block" href="#">
+                    <img src="~/assets/Version.png" alt="Version" class="version">
+                    <p>Version</p>
                 </div>
             </li>
             <li>
@@ -24,9 +24,9 @@
                 </div>
             </li>
             <li>
-                <div class="version-block" href="#">
-                    <img src="~/assets/Version.png" alt="Version" class="version">
-                    <p>Version</p>
+                <div class="account-block">
+                    <img src="~/assets/User.png" alt="User" class="user">
+                    <p>User</p>
                 </div>
             </li>
         </ul>
@@ -47,57 +47,45 @@ export default {
         position: absolute;
         left: 0;
     }
-    ul{
+    .nav-bar{
         list-style-type: none;
         margin: 0;
         padding: 0;
         overflow: hidden;
-
+        display: flex;
     }
-
     li{
-        float: right;
-    }
-    li:first-child{
-        float: left;
+        margin-left: auto;
     }
     li div{
-        display: block;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         color: #00315E;
-        text-align: center;
-        padding: 0px 50px;
+        padding: 0px 0px;
         text-decoration: none;
     }
-    .version{
+    .version, .view, .filter, .user{
         max-width: 100%;
         max-height: 100%;
+        margin-top: 15px;
+    }
+    .version{
         width: 30px;
         height: 50px;
-        margin-top: 15px;
     }
     .view{
-        max-width: 100%;
-        max-height: 100%;
         width: 55px;
         height: 50px;
-        margin-top: 15px;
     }
     .filter{
-        max-width: 100%;
-        max-height: 100%;
         width: 50px;
         height: 45px; 
-        margin-top: 15px;
+        margin-bottom: 5px;
     }
     .user{
-        max-width: 100%;
-        max-height: 100%;
         width: 50px;
         height: 50px;  
-        margin-top: 15px;
-    }
-    .filter-block p{
-        margin-bottom: 10px;
     }
     
 </style>
