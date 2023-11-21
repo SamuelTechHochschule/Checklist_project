@@ -30,6 +30,7 @@
                 </div>
             </li>
         </ul>
+        <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
 </template>
 
 <script>
@@ -95,5 +96,7 @@ export default {
         height: 50px;  
         margin-top: 15px;
     }
-    
+    h2{
+        color:#00315E;
+    }
 </style>
