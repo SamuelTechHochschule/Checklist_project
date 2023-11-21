@@ -35,6 +35,13 @@
         methods: {
             async loginUser() {
                 try {
+                    if(this.username === "dummyUser" && this.password === "dummyPassword") {
+                        this.loginToken = "dummyToken";
+                        console.log("Login successful (Dummy):", this.loginToken);
+
+                        this.$router.push("/checklist");
+                        return;
+                    }
                     const response = await fetch('http://localhost:5500/', {
                         method: 'POST', 
 //                        mode: 'no-cors',
@@ -55,6 +62,7 @@
                             this.loginToken = user.loginToken;
 
                             console.log('Login successful:', user);
+                            this.$router.push("/checklist");
                         } catch (jsonError) {
 
                             console.error('Error parsing json:', jsonError);
