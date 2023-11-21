@@ -32,12 +32,59 @@
         </ul>
         <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
         <h2>Abteilung: R&D</h2>
+
+        <div class="row">
+            <div class="column">
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Erledigungspunkte aus dem PEP</th>
+                            <th>FB / Abt.</th>
+                            <th>Person</th>
+                            <th>Termin geplant</th>
+                            <th>Termin erledigt</th>
+                            <th>Unterschrift erledigt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in checklistItems" :key="item.id">
+                            <td>{{ item.number }}</td>
+                            <td>{{ item.task }}</td>
+                            <td>{{ item.department }}</td>
+                            <td>{{ item.person }}</td>
+                            <td>{{ item.plannedDate }}</td>
+                            <td>{{ item.completedDate }}</td>
+                            <td>{{ item.signature }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 </template>
 
 <script>
 export default {
-    
-}
+    data(){
+        return{
+            checklistItems: [],
+        };
+    },
+    asynch fetch(){
+        await this.fetchChecklistItems();
+    },
+    methods: {
+        async fetchChecklistItems() {
+            try{
+                const response = await fetch('/api/checklist');
+                const data = await response.json();
+                this.checklistItems = data;
+            } catch (error) {
+                console.error('Error fetching checklist items:', error);
+            }
+        },
+    },
+};
 </script>
 
 <style scoped>
