@@ -82,19 +82,37 @@ export default {
                 return;
             }
 
-            this.$emit('taskAdded', {
-                number: this.checklistItems.length + 1,
-                task: this.newTask.task,
-                department: this.newTask.department,
-                person: this.newTask.person,
-                plannedDate: this.newTask.plannedDate,
-                completedDate: '',
-                signature: '',
-                colorClass_pv,
-                colorClass_rv,
-            });
-
-            this.closeModal();
+            fetch('http://localhost:5500/api/checklist/addTask', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    number: this.checklistItems.length + 1,
+                    task: this.newTask.task,
+                    department: this.newTask.department,
+                    person: this.newTask.person,
+                    plannedDate: this.newTask.plannedDate,
+                    completedDate: '',
+                    signature: '',
+                    colorClass_pv,
+                    colorClass_rv,
+                }),
+            })
+            .then(response => {
+                if(!response.ok){
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Task added successfully:', data);
+                this.$emit('taskAdded');
+                this.closeModal();
+            })
+            .catch(error => {
+                console.error('Error adding task:', error);
+            })
         },
         resetNewTask() {
             this.newTask = {
