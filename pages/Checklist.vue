@@ -35,7 +35,9 @@
 
         <h2>Abteilung: R&D</h2>
 
-        <button class="add-Task-Button" @click="openAddTaskModal">Task hinzufügen</button>
+        <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
+
+        <AddTaskModal ref="addTaskModal" />
 
         <div class="row">
             <div class="column">
@@ -68,62 +70,55 @@
 </template>
 
 <script>
+import AddTaskModal from '~/components/AddTaskModal.vue';
+
 export default {
-    data(){
-        return{
+    components: {
+        AddTaskModal,
+    },
+    data() {
+        return {
             checklistItems: [],
-            isAddTaskModalOpen: false,
-            newTask: {
-                task: '',
-                department: '',
-                person: '',
-                plannedDate: '',
-                isPreliminary: '',
-                isRelease: '',
-            },
         };
     },
-    created(){
+    created() {
         this.fetchChecklistItems();
     },
-/*    
-    async fetch(){
-        try{
-            await this.fetchChecklistItems();
-        } catch (error) {
-            console.error("Error in fetch hook:", error);
-        }
-    },
-*/    
+    /*
+        async fetch(){
+            try{
+                await this.fetchChecklistItems();
+            } catch (error) {
+                console.error("Error in fetch hook:", error);
+            }
+        },
+    */
     methods: {
         async fetchChecklistItems() {
-            try{
+            try {
                 const response = await fetch('http://localhost:5500/api/checklist');
-
-                if(!response.ok){
+                if (!response.ok) {
                     throw new Error(`Server responded with status ${response.status}`);
                 }
-
                 const data = await response.json();
-
-                if(!data || !Array.isArray(data)) {
+                if (!data || !Array.isArray(data)) {
                     throw new Error('Invalid response format');
                 }
-
                 this.checklistItems = data;
-            } catch (error) {
+            }
+            catch (error) {
                 console.error('Error fetching checklist items:', error);
             }
         },
-
-        formatDate(dateString){
-
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric'};
+        formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             const date = new Date(dateString);
             return date.toLocaleDateString('de-DE', options);
         },
+        openModal() {
+            this.$refs.addTaskModal.openModal();
+        }
     },
-
 };
 </script>
 

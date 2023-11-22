@@ -41,13 +41,16 @@ export default {
         };
     },
     methods: {
+
         openModal() {
             this.isOpen = true;
         },
+
         closeModal() {
             this.isOpen = false;
             this.resetNewTask();
         },
+        
         addTask() {
 
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
