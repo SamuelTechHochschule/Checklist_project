@@ -37,7 +37,7 @@
 
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
-        <AddTaskModal ref="addTaskModal" />
+        <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
         <div class="row">
             <div class="column">
@@ -54,7 +54,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in checklistItems" :key="item.id">
+                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv, 'cyan-row': item.colorClass_rv}">
                             <td>{{ item.number }}</td>
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -73,26 +73,20 @@
 import AddTaskModal from '~/components/AddTaskModal.vue';
 
 export default {
+
     components: {
         AddTaskModal,
     },
+
     data() {
         return {
             checklistItems: [],
         };
     },
+
     created() {
         this.fetchChecklistItems();
     },
-    /*
-        async fetch(){
-            try{
-                await this.fetchChecklistItems();
-            } catch (error) {
-                console.error("Error in fetch hook:", error);
-            }
-        },
-    */
     methods: {
         async fetchChecklistItems() {
             try {
@@ -105,8 +99,7 @@ export default {
                     throw new Error('Invalid response format');
                 }
                 this.checklistItems = data;
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error fetching checklist items:', error);
             }
         },
@@ -223,7 +216,12 @@ export default {
         right: 10px;
         height: 30px;
     }
-
+    .blue-row{
+        background-color: blue;
+    }
+    .cyan-row{
+        background-color: cyan;
+    }
 
 
 </style>

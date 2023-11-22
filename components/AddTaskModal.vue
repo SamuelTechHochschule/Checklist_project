@@ -20,7 +20,7 @@
                 <input v-model="newTask.isRelease" type="checkbox" />
             </label>
             <button @click="addTask">Bestätigen</button>
-            <button @click="closeAddTaskModal">Abbrechen</button>
+            <button @click="closeModal">Abbrechen</button>
         </div>
     </div>
 </template>
@@ -53,6 +53,9 @@ export default {
         
         addTask() {
 
+            const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
+            const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
+
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
                 alert('Bitte füllen Sie alle Felder aus!');
                 return;
@@ -63,10 +66,7 @@ export default {
                 return;
             }
 
-            const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
-            const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
-
-            this.checklistItems.push({
+            this.$emit('taskAdded', {
                 number: this.checklistItems.length + 1,
                 task: this.newTask.task,
                 department: this.newTask.department,
@@ -124,10 +124,5 @@ export default {
         text-decoration: none;
         cursor: pointer; 
     }
-    .blue-row{
-        background-color: blue;
-    }
-    .cyan-row{
-        background-color: cyan;
-    }
+
 </style>
