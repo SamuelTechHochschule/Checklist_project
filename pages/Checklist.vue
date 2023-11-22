@@ -228,13 +228,6 @@ export default {
         right: 10px;
         height: 30px;
     }
-    .blue-row{
-        background-color: blue;
-    }
-    .cyan-row{
-        background-color: cyan;
-    }
-
 
 
 

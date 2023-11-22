@@ -121,4 +121,10 @@ export default {
         text-decoration: none;
         cursor: pointer; 
     }
+    .blue-row{
+        background-color: blue;
+    }
+    .cyan-row{
+        background-color: cyan;
+    }
 </style>
