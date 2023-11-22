@@ -1,26 +1,42 @@
 <template>
     <div class="modal" v-if="isOpen">
         <div class="modal-content">
-            <span class="close" @click="closeModal">$times;</span> 
+<!--            <span class="close" @click="closeModal">x</span> -->
             <h3>Task hinzufügen</h3>
             <label>Aufgabenbeschreibung:</label>
             <input v-model="newTask.task" type="text" />
-            <label>Abteilung:</label>
-            <input v-model="newTask.department" type="text" />
-            <label>Person:</label>
-            <input v-model="newTask.person" type="text" />
-            <label>Termin geplant:</label>
-            <input v-model="newTask.plannedDate" type="text" />
-            <label>
-                Preliminary Version
-                <input v-model="newTask.isPreliminary" type="checkbox" />
-            </label>
-            <label>
-                Release Version
-                <input v-model="newTask.isRelease" type="checkbox" />
-            </label>
-            <button @click="addTask">Bestätigen</button>
-            <button @click="closeModal">Abbrechen</button>
+            
+            <div class="form-row">
+                <div class="form-column">
+                    <label>Verantwortliche Abteilung:</label>
+                    <input v-model="newTask.department" type="text" />
+                </div>
+
+                <div class="form-column">
+                    <label>Verantwortliche Person:</label>
+                    <input v-model="newTask.person" type="text" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-column">
+                    <label>Geplanter Termin:</label>
+                    <input v-model="newTask.plannedDate" type="text" />
+                </div>
+
+                <div class="form-column">
+                    <label>Preliminary Version:</label>
+                    <input v-model="newTask.isPreliminary" type="checkbox" />
+                </div>
+
+                <div class="form-column">
+                    <label>Release Version:</label>
+                    <input v-model="newTask.isRelease" type="checkbox" />
+                </div>
+            </div>
+            <div class="form-row">
+                <button @click="closeModal">Abbrechen</button>
+                <button @click="addTask">Bestätigen</button>
+            </div>
         </div>
     </div>
 </template>
@@ -111,6 +127,18 @@ export default {
         padding: 20px;
         border: 1px solid #888;
         width: 60%;
+    }
+    .form-row{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .form-column{
+        flex: 1;
+        margin-right: 10px;
+    }
+    .form-column:last-child{
+        margin-right: 0;
     }
     .close{
         color: #add;
