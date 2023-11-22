@@ -53,8 +53,8 @@
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
                             <td>{{ item.person }}</td>
-                            <td>{{ item.plannedDate }}</td>
-                            <td>{{ item.completedDate }}</td>
+                            <td>{{ formatDate(item.plannedDate) }}</td>
+                            <td>{{ formatDate(item.completedDate) }}</td>
                             <td>{{ item.signature }}</td>
                         </tr>
                     </tbody>
@@ -70,7 +70,10 @@ export default {
             checklistItems: [],
         };
     },
-   
+    created(){
+        this.fetchChecklistItems();
+    },
+/*    
     async fetch(){
         try{
             await this.fetchChecklistItems();
@@ -78,6 +81,7 @@ export default {
             console.error("Error in fetch hook:", error);
         }
     },
+*/    
     methods: {
         async fetchChecklistItems() {
             try{
@@ -97,6 +101,11 @@ export default {
             } catch (error) {
                 console.error('Error fetching checklist items:', error);
             }
+        },
+        formatDate(dateString){
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric'};
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE', options);
         },
     },
 
@@ -172,7 +181,7 @@ export default {
     }
     .column{
         float: left;
-        width: 50%;
+        width: 100%;
         padding:5px;
     }
     .row::after{
