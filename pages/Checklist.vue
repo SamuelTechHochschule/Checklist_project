@@ -70,6 +70,7 @@ export default {
             checklistItems: [],
         };
     },
+   
     async fetch(){
         try{
             await this.fetchChecklistItems();
@@ -91,13 +92,14 @@ export default {
                 if(!data || !Array.isArray(data)) {
                     throw new Error('Invalid response format');
                 }
-                
+
                 this.checklistItems = data;
-            } catch (error) {ö
+            } catch (error) {
                 console.error('Error fetching checklist items:', error);
             }
         },
     },
+
 };
 </script>
 
