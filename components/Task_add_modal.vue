@@ -27,8 +27,68 @@
 
 <script>
 export default {
-    
-}
+    data(){
+        return{
+            isOpen: false,
+            newTask: {
+                task: '',
+                department: '',
+                person: '',
+                plannedDate: '',
+                isPreliminary: false,
+                isRelease: false,
+            },
+        };
+    },
+    methods: {
+        openModal() {
+            this.isOpen = true;
+        },
+        closeModal() {
+            this.isOpen = false;
+            this.resetNewTask();
+        },
+        addTask() {
+
+            if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
+                alert('Bitte füllen Sie alle Felder aus!');
+                return;
+            }
+
+            if (this.newTask.isPreliminary && this.newTask.isRelease) {
+                alert('Bitte wählen sie nur eine Checkbox aus.');
+                return;
+            }
+
+            const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
+            const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
+
+            this.checklistItems.push({
+                number: this.checklistItems.length + 1,
+                task: this.newTask.task,
+                department: this.newTask.department,
+                person: this.newTask.person,
+                plannedDate: this.newTask.plannedDate,
+                completedDate: '',
+                signature: '',
+                colorClass_pv,
+                colorClass_rv,
+            });
+
+            this.closeModal();
+        },
+        resetNewTask() {
+            this.newTask = {
+                task: '',
+                department: '',
+                person: '',
+                plannedDate: '',
+                isPreliminary: false,
+                isRelease: false,
+            };
+        },        
+    },    
+};
 </script>
 
 <style scoped>
