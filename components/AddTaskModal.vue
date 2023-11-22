@@ -88,15 +88,15 @@ export default {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    number: this.checklistItems.length + 1,
+                    number: 1.2,
                     task: this.newTask.task,
                     department: this.newTask.department,
                     person: this.newTask.person,
                     plannedDate: this.newTask.plannedDate,
                     completedDate: '',
                     signature: '',
-                    colorClass_pv,
-                    colorClass_rv,
+//                    isPreliminary,
+//                    isRelease,
                 }),
             })
             .then(response => {
