@@ -30,8 +30,12 @@
                 </div>
             </li>
         </ul>
+
         <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
+
         <h2>Abteilung: R&D</h2>
+
+        <button class="add-Task-Button" @click="openAddTaskModal">Task hinzufügen</button>
 
         <div class="row">
             <div class="column">
@@ -62,7 +66,6 @@
             </div>
         </div>
         <div>
-            <button @click="openAddTaskModal">Task hinzufügen</button>
             <div v-if="isAddTaskModalOpen" class="modal">
                 <div class="modal-content">
                     <span class="close" @click="closeAddTaskModal">$times;</span>
@@ -292,6 +295,12 @@ export default {
     tr:nth-child(odd){
         background-color: #f2f2f2;
         border: 1px solid #000000;
+    }
+    .add-Task-Button{
+        position: absolute;
+        top: 188px;
+        right: 10px;
+        height: 30px;
     }
     .blue-row{
         background-color: blue;
