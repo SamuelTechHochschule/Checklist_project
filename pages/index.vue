@@ -77,35 +77,7 @@
             },
         },
     };
-
-/*
-    import { useAuthStore } from '~/store/auth';
-
-    export default{
-        setup() {
-            const authStore = useAuthStore();
-
-            const username = ref('');
-            const password = ref('');
-
-            const login = async () => {
-                try{
-                    await authStore.loginUser(username.value, password.value);
-                    console.log('Anmeldung erfolgreich');
-                    this.$route.push('/Checklist');
-                } catch (error) {
-                    console.error('Login error:', error);
-                }
-            };
-            return {
-                authStore,
-                username, 
-                password,
-                login,
-            };
-        },
-    };
-*/   
+ 
 </script>
 
 <style scoped>
