@@ -68,7 +68,7 @@
         <div>
             <div v-if="isAddTaskModalOpen" class="modal">
                 <div class="modal-content">
-                    <span class="close" @click="closeAddTaskModal">$times;</span>
+                    <span class="close" @click="closeAddTaskModal">$times;</span> 
                     <h3>Task hinzufügen</h3>
                     <label>Aufgabenbeschreibung:</label>
                     <input v-model="newTask.task" type="text" />
@@ -150,7 +150,7 @@ export default {
         },
 
         openAddTaskModal() {
-
+            
             this.isAddTaskModalOpen = true;
         },
 
@@ -314,8 +314,8 @@ export default {
         z-index: 1;
         left: 0;
         top: 0;
-        width: 75%;
-        height: 75%;
+        width: 100%;
+        height: 100%;
         overflow: auto;
         background-color: rgba(0,0,0,0.4);
     }
@@ -324,7 +324,7 @@ export default {
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 55%;
+        width: 60%;
     }
     .close{
         color: #add;
