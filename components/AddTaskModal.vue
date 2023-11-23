@@ -71,6 +71,7 @@ export default {
         
         addTask() {
 
+            // Konfigurierung für Reihenfärbung
             const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
 
