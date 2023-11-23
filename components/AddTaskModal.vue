@@ -99,13 +99,18 @@ export default {
             const sixWeeksLater = new Date(plannedDateObject.getTime() + 6 * 7 * 24 * 60 * 60* 1000);
             const formattedCompletedDate = `${sixWeeksLater.getFullYear()}-${(sixWeeksLater.getMonth() + 1).toString().padStart(2, '0')}-${sixWeeksLater.getDate().toString().padStart(2, '0')}`;
 
+            //Aufgabennummer um 0.1 erhöhen
+            const taskNumberIncrement = 0.1;
+            this.newTask.number = this.currentTaskNumber;
+            this.currentTaskNumber += taskNumberIncrement;
+
             fetch('http://localhost:5500/api/checklist/addTask', {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    number: 1.2,
+                    number: this.newTask.number,
                     task: this.newTask.task,
                     department: this.newTask.department,
                     person: this.newTask.person,
