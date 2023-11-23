@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv, 'cyan-row': item.colorClass_rv}">
+                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv, 'cyan-row': item.colorClass_rv}" @click="handleTaskClick(item.id)">
                             <td>{{ item.number }}</td>
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -43,6 +43,9 @@ export default {
             const date = new Date(dateString);
             return date.toLocaleDateString('de-DE', options);
         },
+        handleTaskClick(taskId) {
+            this.$emit('taskClicked', taskId);
+        }
     },
 };
 </script>
@@ -77,6 +80,9 @@ export default {
         border-spacing: 0;
         width: 100%;
         border: 1px solid #000000;
+    }
+    td{
+        cursor: pointer;
     }
     th, td{
         text-align: left;

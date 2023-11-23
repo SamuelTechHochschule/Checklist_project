@@ -39,7 +39,12 @@
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
-        <ChecklistTable :checklistItems="checklistItems" />       
+        <ChecklistTable :checklistItems="checklistItems" @taskClicked="handleTaskClick"/>
+        
+        <div v-if="showButtons" class="button-container">
+            <button @click="deleteTask(selectedTask.id)">Task löschen</button>
+            <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
+        </div>
 </template>
 
 <script>
@@ -56,6 +61,8 @@ export default {
     data() {
         return {
             checklistItems: [],
+            showButtons: false,
+            selectedTask: null,
         };
     },
 
@@ -78,12 +85,15 @@ export default {
                 console.error('Error fetching checklist items:', error);
             }
         },
-        formatDate(dateString) {
 
-        },
         openModal() {
             this.$refs.addTaskModal.openModal();
-        }
+        },
+
+        handleTaskClick(taskId) {
+            this.showButtons = !this.showButtons;
+            this.selectedTask = this.checklistItems.find(item => item.id === taskId);
+        },
     },
 };
 </script>
@@ -156,6 +166,15 @@ export default {
         height: 30px;
     }
 
-
+    .button-container{
+        position: absolute;
+        margin-top: 20px;
+        top: 169px;
+        right: 125px;
+    }
+    .button-container button{
+        margin-right: 20px;
+        height: 30px;
+    }
 
 </style>
