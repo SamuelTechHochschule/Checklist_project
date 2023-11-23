@@ -47,6 +47,7 @@ export default {
         return{
             isOpen: false,
             newTask: {
+                number: 1.0,
                 task: '',
                 department: '',
                 person: '',
@@ -54,6 +55,7 @@ export default {
                 isPreliminary: false,
                 isRelease: false,
             },
+            currentTaskNumber: 1.1,
         };
     },
     methods: {
@@ -72,11 +74,13 @@ export default {
             const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
 
+            // Prüfen ob alle Felder ausgefüllt sind
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
                 alert('Bitte füllen Sie alle Felder aus!');
                 return;
             }
 
+            // Prüfen, ob nur eins der Checkboxen gewählt ist
             if (this.newTask.isPreliminary && this.newTask.isRelease) {
                 alert('Bitte wählen sie nur eine Checkbox aus.');
                 return;
@@ -100,9 +104,8 @@ export default {
             const formattedCompletedDate = `${sixWeeksLater.getFullYear()}-${(sixWeeksLater.getMonth() + 1).toString().padStart(2, '0')}-${sixWeeksLater.getDate().toString().padStart(2, '0')}`;
 
             //Aufgabennummer um 0.1 erhöhen
-            const taskNumberIncrement = 0.1;
             this.newTask.number = this.currentTaskNumber;
-            this.currentTaskNumber += taskNumberIncrement;
+            this.currentTaskNumber += 0.1;
 
             fetch('http://localhost:5500/api/checklist/addTask', {
                 method: 'POST',
