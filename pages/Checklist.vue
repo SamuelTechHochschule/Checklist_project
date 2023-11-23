@@ -175,6 +175,12 @@ export default {
     h2{
         color:#00315E;
     }
+    .blue-row{
+        background-color: blue;
+    }
+    .cyan-row{
+        background-color: cyan;
+    }
     *{
             box-sizing: border-box;
         }
@@ -216,12 +222,7 @@ export default {
         right: 10px;
         height: 30px;
     }
-    .blue-row{
-        background-color: blue;
-    }
-    .cyan-row{
-        background-color: cyan;
-    }
+
 
 
 </style>

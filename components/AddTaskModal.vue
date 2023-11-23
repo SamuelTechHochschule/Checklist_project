@@ -120,8 +120,8 @@ export default {
                     plannedDate: formattedPlannedDate,
                     completedDate: formattedCompletedDate,
                     signature: '',
-//                    isPreliminary,
-//                    isRelease,
+                    colorClass_pv,
+                    colorClass_rv,
                 }),
             })
             .then(response => {
