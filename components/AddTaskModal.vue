@@ -82,6 +82,17 @@ export default {
                 return;
             }
 
+            // Überprüfung, ob Datumsformat korrekt ist
+            const dataRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+            if (!dataRegex.test(this.newTask.plannedDate)) {
+                alert('Das Datumsformat sollte DD.MM.YYYY sein!');
+                return;
+            }
+
+            // Datumsformatkonvertierung zu YYYY-MM-DD
+            const [day, month, year] = this.newTask.plannedDate.split('.');
+            this.newTask.plannedDate = `${year}-${month}-${day}`;
+
             fetch('http://localhost:5500/api/checklist/addTask', {
                 method: 'POST',
                 headers:{
