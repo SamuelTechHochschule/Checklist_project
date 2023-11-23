@@ -125,6 +125,7 @@ export default {
                 }),
             })
             .then(response => {
+                console.log('Server response:', response);
                 if(!response.ok){
                     throw new Error(`Server responded with status ${response.status}`);
                 }
@@ -141,6 +142,7 @@ export default {
         },
         resetNewTask() {
             this.newTask = {
+                number: this.currentTaskNumber,
                 task: '',
                 department: '',
                 person: '',
