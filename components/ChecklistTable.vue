@@ -31,15 +31,53 @@
 
 <script>
 export default {
+
     props: {
+
         checklistItems: {
+
             type: Array,
             required: true,
         },
+        
         selectedTaskId: {
+
             type: Number,
             default: -1,
         },
+    },
+
+    data() {
+
+        return{
+
+            localChecklistItems: [...this.checklistItems],
+        };
+    },
+
+    methods: {
+
+        formatDate(dateString) {
+
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE', options);
+        },
+
+        handleTaskClick(taskId) {
+
+            this.localChecklistItems = this.localChecklistItems.map((item) => {
+                
+                return {
+
+                    ...item,
+                    selectedTaskId: item.id === taskId ? taskId : -1,
+                };
+            });
+
+            this.$emit('taskClicked', taskId);
+        },
+
     },
 
     created() {
@@ -49,28 +87,6 @@ export default {
             isPreliminary: this.loadCheckboxStatus(`isPreliminary_${item.id}`),
             isRelease: this.loadCheckboxStatus(`isRelease_${item.id}`),
         }));
-    },
-
-    methods: {
-
-        formatDate(dateString) {
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            const date = new Date(dateString);
-            return date.toLocaleDateString('de-DE', options);
-        },
-
-        handleTaskClick(taskId) {
-            this.$emit('taskClicked', taskId);
-        },
-
-        saveCheckboxStatus(key, value) {
-            localStorage.setItem(key, JSON.stringify(value));
-        },
-
-        loadCheckboxStatus(key) {
-            const storedValue = localStorage.getItem(key);
-            return storedValue ? JSON.parse(storedValue) : false;
-        },
     },
 };
 </script>

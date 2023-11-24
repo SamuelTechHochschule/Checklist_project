@@ -43,10 +43,14 @@
 
 <script>
 export default {
+
     data(){
+
         return{
+
             isOpen: false,
             newTask: {
+
                 number: 1.0,
                 task: '',
                 department: '',
@@ -55,14 +59,9 @@ export default {
                 isPreliminary: false,
                 isRelease: false,
             },
+
             currentTaskNumber: 1.1,
         };
-    },
-    created() {
-
-        this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
-        this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
-        
     },
 
     methods: {
@@ -84,6 +83,13 @@ export default {
             // Konfigurierung für Reihenfärbung
             const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
+            
+            // Überprüfen, ob localStorage verfügbar ist
+            if (typeof localStorage !== "undefined") {
+
+                localStorage.setItem("colorClass_pv", colorClass_pv)
+                localStorage.setItem("colorClass_rv", colorClass_rv);
+            }
 
             // Prüfen ob alle Felder ausgefüllt sind
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
@@ -148,6 +154,9 @@ export default {
             .catch(error => {
                 console.error('Error adding task:', error);
             })
+
+            this.saveCheckboxStatus('isPreliminary', this.newTask.isPreliminary);
+            this.saveCheckboxStatus('isRelease', this.newTask.isRelease);
         },
 
         // Cleared Eingabe im Modal
@@ -173,7 +182,14 @@ export default {
             const storedValue = localStorage.getItem(key);
             return storedValue ? JSON.parse(storedValue) : false;
         },
-    },    
+    },   
+    
+    created() {
+
+        this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
+        this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
+
+    },
 };
 </script>
 
