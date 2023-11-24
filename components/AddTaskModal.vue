@@ -25,12 +25,12 @@
 
                 <div class="form-column">
                     <label>Preliminary Version:</label>
-                    <input v-model="newTask.isPreliminary" type="checkbox" @change="saveCheckboxStatus('isPreliminary', newTask.isPreliminary)"/>
+                    <input v-model="newTask.isPreliminary" type="checkbox"/>
                 </div>
 
                 <div class="form-column">
                     <label>Release Version:</label>
-                    <input v-model="newTask.isRelease" type="checkbox" @change="saveCheckboxStatus('isRelease', newTask.isRelease)"/>
+                    <input v-model="newTask.isRelease" type="checkbox"/>
                 </div>
             </div>
             <div class="form-row">
@@ -64,15 +64,6 @@ export default {
         };
     },
 
-    created() {
-
-        if (process.client) {
-
-            this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
-            this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
-        }
-    },
-
     methods: {
 
         // Öffnet Modal 
@@ -89,15 +80,9 @@ export default {
         // Fügt Aufgabe hinzu
         addTask() {
 
-            if (process.client) {
-
-                // Konfigurierung für Reihenfärbung
-                const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
-                const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
-                localStorage.setItem("colorClass_pv", colorClass_pv)
-                localStorage.setItem("colorClass_rv", colorClass_rv);
-            }
-
+            // Konfigurierung für Reihenfärbung
+            const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
+            const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
 
             // Prüfen ob alle Felder ausgefüllt sind
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
@@ -163,8 +148,22 @@ export default {
                 console.error('Error adding task:', error);
             })
 
-            this.saveCheckboxStatus('isPreliminary', this.newTask.isPreliminary);
-            this.saveCheckboxStatus('isRelease', this.newTask.isRelease);
+            const newRow = document.querySelector('.table-row:last-child');
+            if (newRow) {
+
+                if(colorClass_pv) {
+
+                    newRow.classList.add(colorClass_pv);
+                }
+
+                if(colorClass_rv) {
+
+                    newRow.classList.add(colorClass_rv);
+                }
+            } else {
+
+                console.error('Error: Unable to find the last table row.');
+            }
         },
 
         // Cleared Eingabe im Modal

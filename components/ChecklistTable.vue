@@ -129,13 +129,12 @@ export default {
         text-align: left;
         padding: 16px;
     }
-    tr:nth-child(even){
-        background-color: #cccccc;
-        border: 1px solid #000000;
-    }
-    tr:nth-child(odd){
+    tr{
         background-color: #f2f2f2;
         border: 1px solid #000000;
+    }
+    tr:hover{
+        background-color: #BCBBBB;
     }
     .selected-row{
         background-color: #BCBBBB;
