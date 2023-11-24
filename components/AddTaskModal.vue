@@ -71,6 +71,7 @@ export default {
             this.resetNewTask();
         },
         
+        // Fügt Aufgabe hinzu
         addTask() {
 
             // Konfigurierung für Reihenfärbung
@@ -141,6 +142,8 @@ export default {
                 console.error('Error adding task:', error);
             })
         },
+
+        // Cleared Eingabe im Modal
         resetNewTask() {
             this.newTask = {
                 number: this.currentTaskNumber,
@@ -153,10 +156,12 @@ export default {
             };
         },    
         
+        // Speichert Checkbox-Status
         saveCheckboxStatus(key, value) {
             localStorage.setItem(key, JSON.stringify(value));
         },
 
+        // Ladet Checkbox-Status
         loadCheckboxStatus(key) {
             const storedValue = localStorage.getItem(key);
             return storedValue ? JSON.parse(storedValue) : false;
