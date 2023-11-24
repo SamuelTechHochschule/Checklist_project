@@ -41,8 +41,18 @@ export default {
             default: -1,
         },
     },
+
+    created() {
+
+        this.checklistItems = this.checklistItems.map(item => ({
+            ...item,
+            isPreliminary: this.loadCheckboxStatus(`isPreliminary_${item.id}`),
+            isRelease: this.loadCheckboxStatus(`isRelease_${item.id}`),
+        }));
+    },
+
     methods: {
-        
+
         formatDate(dateString) {
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             const date = new Date(dateString);

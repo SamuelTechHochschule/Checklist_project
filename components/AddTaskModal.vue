@@ -58,6 +58,13 @@ export default {
             currentTaskNumber: 1.1,
         };
     },
+    created() {
+
+        this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
+        this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
+        
+    },
+
     methods: {
 
         // Öffnet Modal 
