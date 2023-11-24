@@ -64,6 +64,13 @@ export default {
         };
     },
 
+    created() {
+
+        this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
+        this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
+
+    },
+
     methods: {
 
         // Öffnet Modal 
@@ -184,12 +191,7 @@ export default {
         },
     },   
     
-    created() {
 
-        this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
-        this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
-
-    },
 };
 </script>
 

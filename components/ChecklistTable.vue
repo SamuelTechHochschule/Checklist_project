@@ -39,7 +39,7 @@ export default {
             type: Array,
             required: true,
         },
-        
+
         selectedTaskId: {
 
             type: Number,
@@ -82,7 +82,7 @@ export default {
 
     created() {
 
-        this.checklistItems = this.checklistItems.map(item => ({
+        this.localChecklistItems = this.localChecklistItems.map(item => ({
             ...item,
             isPreliminary: this.loadCheckboxStatus(`isPreliminary_${item.id}`),
             isRelease: this.loadCheckboxStatus(`isRelease_${item.id}`),
