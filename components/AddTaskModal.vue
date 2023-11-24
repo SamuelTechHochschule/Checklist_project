@@ -60,10 +60,12 @@ export default {
     },
     methods: {
 
+        // Öffnet Modal 
         openModal() {
             this.isOpen = true;
         },
 
+        // Schließt Modal und resetted Input
         closeModal() {
             this.isOpen = false;
             this.resetNewTask();
