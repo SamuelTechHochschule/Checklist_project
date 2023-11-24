@@ -66,9 +66,11 @@ export default {
 
     created() {
 
-        this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
-        this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
+        if (process.client) {
 
+            this.newTask.isPreliminary = this.loadCheckboxStatus('isPreliminary');
+            this.newTask.isRelease = this.loadCheckboxStatus('isRelease');
+        }
     },
 
     methods: {
@@ -87,16 +89,15 @@ export default {
         // Fügt Aufgabe hinzu
         addTask() {
 
-            // Konfigurierung für Reihenfärbung
-            const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
-            const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
-            
-            // Überprüfen, ob localStorage verfügbar ist
-            if (typeof localStorage !== "undefined") {
+            if (process.client) {
 
+                // Konfigurierung für Reihenfärbung
+                const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
+                const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
                 localStorage.setItem("colorClass_pv", colorClass_pv)
                 localStorage.setItem("colorClass_rv", colorClass_rv);
             }
+
 
             // Prüfen ob alle Felder ausgefüllt sind
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
