@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in checklistItems" :key="item.id" :class="getRowClass(item)" @click="handleTaskClick(item.id)">
+                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.isPreliminary, 'cyan-row': item.isRelease, 'selected-row': item.selectedTaskId}" @click="handleTaskClick(item.id)">
                             <td>{{ item.number }}</td>
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -42,18 +42,24 @@ export default {
         },
     },
     methods: {
+        
         formatDate(dateString) {
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             const date = new Date(dateString);
             return date.toLocaleDateString('de-DE', options);
         },
+
         handleTaskClick(taskId) {
             this.$emit('taskClicked', taskId);
         },
-        getRowClass(item) {
-            const colorClass_pv = item.isPreliminary ? 'blue-row' : '';
-            const colorClass_rv = item.isRelease ? 'cyan-row' : '';
-            return {'blue-row': colorClass_pv, 'cyan-row': colorClass_rv, 'selected-row': item.id === this.selectedTaskId};
+
+        saveCheckboxStatus(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        },
+
+        loadCheckboxStatus(key) {
+            const storedValue = localStorage.getItem(key);
+            return storedValue ? JSON.parse(storedValue) : false;
         },
     },
 };

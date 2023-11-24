@@ -25,12 +25,12 @@
 
                 <div class="form-column">
                     <label>Preliminary Version:</label>
-                    <input v-model="newTask.isPreliminary" type="checkbox" />
+                    <input v-model="newTask.isPreliminary" type="checkbox" @change="saveCheckboxStatus('isPreliminary', newTask.isPreliminary)"/>
                 </div>
 
                 <div class="form-column">
                     <label>Release Version:</label>
-                    <input v-model="newTask.isRelease" type="checkbox" />
+                    <input v-model="newTask.isRelease" type="checkbox" @change="saveCheckboxStatus('isRelease', newTask.isRelease)"/>
                 </div>
             </div>
             <div class="form-row">
@@ -123,8 +123,6 @@ export default {
                     plannedDate: formattedPlannedDate,
                     completedDate: formattedCompletedDate,
                     signature: '',
-                    colorClass_pv,
-                    colorClass_rv,
                 }),
             })
             .then(response => {
@@ -153,7 +151,16 @@ export default {
                 isPreliminary: false,
                 isRelease: false,
             };
-        },        
+        },    
+        
+        saveCheckboxStatus(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        },
+
+        loadCheckboxStatus(key) {
+            const storedValue = localStorage.getItem(key);
+            return storedValue ? JSON.parse(storedValue) : false;
+        },
     },    
 };
 </script>
