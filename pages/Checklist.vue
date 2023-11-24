@@ -39,7 +39,7 @@
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
-        <ChecklistTable :checklistItems="checklistItems" @taskClicked="handleTaskClick"/>
+        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick"/>
         
         <div v-if="showButtons" class="button-container">
             <button @click="deleteTask(selectedTask.id)">Task löschen</button>
@@ -63,6 +63,7 @@ export default {
             checklistItems: [],
             showButtons: false,
             selectedTask: null,
+            selectedTaskId: -1,
         };
     },
 
@@ -93,6 +94,7 @@ export default {
         handleTaskClick(taskId) {
             this.showButtons = !this.showButtons;
             this.selectedTask = this.checklistItems.find(item => item.id === taskId);
+            this.selectedTaskId = taskId;
         },
     },
 };

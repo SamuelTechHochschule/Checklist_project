@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv, 'cyan-row': item.colorClass_rv}" @click="handleTaskClick(item.id)">
+                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv, 'cyan-row': item.colorClass_rv, 'selected-row': item.selectedTaskId}" @click="handleTaskClick(item.id)">
                             <td>{{ item.number }}</td>
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -35,6 +35,10 @@ export default {
         checklistItems: {
             type: Array,
             required: true,
+        },
+        selectedTaskId: {
+            type: Number,
+            default: -1,
         },
     },
     methods: {
@@ -95,6 +99,9 @@ export default {
     tr:nth-child(odd){
         background-color: #f2f2f2;
         border: 1px solid #000000;
+    }
+    .selected-row{
+        background-color: #BCBBBB;
     }
 
 </style>
