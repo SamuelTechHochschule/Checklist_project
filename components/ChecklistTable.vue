@@ -63,12 +63,14 @@ export default {
 
         getRowClasses(item) {
 
-            return{
+            if (item.isPreliminary) {
+                return 'blue-row';
+            } else if (item.isRelease) {
+                return 'cyan-row';
+            } else {
+                return '';
+            }
 
-                'blue-row': item.colorClass_pv,
-                'cyan-row': item.colorClass_rv,
-                'selected-row': item.id === this.selectedTaskId,
-            };
         },
 
         loadSavedColors() {
@@ -83,12 +85,7 @@ export default {
                     item.colorClass_rv = savedColors.colorClass_rv || '';
                 })
             }
-
-
-
-
         }
-
     },
 
 

@@ -25,12 +25,12 @@
 
                 <div class="form-column">
                     <label>Preliminary Version:</label>
-                    <input v-model="newTask.isPreliminary" type="checkbox" @change="updateColorClass('blue-row')"/>
+                    <input :checked="newTask.isPreliminary" type="checkbox" @change="updateColorClass('blue-row')"/>
                 </div>
 
                 <div class="form-column">
                     <label>Release Version:</label>
-                    <input v-model="newTask.isRelease" type="checkbox" @change="updateColorClass('cyan-row')"/>
+                    <input :checked="newTask.isRelease" type="checkbox" @change="updateColorClass('cyan-row')"/>
                 </div>
             </div>
             <div class="form-row">
@@ -77,9 +77,11 @@ export default {
             this.resetNewTask();
         },
 
+        //Aktualisiert Reihe im Modal
         updateColorClass(colorClass) {
 
-            this.newTask[colorClass === 'blue-row' ? 'isPreliminary' : 'isRelease'] = !this.newTask[colorClass === 'blue-row' ? 'isPreliminary' : 'isRelease'];
+            const propertyName = colorClass === 'blue-row' ? 'isPreliminary' : 'isRelease';
+            this.newTask[propertyName] = !this.newTask[propertyName]; 
         },
         
         // Fügt Aufgabe hinzu
@@ -130,6 +132,9 @@ export default {
             this.newTask.number = this.currentTaskNumber;
             this.currentTaskNumber += 0.1;
 
+            // Änderung der Aufgabenbeschreibung am Ende
+            this.newTask.task += this.getTaskSuffix();
+
             fetch('http://localhost:5500/api/checklist/addTask', {
                 method: 'POST',
                 headers:{
@@ -173,7 +178,22 @@ export default {
                 isPreliminary: false,
                 isRelease: false,
             };
-        },    
+        },   
+        
+        // Hinzufügen der Art von Release an Aufgabenbeschreibung
+        getTaskSuffix() {
+
+            if (this.newTask.isPreliminary) {
+
+                return ' - Preliminary Release';
+            } else if (this.newTask.isRelease){
+
+                return ' - Final Release';
+            } else {
+
+                return '';
+            }
+        }
         
     },   
     
@@ -222,5 +242,6 @@ export default {
         text-decoration: none;
         cursor: pointer; 
     }
+    
 
 </style>
