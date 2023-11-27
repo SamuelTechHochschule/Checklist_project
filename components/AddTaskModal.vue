@@ -25,12 +25,12 @@
 
                 <div class="form-column">
                     <label>Preliminary Version:</label>
-                    <input v-model="newTask.isPreliminary" type="checkbox"/>
+                    <input v-model="newTask.isPreliminary" type="checkbox" @change="updateColorClass('blue-row')"/>
                 </div>
 
                 <div class="form-column">
                     <label>Release Version:</label>
-                    <input v-model="newTask.isRelease" type="checkbox"/>
+                    <input v-model="newTask.isRelease" type="checkbox" @change="updateColorClass('cyan-row')"/>
                 </div>
             </div>
             <div class="form-row">
@@ -76,6 +76,13 @@ export default {
             this.isOpen = false;
             this.resetNewTask();
         },
+
+        updateColorClass(colorClass) {
+
+            const modalPreview = document.querySelector('.modal');
+            modalPreview.classList.remove('blue-row', 'cyan-row');
+            modalPreview.classList.add(colorClass);
+        },
         
         // Fügt Aufgabe hinzu
         addTask() {
@@ -83,6 +90,13 @@ export default {
             // Konfigurierung für Reihenfärbung
             const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
+
+            if (typeof localStorage !== 'undefined') {
+
+                const savedColors = JSON.parse(localStorage.getItem('checklistColors')) || {};
+                savedColors[this.newTask.number] = { colorClass_pv, colorClass_rv };
+                localStorage.setItem('checklistColors', JSON.stringify(savedColors))
+            }
 
             // Prüfen ob alle Felder ausgefüllt sind
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
@@ -147,23 +161,6 @@ export default {
             .catch(error => {
                 console.error('Error adding task:', error);
             })
-
-            const newRow = document.querySelector('.table-row:last-child');
-            if (newRow) {
-
-                if(colorClass_pv) {
-
-                    newRow.classList.add(colorClass_pv);
-                }
-
-                if(colorClass_rv) {
-
-                    newRow.classList.add(colorClass_rv);
-                }
-            } else {
-
-                console.error('Error: Unable to find the last table row.');
-            }
         },
 
         // Cleared Eingabe im Modal
@@ -179,16 +176,6 @@ export default {
             };
         },    
         
-        // Speichert Checkbox-Status
-        saveCheckboxStatus(key, value) {
-            localStorage.setItem(key, JSON.stringify(value));
-        },
-
-        // Ladet Checkbox-Status
-        loadCheckboxStatus(key) {
-            const storedValue = localStorage.getItem(key);
-            return storedValue ? JSON.parse(storedValue) : false;
-        },
     },   
     
 

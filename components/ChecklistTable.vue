@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.isPreliminary, 'cyan-row': item.isRelease, 'selected-row': item.selectedTaskId}" @click="handleTaskClick(item.id)">
+                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv, 'cyan-row': item.colorClass_rv, 'selected-row': item.selectedTaskId}" @click="handleTaskClick(item.id)">
                             <td>{{ item.number }}</td>
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -47,12 +47,12 @@ export default {
         },
     },
 
-    data() {
+    created() {
 
-        return{
+        if (typeof localStorage !== 'undefined') {
 
-            localChecklistItems: [...this.checklistItems],
-        };
+            this.loadSavedColors();
+        }
     },
 
     methods: {
@@ -66,38 +66,40 @@ export default {
 
         handleTaskClick(taskId) {
 
-            this.localChecklistItems = this.localChecklistItems.map((item) => {
-                
-                return {
-
-                    ...item,
-                    selectedTaskId: item.id === taskId ? taskId : -1,
-                };
-            });
-
             this.$emit('taskClicked', taskId);
         },
 
+        loadSavedColors() {
+
+            if (typeof localStorage !== 'undefined') {
+
+                const savedColors = JSON.parse(localStorage.getItem('checklistColors')) || {};
+                this.checklistItems.forEach((item) => {
+                    
+                    const savedColor = savedColors[item.number] || {};
+                    item.colorClass_pv = savedColor.colorClass_pv || '';
+                    item.colorClass_rv = savedColors.colorClass_rv || '';
+                })
+            }
+
+
+
+
+        }
+
     },
 
-    created() {
 
-        this.localChecklistItems = this.localChecklistItems.map(item => ({
-            ...item,
-            isPreliminary: this.loadCheckboxStatus(`isPreliminary_${item.id}`),
-            isRelease: this.loadCheckboxStatus(`isRelease_${item.id}`),
-        }));
-    },
 };
 </script>
 
 <style scoped>
 
     .blue-row{
-        background-color: blue;
+        background-color: rgb(50, 50, 255);
     }
     .cyan-row{
-        background-color: cyan;
+        background-color: rgb(133, 233, 233);
     }
     *{
             box-sizing: border-box;
