@@ -117,11 +117,19 @@ export default {
             this.newTask.number = this.currentTaskNumber;
             this.currentTaskNumber += 0.1;
 
-/*
-            // Änderung der Aufgabenbeschreibung am Ende
-            this.newTask.task += this.getTaskSuffix();
 
-*/
+            // Änderung der Aufgabenbeschreibung am Ende
+            if (this.newTask.isPreliminary) {
+
+                this.newTask.task += '- Preliminary Version';
+            }
+
+            if (this.newTask.isRelease) {
+
+                this.newTask.task += '- Release Version';
+            }
+
+
             fetch('http://localhost:5500/api/checklist/addTask', {
                 method: 'POST',
                 headers:{
