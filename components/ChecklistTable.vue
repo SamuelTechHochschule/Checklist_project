@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv, 'cyan-row': item.colorClass_rv, 'selected-row': item.selectedTaskId}" @click="handleTaskClick(item.id)">
+                        <tr v-for="item in checklistItems" :key="item.id" :class="getRowClasses(item)" @click="handleTaskClick(item.id)">
                             <td>{{ item.number }}</td>
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -47,14 +47,6 @@ export default {
         },
     },
 
-    created() {
-
-        if (typeof localStorage !== 'undefined') {
-
-            this.loadSavedColors();
-        }
-    },
-
     methods: {
 
         formatDate(dateString) {
@@ -67,6 +59,16 @@ export default {
         handleTaskClick(taskId) {
 
             this.$emit('taskClicked', taskId);
+        },
+
+        getRowClasses(item) {
+
+            return{
+
+                'blue-row': item.colorClass_pv,
+                'cyan-row': item.colorClass_rv,
+                'selected-row': item.id === this.selectedTaskId,
+            };
         },
 
         loadSavedColors() {

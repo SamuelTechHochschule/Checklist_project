@@ -79,9 +79,7 @@ export default {
 
         updateColorClass(colorClass) {
 
-            const modalPreview = document.querySelector('.modal');
-            modalPreview.classList.remove('blue-row', 'cyan-row');
-            modalPreview.classList.add(colorClass);
+            this.newTask[colorClass === 'blue-row' ? 'isPreliminary' : 'isRelease'] = !this.newTask[colorClass === 'blue-row' ? 'isPreliminary' : 'isRelease'];
         },
         
         // Fügt Aufgabe hinzu
@@ -91,6 +89,7 @@ export default {
             const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
 
+            // Farbinformation wird lokal gespeichert
             if (typeof localStorage !== 'undefined') {
 
                 const savedColors = JSON.parse(localStorage.getItem('checklistColors')) || {};
