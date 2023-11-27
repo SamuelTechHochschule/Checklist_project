@@ -25,12 +25,12 @@
 
                 <div class="form-column">
                     <label>Preliminary Version:</label>
-                    <input :checked="newTask.isPreliminary" type="checkbox" @change="updateColorClass('blue-row')"/>
+                    <input v-model="newTask.isPreliminary" type="checkbox" />
                 </div>
 
                 <div class="form-column">
                     <label>Release Version:</label>
-                    <input :checked="newTask.isRelease" type="checkbox" @change="updateColorClass('cyan-row')"/>
+                    <input v-model="newTask.isRelease" type="checkbox" />
                 </div>
             </div>
             <div class="form-row">
@@ -117,9 +117,11 @@ export default {
             this.newTask.number = this.currentTaskNumber;
             this.currentTaskNumber += 0.1;
 
+/*
             // Änderung der Aufgabenbeschreibung am Ende
             this.newTask.task += this.getTaskSuffix();
 
+*/
             fetch('http://localhost:5500/api/checklist/addTask', {
                 method: 'POST',
                 headers:{
@@ -133,6 +135,8 @@ export default {
                     plannedDate: formattedPlannedDate,
                     completedDate: formattedCompletedDate,
                     signature: '',
+                    colorClass_pv,
+                    colorClass_rv,
                 }),
             })
             .then(response => {
@@ -144,12 +148,25 @@ export default {
             })
             .then(data => {
                 console.log('Task added successfully:', data);
+                if (!data || !data.id) {
+                    
+                    console.error('Invalid data received from server:', data);
+                    return;
+                }
+                this.$emit('updateRowColors', {
+                    taskId: data.id,
+                    colorClass_pv,
+                    colorClass_rv,
+                });
+
                 this.$emit('taskAdded');
                 this.closeModal();
             })
+
             .catch(error => {
                 console.error('Error adding task:', error);
             })
+
         },
 
         // Cleared Eingabe im Modal

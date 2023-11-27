@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in checklistItems" :key="item.id" :class="getRowClasses(item)" @click="handleTaskClick(item.id)">
+                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': preliminaryVersions[item.id], 'cyan-row': releaseVersions[item.id], 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
                             <td>{{ item.number }}</td>
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -44,6 +44,18 @@ export default {
 
             type: Number,
             default: -1,
+        },
+
+        preliminaryVersions: {
+
+            type: Object,
+            default: () => ({}),
+        },
+
+        releaseVersions: {
+
+            type: Object,
+            default: () => ({}),
         },
     },
 

@@ -39,7 +39,7 @@
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
-        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick"/>
+        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick" @updateRowColors="updateRowColors"/>
         
         <div v-if="showButtons" class="button-container">
             <button @click="deleteTask(selectedTask.id)">Task löschen</button>
@@ -64,6 +64,8 @@ export default {
             showButtons: false,
             selectedTask: null,
             selectedTaskId: -1,
+            preliminaryVersions: {},
+            releaseVersions: {},
         };
     },
 
@@ -81,7 +83,12 @@ export default {
                 if (!data || !Array.isArray(data)) {
                     throw new Error('Invalid response format');
                 }
-                this.checklistItems = data;
+                this.checklistItems = data.map(item => ({
+
+                    ...item,
+                    isPreliminary: item.colorClass_pv === 'blue-row',
+                    isRelease: item.colorClass_rv === 'cyan-row',
+                }));
             } catch (error) {
                 console.error('Error fetching checklist items:', error);
             }
@@ -96,6 +103,12 @@ export default {
             this.selectedTask = this.checklistItems.find(item => item.id === taskId);
             this.selectedTaskId = taskId;
         },
+
+        updateRowColors ({ taskId, colorClass_pv, colorClass_rv }) {
+
+            this.$set(this.preliminaryVersions, taskId, colorClass_pv);
+            this.$set(this.releaseVersions, taskId, colorClass_rv);
+        }
     },
 };
 </script>
