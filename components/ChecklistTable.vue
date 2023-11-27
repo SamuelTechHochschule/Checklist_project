@@ -70,6 +70,7 @@ export default {
 
         handleTaskClick(taskId) {
 
+            console.log('Handling task click for task ID:', taskId);
             this.$emit('taskClicked', taskId);
         },
 
