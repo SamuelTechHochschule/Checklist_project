@@ -76,13 +76,6 @@ export default {
             this.isOpen = false;
             this.resetNewTask();
         },
-
-        //Aktualisiert Reihe im Modal
-        updateColorClass(colorClass) {
-
-            const propertyName = colorClass === 'blue-row' ? 'isPreliminary' : 'isRelease';
-            this.newTask[propertyName] = !this.newTask[propertyName]; 
-        },
         
         // Fügt Aufgabe hinzu
         addTask() {
@@ -90,14 +83,6 @@ export default {
             // Konfigurierung für Reihenfärbung
             const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
-
-            // Farbinformation wird lokal gespeichert
-            if (typeof localStorage !== 'undefined') {
-
-                const savedColors = JSON.parse(localStorage.getItem('checklistColors')) || {};
-                savedColors[this.newTask.number] = { colorClass_pv, colorClass_rv };
-                localStorage.setItem('checklistColors', JSON.stringify(savedColors))
-            }
 
             // Prüfen ob alle Felder ausgefüllt sind
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
@@ -179,21 +164,6 @@ export default {
                 isRelease: false,
             };
         },   
-        
-        // Hinzufügen der Art von Release an Aufgabenbeschreibung
-        getTaskSuffix() {
-
-            if (this.newTask.isPreliminary) {
-
-                return ' - Preliminary Release';
-            } else if (this.newTask.isRelease){
-
-                return ' - Final Release';
-            } else {
-
-                return '';
-            }
-        }
         
     },   
     

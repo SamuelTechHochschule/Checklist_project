@@ -61,31 +61,6 @@ export default {
             this.$emit('taskClicked', taskId);
         },
 
-        getRowClasses(item) {
-
-            if (item.isPreliminary) {
-                return 'blue-row';
-            } else if (item.isRelease) {
-                return 'cyan-row';
-            } else {
-                return '';
-            }
-
-        },
-
-        loadSavedColors() {
-
-            if (typeof localStorage !== 'undefined') {
-
-                const savedColors = JSON.parse(localStorage.getItem('checklistColors')) || {};
-                this.checklistItems.forEach((item) => {
-                    
-                    const savedColor = savedColors[item.number] || {};
-                    item.colorClass_pv = savedColor.colorClass_pv || '';
-                    item.colorClass_rv = savedColors.colorClass_rv || '';
-                })
-            }
-        }
     },
 
 
@@ -101,8 +76,8 @@ export default {
         background-color: rgb(133, 233, 233);
     }
     *{
-            box-sizing: border-box;
-        }
+        box-sizing: border-box;
+    }
     .row{
         margin-left: -5px;
         margin-right: -5px;
