@@ -71,10 +71,10 @@ export default {
 <style scoped>
 
     .blue-row{
-        background-color: rgb(50, 50, 255);
+        background-color: rgb(105, 105, 245);
     }
     .cyan-row{
-        background-color: rgb(133, 233, 233);
+        background-color: rgb(143, 226, 226);
     }
     *{
         box-sizing: border-box;
