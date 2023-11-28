@@ -114,7 +114,7 @@ export default {
         background-color: #BCBBBB;
     }
     .selected-row{
-        background-color: #BCBBBB;
+        background-color: #d4d4d4;
     }
 
 </style>

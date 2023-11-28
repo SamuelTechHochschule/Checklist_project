@@ -129,12 +129,12 @@ export default {
             // Änderung der Aufgabenbeschreibung am Ende
             if (this.newTask.isPreliminary) {
 
-                this.newTask.task += '- Preliminary Version';
+                this.newTask.task += '- Preliminary Release';
             }
 
             if (this.newTask.isRelease) {
 
-                this.newTask.task += '- Release Version';
+                this.newTask.task += '- Final Release';
             }
 
 
