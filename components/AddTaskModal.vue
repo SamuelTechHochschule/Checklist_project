@@ -59,9 +59,17 @@ export default {
                 isPreliminary: false,
                 isRelease: false,
             },
-
             currentTaskNumber: 1.1,
         };
+    },
+
+    mounted() {
+
+        const storedTaskNumber = localStorage.getItem('currentTaskNumber');
+        if (storedTaskNumber) {
+
+            this.currentTaskNumber = parseFloat(storedTaskNumber);
+        }
     },
 
     methods: {
@@ -174,6 +182,8 @@ export default {
             .catch(error => {
                 console.error('Error adding task:', error);
             })
+
+            localStorage.setItem('currentTaskNumber', this.currentTaskNumber.toString());
 
         },
 
