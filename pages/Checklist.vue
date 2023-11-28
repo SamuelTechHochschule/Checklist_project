@@ -39,10 +39,10 @@
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
-        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick" @updateRowColors="updateRowColors" @deleteTask="deleteTask"/>
+        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick" @updateRowColors="updateRowColors" @deleteItemFromChecklist="deleteItemFromChecklist"/>
         
         <div v-if="showButtons" class="button-container">
-            <button @click="deleteTask(selectedTask.id)">Task löschen</button>
+            <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
 </template>
@@ -123,6 +123,39 @@ export default {
 
             this.$set(this.preliminaryVersions, taskId, colorClass_pv);
             this.$set(this.releaseVersions, taskId, colorClass_rv);
+        },
+
+        async deleteItemFromChecklist(taskId) {
+
+            try{
+
+                const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
+
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) {
+
+                    throw new Error(`Failed to delete task. Server responded with status ${response.status}`);
+                }
+
+                // Aufgabe aus Array manuell löschen
+                const index = this.checklistItems.findIndex(item => item.id === taskId);
+                if (index !== -1) {
+
+                    this.checklistItems.splice(index, 1);
+                }
+
+                // Selected task resetten
+                this.showButtons = false;
+                this.selectedTask = null;
+                this.selectedTaskId = -1;
+
+                console.log('Task deleted successfully');
+            } catch (error) {
+
+                console.error('Error deleting task:', error);
+            }
         }
     },
 };
