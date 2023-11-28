@@ -102,7 +102,9 @@ export default {
 
             if (this.selectedTaskId === taskId) {
 
-                this.showButtons = !this.showButtons;
+                this.showButtons = false;
+                this.selectedTask = null;
+                this.selectedTaskId = -1;
             } else {
 
                 this.showButtons = true;
