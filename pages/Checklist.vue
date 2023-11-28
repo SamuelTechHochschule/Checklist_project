@@ -39,7 +39,7 @@
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
-        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick" @updateRowColors="updateRowColors"/>
+        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick" @updateRowColors="updateRowColors" @deleteTask="deleteTask"/>
         
         <div v-if="showButtons" class="button-container">
             <button @click="deleteTask(selectedTask.id)">Task löschen</button>
@@ -73,6 +73,8 @@ export default {
         this.fetchChecklistItems();
     },
     methods: {
+
+        // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
             try {
                 const response = await fetch('http://localhost:5500/api/checklist');
@@ -94,10 +96,12 @@ export default {
             }
         },
 
+        // Modal öffnen
         openModal() {
             this.$refs.addTaskModal.openModal();
         },
 
+        // Handler für Betätigen einer Tabellenreihe
         handleTaskClick(taskId) {
 
             if (this.selectedTaskId === taskId) {
@@ -114,6 +118,7 @@ export default {
 
         },
 
+        // Farben der Reihen beim Neuladen updaten
         updateRowColors ({ taskId, colorClass_pv, colorClass_rv }) {
 
             this.$set(this.preliminaryVersions, taskId, colorClass_pv);
