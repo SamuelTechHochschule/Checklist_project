@@ -9,7 +9,9 @@
             <div class="form-row">
                 <div class="form-column">
                     <label>Verantwortliche Abteilung:</label>
-                    <input v-model="newTask.department" type="text" />
+                    <select v-model="newTask.department">
+                        <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }} </option>
+                    </select>
                 </div>
 
                 <div class="form-column">
@@ -42,6 +44,7 @@
 </template>
 
 <script>
+
 export default {
 
     data(){
@@ -60,6 +63,7 @@ export default {
                 isRelease: false,
             },
             currentTaskNumber: 1.1,
+            departmentOptions: ['PDM', 'R&D', 'F&C', 'QM', 'SA', 'SLS', 'AA', 'WEB', 'QA', 'SC', 'M&D', 'MPR&C', 'P&P', 'OP', 'TSC'],
         };
     },
 
@@ -248,6 +252,5 @@ export default {
         text-decoration: none;
         cursor: pointer; 
     }
-    
 
 </style>
