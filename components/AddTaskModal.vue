@@ -63,7 +63,7 @@ export default {
                 isRelease: false,
             },
             currentTaskNumber: 1.1,
-            departmentOptions: ['PDM', 'R&D', 'F&C', 'QM', 'SA', 'SLS', 'AA', 'WEB', 'QA', 'SC', 'M&D', 'MPR&C', 'P&P', 'OP', 'TSC'],
+            departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
         };
     },
 
