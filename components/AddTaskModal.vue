@@ -183,6 +183,7 @@ export default {
                 console.error('Error adding task:', error);
             })
 
+            // Momentane Nummer im localStorage speichern
             localStorage.setItem('currentTaskNumber', this.currentTaskNumber.toString());
 
         },

@@ -99,9 +99,17 @@ export default {
         },
 
         handleTaskClick(taskId) {
-            this.showButtons = !this.showButtons;
-            this.selectedTask = this.checklistItems.find(item => item.id === taskId);
-            this.selectedTaskId = taskId;
+
+            if (this.selectedTaskId === taskId) {
+
+                this.showButtons = !this.showButtons;
+            } else {
+
+                this.showButtons = true;
+                this.selectedTask = this.checklistItems.find(item => item.id === taskId);
+                this.selectedTaskId = taskId;
+            }
+
         },
 
         updateRowColors ({ taskId, colorClass_pv, colorClass_rv }) {
