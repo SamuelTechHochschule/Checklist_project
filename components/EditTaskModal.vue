@@ -2,7 +2,7 @@
     <div class="modal" v-if="taskToEdit">
         <div class="modal-content">
 <!--            <span class="close" @click="closeModal">x</span> -->
-            <h3>Task hinzufügen</h3>
+            <h3>Task bearbeiten</h3>
                 <form @submit.prevent="editTask">
                     <label for="task">Aufgabenbeschreibung:</label>
                     <input v-model="editedTask.task" />
@@ -69,6 +69,7 @@ export default {
                 completedDate: '',
                 signature: '',
             },
+            departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
         };
     },
 
