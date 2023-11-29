@@ -45,10 +45,13 @@
             <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
+
+        <EditTaskModal v-if="showEditModal" :taskToEdit="selectedTask" @saveChanges="saveEditedTask" @closeModal="closeEditModal" />
 </template>
 
 <script>
 import AddTaskModal from '~/components/AddTaskModal.vue';
+import EditTaskModal from '~/components/EditTaskModal.vue';
 import ChecklistTable from '~/components/ChecklistTable.vue';
 
 export default {
@@ -56,6 +59,7 @@ export default {
     components: {
         AddTaskModal,
         ChecklistTable,
+        EditTaskModal,
     },
 
     data() {
@@ -66,6 +70,7 @@ export default {
             selectedTaskId: -1,
             preliminaryVersions: {},
             releaseVersions: {},
+            showEditModal: false,
         };
     },
 
@@ -125,6 +130,7 @@ export default {
             this.$set(this.releaseVersions, taskId, colorClass_rv);
         },
 
+        // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
 
             try{
@@ -156,6 +162,22 @@ export default {
 
                 console.error('Error deleting task:', error);
             }
+        },
+
+        editTask(taskId) {
+
+            this.showEditModal = true;
+        },
+
+        saveEditedTask(editedTask) {
+
+            console.log('Saving changes for edited task:', editedTask);
+            this.showEditModal = false;
+        },  
+
+        closeEditModal() {
+
+            this.showEditModal = false;
         }
     },
 };
