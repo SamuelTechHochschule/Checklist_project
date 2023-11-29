@@ -23,12 +23,12 @@
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin:</label>
-                            <input v-model="editedTask.plannedDate" type="text" />
+                            <input :value="formatDate(editedTask.plannedDate)" type="text" />
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin:</label>
-                            <input v-model="editedTask.completedDate" type="text" />
+                            <input :value="formatDate(editedTask.completedDate)" type="text" />
                         </div>
                     </div>
                     <div class="form-row">
@@ -84,6 +84,18 @@ export default {
         closeModal() {
 
             this.$emit('closeModal');
+        },
+
+        formatDate(dateString) {
+
+            if(!dateString) return '';
+
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+
+            return `${day}.${month}.${year}`;
         },
     },
 
