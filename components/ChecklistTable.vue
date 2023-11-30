@@ -20,7 +20,7 @@
                             <td>{{ item.department }}</td>
                             <td>{{ item.person }}</td>
                             <td>{{ formatDate(item.plannedDate) }}</td>
-                            <td>{{ formatDate(item.completedDate) }}</td>
+                            <td>{{ item.completedDate }}</td>
                             <td>{{ item.signature }}</td>
                         </tr>
                     </tbody>
