@@ -167,12 +167,42 @@ export default {
         editTask(taskId) {
 
             this.showEditModal = true;
+            this.selectedTaskId = taskId;
         },
 
         saveEditedTask(editedTask) {
 
             console.log('Saving changes for edited task:', editedTask);
             this.showEditModal = false;
+
+            const taskId = this.selectedTaskId;
+            const url = `http://localhost:5500/api/checklist/edit/${taskId}`;
+
+            fetch(url, {
+
+                method: 'PUT',
+                headers: {
+
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify(editedTask)
+            })
+            .then(response => {
+
+                if(!response.ok) {
+
+                    throw new Error(`Failed to save changes. Server responded with status ${response.status}`);
+                }
+
+                console.log('Changes saved successfully');
+                this.showEditModal = false;
+                this.fetchChecklistItems();
+            })
+            .catch(error => {
+
+                console.error('Error saving changes:', error);
+            });
         },  
 
         closeEditModal() {

@@ -23,12 +23,12 @@
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin:</label>
-                            <input :value="formatDate(editedTask.plannedDate)" type="text" />
+                            <input type="text" :value="formatDate(editedTask.plannedDate)"/>
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin:</label>
-                            <input :value="formatDate(editedTask.completedDate)" type="text" />
+                            <input type="text" :value="formatDate(editedTask.completedDate)"/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -75,17 +75,87 @@ export default {
 
     methods: {
 
+        // Bearbeite Aufgabe
         editTask() {
+
+            this.editedTask.plannedDate = this.formatDateforDatabase(this.editedTask.plannedDate);
+            this.editedTask.completedDate = this.formatDateforDatabase(this.editedTask.completedDate);
 
             this.$emit('saveChanges', this.editedTask);
             this.closeModal();
         },
 
+        formatDateforDatabase(dateString) {
+
+            if(!dateString || typeof dateString !== 'string') return '';
+            const dateParts = dateString.split('.');
+            if(dateParts.length !== 3) return '';
+            const [day, month, year] = dateParts;
+            return `${year}-${month}-${day}`;
+        },
+
+        // Speichere Änderung der Aufgabe
+        saveEditedTask() {
+
+            /*
+            const originalTask = { ...this.taskToEdit };
+
+            const editedTask = {
+
+                task: this.editedTask.task,
+                department: this.editedTask.department,
+                person: this.editedTask.person,
+                plannedDate: this.editedTask.plannedDate,
+                completedDate: this.editedTask.completedDate,
+                signature: this.editedTask.signature,
+            };
+
+            if(!editedTask.plannedDate) {
+
+                editedTask.plannedDate = originalTask.plannedDate;
+            }
+
+            if(!editedTask.completedDate) {
+
+                editedTask.completedDate = originalTask.completedDate;
+            }
+            */
+            const taskId = this.taskToEdit.id;;
+            const url = `http://localhost:5500/api/checklist/edit/${taskId}`;
+
+            fetch(url, {
+
+                method: 'PUT',
+                headers: {
+
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify(this.editedTask),
+            })
+            .then(response => {
+
+                console.log('Server response:', response);
+                if(!response.ok) {
+
+                    throw new Error(`Failed to save changes. Server responded with status ${response.status}`);
+                }
+                console.log('Changes saved successfully');
+                this.$emit('closeModal');
+            })
+            .catch(error => {
+
+                console.error('Error saving changes:', error);
+            })
+        },
+
+        // Schließe das Modal
         closeModal() {
 
             this.$emit('closeModal');
         },
 
+        // Formatiere Datum von YYYY.MM.DD in DD.MM.YYYY
         formatDate(dateString) {
 
             if(!dateString) return '';
@@ -106,7 +176,12 @@ export default {
             immediate: true,
             handler(newTask) {
 
-                this.editedTask = { ...newTask };
+                this.editedTask = { 
+                    
+                    ...newTask,
+                    plannedDate: this.formatDate(newTask.plannedDate),
+                    completedDate: this.formatDate(newTask.completedDate)
+                };
             },
         },
     },
