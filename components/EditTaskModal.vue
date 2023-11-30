@@ -97,7 +97,7 @@ export default {
         // Speichere Änderung der Aufgabe
         saveEditedTask() {
 
-            /*
+            
             const originalTask = { ...this.taskToEdit };
 
             const editedTask = {
@@ -119,7 +119,7 @@ export default {
 
                 editedTask.completedDate = originalTask.completedDate;
             }
-            */
+            
             const taskId = this.taskToEdit.id;;
             const url = `http://localhost:5500/api/checklist/edit/${taskId}`;
 
@@ -160,12 +160,9 @@ export default {
 
             if(!dateString) return '';
 
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-
-            return `${day}.${month}.${year}`;
+            return date.toLocaleDateString('de-DE', options);
         },
     },
 
