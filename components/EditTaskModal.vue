@@ -97,7 +97,7 @@ export default {
         // Speichere Änderung der Aufgabe
         saveEditedTask() {
 
-            
+            // Deep Copy, um zu prüfen, ob Objekt alle erforderlichen Informationen enthält
             const originalTask = { ...this.taskToEdit };
 
             const editedTask = {
