@@ -119,12 +119,7 @@ export default {
             const [day, month, year] = this.newTask.plannedDate.split('.');
             this.newTask.plannedDate = `${year}-${month}-${day}`;
             const formattedPlannedDate = `${year}-${month}-${day}`;
-/*
-            //Automatische Berechnung von completedDate (6 Wochen)
-            const plannedDateObject = new Date(formattedPlannedDate);
-            const sixWeeksLater = new Date(plannedDateObject.getTime() + 6 * 7 * 24 * 60 * 60* 1000);
-            const formattedCompletedDate = `${sixWeeksLater.getFullYear()}-${(sixWeeksLater.getMonth() + 1).toString().padStart(2, '0')}-${sixWeeksLater.getDate().toString().padStart(2, '0')}`;
-*/
+
             //Aufgabennummer um 0.1 erhöhen
             this.newTask.number = this.currentTaskNumber;
             this.currentTaskNumber += 0.1;
