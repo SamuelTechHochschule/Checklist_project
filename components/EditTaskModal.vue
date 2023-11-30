@@ -4,36 +4,36 @@
 <!--            <span class="close" @click="closeModal">x</span> -->
             <h3>Task bearbeiten</h3>
                 <form @submit.prevent="editTask">
-                    <label for="task">Aufgabenbeschreibung:</label>
+                    <label for="task">Aufgabenbeschreibung: </label>
                     <input v-model="editedTask.task" />
 
                     <div class="form-row">
                         <div class="form-column">
-                            <label for="department">Verantwortliche Abteilung:</label>
+                            <label for="department">Verantwortliche Abteilung: </label>
                             <select v-model="editedTask.department">
                                 <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }} </option>
                             </select>
                         </div>
 
                         <div class="form-column">
-                            <label for="person">Verantwortliche Person:</label>
+                            <label for="person">Verantwortliche Person: </label>
                             <input v-model="editedTask.person" type="text" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-column">
-                            <label for="plannedDate">Geplanter Termin:</label>
+                            <label for="plannedDate">Geplanter Termin: </label>
                             <input type="text" :value="formatDate(editedTask.plannedDate)"/>
                         </div>
 
                         <div class="form-column">
-                            <label for="completedDate">Erledigter Termin:</label>
+                            <label for="completedDate">Erledigter Termin: </label>
                             <input type="text" :value="formatDate(editedTask.completedDate)"/>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-column">
-                            <label for="signature">Unterschrift</label>
+                            <label for="signature">Unterschrift: </label>
                             <input v-model="editedTask.signature" type="text" />
                         </div>
 
@@ -123,6 +123,8 @@ export default {
             const taskId = this.taskToEdit.id;;
             const url = `http://localhost:5500/api/checklist/edit/${taskId}`;
 
+            console.log('Edited Task before fetch:', this.editedTask);
+
             fetch(url, {
 
                 method: 'PUT',
@@ -158,10 +160,12 @@ export default {
         // Formatiere Datum von YYYY.MM.DD in DD.MM.YYYY
         formatDate(dateString) {
 
+            console.log("Davor", dateString);
             if(!dateString) return '';
 
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             const date = new Date(dateString);
+            console.log("Danach", date);
             return date.toLocaleDateString('de-DE', options);
         },
     },
@@ -182,6 +186,7 @@ export default {
             },
         },
     },
+    
 };
 </script>
 
