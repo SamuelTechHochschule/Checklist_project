@@ -6,6 +6,12 @@
                 </div>
             </li>
             <li>
+                <div class="logo-Mitarbeiterblock" href="/">
+                    <img src="~/assets/Mitarbeiterliste.png" alt="Mitarbeiterliste" class="mitarbeiterliste">
+                    <p>Mitarbeiterliste</p>
+                </div>
+            </li>
+            <li>
                 <div class="version-block" href="#">
                     <img src="~/assets/Version.png" alt="Version" class="version">
                     <p>Version</p>
@@ -267,6 +273,13 @@ export default {
         max-width: 100%;
         max-height: 100%;
         width: 50px;
+        height: 50px;  
+        margin-top: 15px;
+    }
+    .mitarbeiterliste{
+        max-width: 100%;
+        max-height: 100%;
+        width: 60px;
         height: 50px;  
         margin-top: 15px;
     }
