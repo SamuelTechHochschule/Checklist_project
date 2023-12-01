@@ -29,13 +29,13 @@
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
-                            <input type="text" v-model="editedTask.completedDate"/>
+                            <input type="text" v-model="editedTask.completedDate" placeholder="Erledigtes Datum"/>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-column">
                             <label for="signature">Unterschrift: </label>
-                            <input v-model="editedTask.signature" type="text" />
+                            <input v-model="editedTask.signature" type="text" placeholder="Unterschrift"/>
                         </div>
 
                     </div>
@@ -137,12 +137,7 @@ export default {
             };
         },
 
-        formatDate(dateString) {
 
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            const date = new Date(dateString);
-            return date.toLocaleDateString('de-DE', options);
-        },
 
 /*
         //Daten werden einmalig im Modal geladen
