@@ -1,11 +1,11 @@
 <template>
-    <div class="modal" v-if="taskToEdit">
+    <div class="modal" v-if="isVisible">
         <div class="modal-content">
 <!--            <span class="close" @click="closeModal">x</span> -->
             <h3>Task bearbeiten</h3>
-                <form @submit.prevent="editTask">
+                <form @submit.prevent="saveChanges">
                     <label for="task">Aufgabenbeschreibung: </label>
-                    <input v-model="editedTask.task" />
+                    <input type="text" v-model="editedTask.task" />
 
                     <div class="form-row">
                         <div class="form-column">
@@ -17,18 +17,19 @@
 
                         <div class="form-column">
                             <label for="person">Verantwortliche Person: </label>
-                            <input v-model="editedTask.person" type="text" />
+                            <input type="text" v-model="editedTask.person" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin: </label>
-                            <input type="text" :value="formatDate(editedTask.plannedDate)"/>
+                            <input type="text" v-model="editedTask.plannedDate"/>
+                            
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
-                            <input type="text" :value="formatDate(editedTask.completedDate)"/>
+                            <input type="text" v-model="editedTask.completedDate"/>
                         </div>
                     </div>
                     <div class="form-row">
@@ -39,8 +40,8 @@
 
                     </div>
                     <div class="form-row">
-                        <button type="button" @click="closeModal">Abbrechen</button>
-                        <button type="submit">Bestätigen</button>
+                        <button @click="closeModal">Abbrechen</button>
+                        <button @click="saveChanges">Bestätigen</button>
                     </div>
                 </form>
 
@@ -53,29 +54,97 @@ export default {
 
     props: {
 
-        taskToEdit: Object,
+        isVisible: {
+            
+            type: Boolean,
+            required: true,
+
+        },
+
+        taskToEdit: {
+
+            type: Object,
+            default: null,
+
+        }
     },
 
     data() {
 
         return {
 
-            editedTask: {
-
-                task: '',
-                department: '',
-                person: '',
-                plannedDate: '',
-                completedDate: '',
-                signature: '',
+            editedTask: { 
+                
+                id: null,
+                task: "",
+                department: "",
+                person: "",
+                plannedDate: "",
+                completedDate: "",
+                signature: "",
             },
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
-            dataLoaded: false,
         };
+    },
+
+    watch: {
+
+        taskToEdit: {
+
+            handler(newTask) {
+
+                if(newTask) {
+
+                    this.editedTask = { ...newTask};
+                }else{
+
+                    this.resetEditedTask();
+                }
+            },
+
+            //Watch wird beim ersten Rendern sofort ausgeführt
+            immediate: true,
+        },
     },
 
     methods: {
 
+        // Änderungen speichern
+        saveChanges() {
+
+            this.$emit("save", this.editedTask);
+            this.closeModal();
+        },
+
+        // Schließe das Modal
+        closeModal() {
+
+            this.$emit('close');
+        },
+
+        //EditedTask nach Speichern clearen
+        resetEditedTask() {
+
+            this.editedTask = {
+
+                id: null,
+                task: "",
+                department: "",
+                person: "",
+                plannedDate: "",
+                completedDate: "",
+                signature: "",
+            };
+        },
+
+        formatDate(dateString) {
+
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE', options);
+        },
+
+/*
         //Daten werden einmalig im Modal geladen
         loadData() {
 
@@ -85,10 +154,12 @@ export default {
                 this.dataLoaded = true;
             }
         },
-
+*/
+/*
         // Bearbeite Aufgabe
         editTask() {
 
+            console.log("Open Modal in EditTaskModal.vue");
             this.editedTask.plannedDate = this.formatDateforDatabase(this.editedTask.plannedDate);
             this.editedTask.completedDate = this.formatDateforDatabase(this.editedTask.completedDate);
 
@@ -107,6 +178,8 @@ export default {
 
         // Speichere Änderung der Aufgabe
         saveEditedTask() {
+
+            console.log("Changes in Modal");
 
             // Deep Copy, um zu prüfen, ob Objekt alle erforderlichen Informationen enthält
             const originalTask = { ...this.taskToEdit };
@@ -161,27 +234,9 @@ export default {
                 console.error('Error saving changes:', error);
             })
         },
+*/
 
-        // Schließe das Modal
-        closeModal() {
-
-            this.dataLoaded = false;
-            this.$emit('closeModal');
-        },
-
-        // Formatiere Datum von YYYY.MM.DD in DD.MM.YYYY
-        formatDate(dateString) {
-
-            console.log("Davor", dateString);
-            if(!dateString) return '';
-
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            const date = new Date(dateString);
-            console.log("Danach", date);
-            return date.toLocaleDateString('de-DE', options);
-        },
-    },
-
+/*
     watch: {
 
         taskToEdit: {
@@ -199,9 +254,11 @@ export default {
                 this.loadData();
             },
         },
+*/  
     },
-    
+   
 };
+
 </script>
 
 <style scoped>

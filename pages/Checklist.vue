@@ -52,7 +52,7 @@
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
 
-        <EditTaskModal v-if="showEditModal" :taskToEdit="selectedTask" @saveChanges="saveEditedTask" @closeModal="closeEditModal" />
+        <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 </template>
 
 <script>
@@ -73,10 +73,11 @@ export default {
             checklistItems: [],
             showButtons: false,
             selectedTask: null,
+            isEditModalVisible: false,
             selectedTaskId: -1,
             preliminaryVersions: {},
             releaseVersions: {},
-            showEditModal: false,
+//            showEditModal: false,
         };
     },
 
@@ -172,48 +173,54 @@ export default {
 
         editTask(taskId) {
 
-            this.showEditModal = true;
-            this.selectedTaskId = taskId;
+            console.log("editTask-Aufruf");
+            
+            this.selectedTask = this.checklistItems.find((item) => item.id === taskId);
+            this.editedTask = { ...this.selectedTask };
+            this.isEditModalVisible = true;
         },
 
-        saveEditedTask(editedTask) {
+        async saveEditedTask(editedTask) {
 
-            console.log('Saving changes for edited task:', editedTask);
-            this.showEditModal = false;
+            try{
 
-            const taskId = this.selectedTaskId;
-            const url = `http://localhost:5500/api/checklist/edit/${taskId}`;
+                const response = await fetch(`http://localhost:5500/api/checklist/edit/${editedTask.id}`, {
 
-            fetch(url, {
+                    method: 'PUT',
+                    headers: {
 
-                method: 'PUT',
-                headers: {
+                        'Content-Type': 'application/json',
+                    },
 
-                    'Content-Type': 'application/json',
-                },
-
-                body: JSON.stringify(editedTask)
-            })
-            .then(response => {
+                    body: JSON.stringify(editedTask),
+                });
 
                 if(!response.ok) {
 
-                    throw new Error(`Failed to save changes. Server responded with status ${response.status}`);
+                    throw new Error(`Failed to save edited task. Server responded with status ${response.status}`);
                 }
 
-                console.log('Changes saved successfully');
-                this.showEditModal = false;
-                this.fetchChecklistItems();
-            })
-            .catch(error => {
+                // checklistItems-Array wird mit der bearbeiteten Aufgabe aktualisiert
+                const index = this.checklistItems.findIndex((item) => item.id === editedTask.id);
+                if(index !== -1) {
 
-                console.error('Error saving changes:', error);
-            });
+                    this.checklistItems.splice(index, 1, editedTask);
+                }
+
+                //Modal wird geschlossen
+                this.isEditModalVisible = false;
+                console.log('Task edited and saved successfully');
+            } catch(error) {
+
+                console.error('Error saving edited task:', error);
+            }
+
+            console.log('Saving changes for edited task:', editedTask);
         },  
 
         closeEditModal() {
 
-            this.showEditModal = false;
+            this.isEditModalVisible = false;
         }
     },
 };
