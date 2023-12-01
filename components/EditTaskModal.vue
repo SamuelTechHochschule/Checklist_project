@@ -70,10 +70,21 @@ export default {
                 signature: '',
             },
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
+            dataLoaded: false,
         };
     },
 
     methods: {
+
+        //Daten werden einmalig im Modal geladen
+        loadData() {
+
+            if(!this.dataLoaded) {
+
+                console.log('Daten laden');
+                this.dataLoaded = true;
+            }
+        },
 
         // Bearbeite Aufgabe
         editTask() {
@@ -154,6 +165,7 @@ export default {
         // Schließe das Modal
         closeModal() {
 
+            this.dataLoaded = false;
             this.$emit('closeModal');
         },
 
@@ -181,8 +193,10 @@ export default {
                     
                     ...newTask,
                     plannedDate: this.formatDate(newTask.plannedDate),
-                    completedDate: this.formatDate(newTask.completedDate)
+                    completedDate: this.formatDate(newTask.completedDate),
                 };
+
+                this.loadData();
             },
         },
     },

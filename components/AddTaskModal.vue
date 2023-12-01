@@ -54,7 +54,6 @@ export default {
             isOpen: false,
             newTask: {
 
-                number: 1.0,
                 task: '',
                 department: '',
                 person: '',
@@ -62,18 +61,8 @@ export default {
                 isPreliminary: false,
                 isRelease: false,
             },
-            currentTaskNumber: 1.1,
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
         };
-    },
-
-    mounted() {
-
-        const storedTaskNumber = localStorage.getItem('currentTaskNumber');
-        if (storedTaskNumber) {
-
-            this.currentTaskNumber = parseFloat(storedTaskNumber);
-        }
     },
 
     methods: {
@@ -120,11 +109,6 @@ export default {
             this.newTask.plannedDate = `${year}-${month}-${day}`;
             const formattedPlannedDate = `${year}-${month}-${day}`;
 
-            //Aufgabennummer um 0.1 erhöhen
-            this.newTask.number = this.currentTaskNumber;
-            this.currentTaskNumber += 0.1;
-
-
             // Änderung der Aufgabenbeschreibung am Ende
             if (this.newTask.isPreliminary) {
 
@@ -136,14 +120,12 @@ export default {
                 this.newTask.task += '- Final Release';
             }
 
-
             fetch('http://localhost:5500/api/checklist/addTask', {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    number: this.newTask.number,
                     task: this.newTask.task,
                     department: this.newTask.department,
                     person: this.newTask.person,
@@ -182,15 +164,11 @@ export default {
                 console.error('Error adding task:', error);
             })
 
-            // Momentane Nummer im localStorage speichern
-            localStorage.setItem('currentTaskNumber', this.currentTaskNumber.toString());
-
         },
 
         // Cleared Eingabe im Modal
         resetNewTask() {
             this.newTask = {
-                number: this.currentTaskNumber,
                 task: '',
                 department: '',
                 person: '',

@@ -4,7 +4,6 @@
                 <table id="table">
                     <thead>
                         <tr>
-<!--                            <th>#</th> -->
                             <th>Erledigungspunkte aus dem PEP</th>
                             <th>FB / Abt.</th>
                             <th>Person</th>
@@ -15,7 +14,6 @@
                     </thead>
                     <tbody>
                         <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv ==='blue-row', 'cyan-row': item.colorClass_rv === 'cyan-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
-<!--                           <td>{{ item.number }}</td> -->
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
                             <td>{{ item.person }}</td>
