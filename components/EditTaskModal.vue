@@ -20,19 +20,19 @@
                             <input type="text" v-model="editedTask.person" placeholder="Vornamenkürzel.Nachname"/>
                         </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin: </label>
-                            <input type="text" v-model="editedTask.plannedDate" placeholder="DD.MM.YYYY"/>
-                            {{ formatDate(editedTask.plannedDate) }}
+                            <input type="text" v-model="formattedPlannedDate" placeholder="DD.MM.YYYY"/>
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
-                            <input type="text" v-model="editedTask.completedDate" placeholder="DD.MM.YYYY"/>
-                            {{ formatDate(editedTask.completedDate) }}
+                            <input type="text" v-model="formattedCompleteDate" placeholder="DD.MM.YYYY"/>
                         </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-column">
                             <label for="signature">Unterschrift: </label>
@@ -88,6 +88,19 @@ export default {
         };
     },
 
+    computed: {
+
+        formattedPlannedDate: function() {
+
+            return this.formatDate(this.editedTask.plannedDate);
+        },
+
+        formattedCompleteDate: function() {
+
+            return this.formatDate(this.editedTask.completedDate);
+        },
+    },
+
     watch: {
 
         taskToEdit: {
@@ -109,29 +122,17 @@ export default {
     },
 
     methods: {
-
-        // Formatierung von DD.MM.YYYY in YYYY-MM-DD für Datenbankspeicherung
-        formatDateforBackend(dateString) {
-
-            if(!dateString) {
-
-                return null;
-            }
-
-            const [day, month, year] = dateString.split('.');
-            return `${year}-${month}-${day}`;
-        },
-
+/*
         // Prüfung, ob richtiges Format verwendet wurde
         validateDateFormat(dateString) {
 
             const regex = /^\d{2}\.\d{2}\.\d{4}$/;
             return regex.test(dateString);
         },  
-
+*/
         // Änderungen speichern
         saveChanges() {
-
+/*
             if(!this.validateDateFormat(this.editedTask.plannedDate)) {
 
                 alert('Das Datumsformat soll im Format DD.MM.YYYY sein!');
@@ -143,7 +144,7 @@ export default {
                 alert('Das Datumsformat soll im Format DD.MM.YYYY sein!');
                 return ;
             }
-
+*/
             this.editedTask.plannedDate = this.formatDateforBackend(this.editedTask.plannedDate);
             this.editedTask.completedDate = this.formatDateforBackend(this.editedTask.completedDate);
 
@@ -183,7 +184,37 @@ export default {
             const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
             const date = new Date(dateString);
             return date.toLocaleDateString('de-DE', options);
-        }
+        },
+
+        // Formatierung von DD.MM.YYYY in YYYY-MM-DD für Datenbankspeicherung
+        formatDateforBackend(dateString) {
+
+            console.log(dateString);
+
+            if(!dateString) {
+
+                return null;
+            }
+
+            // Überprüfen, ob dateString ein string ist
+            if(typeof dateString !== 'string') {
+
+                console.error('Invalid dateString. Expected a string.');
+                return '';
+            }
+
+            const dateParts = dateString.split('.');
+
+            // Überprüfung auf das richtige Format
+            if(!Array.isArray(dateParts) || dateParts.length !== 3) {
+
+                console.error('Invalid date format. Expected DD.MM.YYYY');
+                return '';
+            }
+
+            const [day, month, year] = dateParts;
+            return `${year}-${month}-${day}`;
+        },
     },
    
 };
