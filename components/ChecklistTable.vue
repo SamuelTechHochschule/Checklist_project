@@ -105,9 +105,12 @@ export default {
     td{
         cursor: pointer;
     }
-    th, td{
-        text-align: left;
+    td, th{
+        text-align: center;
         padding: 16px;
+    }
+    td:first-child{
+        text-align: left;
     }
     tr{
         background-color: #f2f2f2;

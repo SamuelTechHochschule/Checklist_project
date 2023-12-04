@@ -24,12 +24,12 @@
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin: </label>
-                            <input type="text" v-model="formattedPlannedDate" placeholder="DD.MM.YYYY"/>
+                            <input type="text" v-model="editedTask.plannedDate" placeholder="DD.MM.YYYY"/>
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
-                            <input type="text" v-model="formattedCompleteDate" placeholder="DD.MM.YYYY"/>
+                            <input type="text" v-model="editedTask.completedDate" placeholder="DD.MM.YYYY"/>
                         </div>
                     </div>
 
@@ -87,7 +87,7 @@ export default {
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
         };
     },
-
+/*
     computed: {
 
         formattedPlannedDate: function() {
@@ -100,7 +100,7 @@ export default {
             return this.formatDate(this.editedTask.completedDate);
         },
     },
-
+*/
     watch: {
 
         taskToEdit: {
@@ -122,29 +122,10 @@ export default {
     },
 
     methods: {
-/*
-        // Prüfung, ob richtiges Format verwendet wurde
-        validateDateFormat(dateString) {
 
-            const regex = /^\d{2}\.\d{2}\.\d{4}$/;
-            return regex.test(dateString);
-        },  
-*/
         // Änderungen speichern
         saveChanges() {
-/*
-            if(!this.validateDateFormat(this.editedTask.plannedDate)) {
 
-                alert('Das Datumsformat soll im Format DD.MM.YYYY sein!');
-                return ;
-            }
-
-            if(!this.validateDateFormat(this.editedTask.completedDate)) {
-
-                alert('Das Datumsformat soll im Format DD.MM.YYYY sein!');
-                return ;
-            }
-*/
             this.editedTask.plannedDate = this.formatDateforBackend(this.editedTask.plannedDate);
             this.editedTask.completedDate = this.formatDateforBackend(this.editedTask.completedDate);
 
@@ -204,8 +185,7 @@ export default {
             }
 
             const dateParts = dateString.split('.');
-
-            // Überprüfung auf das richtige Format
+            // Überprüfen, ob im richtigen Format
             if(!Array.isArray(dateParts) || dateParts.length !== 3) {
 
                 console.error('Invalid date format. Expected DD.MM.YYYY');
