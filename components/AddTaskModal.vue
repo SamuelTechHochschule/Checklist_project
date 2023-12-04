@@ -10,19 +10,19 @@
                 <div class="form-column">
                     <label>Verantwortliche Abteilung:</label>
                     <select v-model="newTask.department">
-                        <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }} </option>
+                        <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }}</option>
                     </select>
                 </div>
 
                 <div class="form-column">
                     <label>Verantwortliche Person:</label>
-                    <input v-model="newTask.person" type="text" />
+                    <input v-model="newTask.person" type="text" placeholder="Vornamenkürzel.Nachname"/>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-column">
                     <label>Geplanter Termin:</label>
-                    <input v-model="newTask.plannedDate" type="text" />
+                    <input v-model="newTask.plannedDate" type="text" placeholder="DD.MM.YYYY"/>
                 </div>
 
                 <div class="form-column">

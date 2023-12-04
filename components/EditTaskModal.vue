@@ -23,13 +23,14 @@
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin: </label>
-                            <input type="text" v-model="editedTask.plannedDate"/>
-                            
+                            <input type="text" v-model="editedTask.plannedDate" />
+                            {{ formatDate(editedTask.plannedDate) }}
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
                             <input type="text" v-model="editedTask.completedDate" placeholder="Erledigtes Datum"/>
+                            {{ formatDate(editedTask.completedDate) }}
                         </div>
                     </div>
                     <div class="form-row">
