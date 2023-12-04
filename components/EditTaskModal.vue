@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-row">
                         <button @click="closeModal">Abbrechen</button>
-                        <button @click="saveChanges">Bestätigen</button>
+                        <button @submit.prevent="saveChanges">Bestätigen</button>
                     </div>
                 </form>
 
@@ -136,6 +136,8 @@ export default {
                 signature: "",
             };
         },
+
+    
 
 
 

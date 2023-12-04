@@ -18,7 +18,7 @@
                             <td>{{ item.department }}</td>
                             <td>{{ item.person }}</td>
                             <td>{{ formatDate(item.plannedDate) }}</td>
-                            <td>{{ item.completedDate }}</td>
+                            <td>{{ formatDate(item.completedDate) }}</td>
                             <td>{{ item.signature }}</td>
                         </tr>
                     </tbody>
@@ -48,6 +48,11 @@ export default {
     methods: {
 
         formatDate(dateString) {
+
+            if(!dateString) {
+                
+                return '';
+            }
 
             const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
             const date = new Date(dateString);
