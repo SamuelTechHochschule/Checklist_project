@@ -137,6 +137,19 @@ export default {
             };
         },
 
+        // Datum wird in Format DD.MM.YYYY formatiert
+        formatDate(dateString) {
+
+            if(!dateString) {
+
+                return '';
+            }
+
+            const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE', options);
+        }
+
     
 
 
