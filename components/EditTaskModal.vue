@@ -110,8 +110,23 @@ export default {
 
     methods: {
 
+        // Formatierung von DD.MM.YYYY in YYYY-MM-DD für Datenbankspeicherung
+        formatDateforBackend(dateString) {
+
+            if(!dateString) {
+
+                return null;
+            }
+
+            const [day, month, year] = dateString.split('.');
+            return `${year}-${month}-${day}`;
+        },
+
         // Änderungen speichern
         saveChanges() {
+
+            this.editedTask.plannedDate = this.formatDateforBackend(this.editedTask.plannedDate);
+            this.editedTask.completedDate = this.formatDateforBackend(this.editedTask.completedDate);
 
             this.$emit("save", this.editedTask);
             this.closeModal();
