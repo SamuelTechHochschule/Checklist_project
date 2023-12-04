@@ -77,7 +77,6 @@ export default {
             selectedTaskId: -1,
             preliminaryVersions: {},
             releaseVersions: {},
-//            showEditModal: false,
         };
     },
 
@@ -171,6 +170,7 @@ export default {
             }
         },
 
+        // Aufruf des Modals für die Bearbeitung
         editTask(taskId) {
 
             console.log("editTask-Aufruf");
@@ -180,6 +180,7 @@ export default {
             this.isEditModalVisible = true;
         },
 
+        // Änderungen werden gespeichert
         async saveEditedTask(editedTask) {
 
             try{
@@ -218,6 +219,7 @@ export default {
             console.log('Saving changes for edited task:', editedTask);
         },  
 
+        // Modal wird geschlossen
         closeEditModal() {
 
             this.isEditModalVisible = false;
