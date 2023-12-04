@@ -17,26 +17,26 @@
 
                         <div class="form-column">
                             <label for="person">Verantwortliche Person: </label>
-                            <input type="text" v-model="editedTask.person" />
+                            <input type="text" v-model="editedTask.person" placeholder="Vornamenkürzel.Nachname"/>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin: </label>
-                            <input type="text" v-model="editedTask.plannedDate" />
+                            <input type="text" v-model="editedTask.plannedDate" placeholder="DD.MM.YYYY"/>
                             {{ formatDate(editedTask.plannedDate) }}
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
-                            <input type="text" v-model="editedTask.completedDate" placeholder="Erledigtes Datum"/>
+                            <input type="text" v-model="editedTask.completedDate" placeholder="DD.MM.YYYY"/>
                             {{ formatDate(editedTask.completedDate) }}
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-column">
                             <label for="signature">Unterschrift: </label>
-                            <input v-model="editedTask.signature" type="text" placeholder="Unterschrift"/>
+                            <input v-model="editedTask.signature" type="text" placeholder="Vornamenkürzel.Nachname"/>
                         </div>
 
                     </div>
