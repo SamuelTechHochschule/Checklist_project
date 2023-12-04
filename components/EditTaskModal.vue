@@ -122,8 +122,27 @@ export default {
             return `${year}-${month}-${day}`;
         },
 
+        // Prüfung, ob richtiges Format verwendet wurde
+        validateDateFormat(dateString) {
+
+            const regex = /^\d{2}\.\d{2}\.\d{4}$/;
+            return regex.test(dateString);
+        },  
+
         // Änderungen speichern
         saveChanges() {
+
+            if(!this.validateDateFormat(this.editedTask.plannedDate)) {
+
+                alert('Das Datumsformat soll im Format DD.MM.YYYY sein!');
+                return ;
+            }
+
+            if(!this.validateDateFormat(this.editedTask.completedDate)) {
+
+                alert('Das Datumsformat soll im Format DD.MM.YYYY sein!');
+                return ;
+            }
 
             this.editedTask.plannedDate = this.formatDateforBackend(this.editedTask.plannedDate);
             this.editedTask.completedDate = this.formatDateforBackend(this.editedTask.completedDate);
