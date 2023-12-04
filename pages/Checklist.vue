@@ -45,9 +45,15 @@
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
-        <ChecklistTable :checklistItems="checklistItems" :selectedTaskId="selectedTaskId" @taskClicked="handleTaskClick" @updateRowColors="updateRowColors" @deleteItemFromChecklist="deleteItemFromChecklist"/>
+        <ChecklistTable :checklistItems="checklistItems"
+         :selectedTaskId="selectedTaskId" 
+         @taskClicked="handleTaskClick" 
+         @updateRowColors="updateRowColors" 
+         @deleteItemFromChecklist="deleteItemFromChecklist"
+         @sendReminder="sendReminder"/>
         
         <div v-if="showButtons" class="button-container">
+            <button v-if="shouldshowReminderButton(selectedTask)" @click="sendReminder(selectedTask.id)">Reminder schicken</button>
             <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
@@ -110,6 +116,12 @@ export default {
         // Modal öffnen
         openModal() {
             this.$refs.addTaskModal.openModal();
+        },
+
+        //Reminder-Button wird nur angzeigt, wenn completedDate oder signature null sind
+        shouldshowReminderButton(item) {
+
+            return !item.completedDate || !item.signature;
         },
 
         // Handler für Betätigen einer Tabellenreihe
@@ -223,6 +235,12 @@ export default {
         closeEditModal() {
 
             this.isEditModalVisible = false;
+        },
+
+        // Reminder-Email-Funktion
+        sendReminder(taskId) {
+
+            console.log('Sending reminder for task ID:', taskId);
         }
     },
 };
