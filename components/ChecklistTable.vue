@@ -13,23 +13,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <!--
-                        <tr class="bodyheader">
-                            <td colspan="6">1. Dokumentation</td>
-                        </tr>
-                        <tr class="bodyheader">
-                            <td colspan="6">2. Tätigkeiten</td>
-                        </tr>
-                        <tr class="bodyheader">
-                            <td colspan="6">3. Erweiterungspunkte zum Standard PEP</td>
-                        </tr>
-                        <tr class="bodyheader">
-                            <td colspan="6">4. Projektspezifische Aufgaben</td>
-                        </tr>
-                        <tr class="bodyheader">
-                            <td colspan="6">5. Aufgaben nach der Freigabe des Meilensteins</td>
-                        </tr>
-                    --> 
                         <template v-for="(tasks, category) in groupedTasks" :key="category">
                             <tr class="bodyheader">
                                 <td :colspan="6">{{ category }}</td>
