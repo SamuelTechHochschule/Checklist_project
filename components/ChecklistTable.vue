@@ -13,6 +13,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr class="bodyheader">
+                            <td colspan="6">1. Dokumentation</td>
+                        </tr>
+                        <tr class="bodyheader">
+                            <td colspan="6">2. Tätigkeiten</td>
+                        </tr>
+                        <tr class="bodyheader">
+                            <td colspan="6">3. Erweiterungspunkte zum Standard PEP</td>
+                        </tr>
+                        <tr class="bodyheader">
+                            <td colspan="6">4. Projektspezifische Aufgaben</td>
+                        </tr>
+                        <tr class="bodyheader">
+                            <td colspan="6">5. Aufgaben nach der Freigabe des Meilensteins</td>
+                        </tr>
                         <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv ==='blue-row', 'cyan-row': item.colorClass_rv === 'cyan-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -73,6 +88,11 @@ export default {
 
 <style scoped>
 
+    .bodyheader{
+        text-align: left;
+        font-size: large;
+        background-color: rgb(69, 196, 69);
+    }
     .blue-row{
         background-color: rgb(105, 105, 245);
     }
