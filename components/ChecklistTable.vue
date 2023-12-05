@@ -104,6 +104,7 @@ export default {
         text-align: left;
         font-size: large;
         background-color: rgba(22, 97, 167, 0.651);
+        border-bottom: 2px solid #000000;
     }
     .Preliminary-row{
         background-color: rgb(90, 196, 164);
