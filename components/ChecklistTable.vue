@@ -13,6 +13,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <!--
                         <tr class="bodyheader">
                             <td colspan="6">1. Dokumentation</td>
                         </tr>
@@ -28,19 +29,20 @@
                         <tr class="bodyheader">
                             <td colspan="6">5. Aufgaben nach der Freigabe des Meilensteins</td>
                         </tr>
-                    <!--
-                        <tr v-for="category in categories" :key="category">
-                            <td colspan="6">{{ category }}</td>
-                        </tr>
-                    -->    
-                        <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv ==='blue-row', 'cyan-row': item.colorClass_rv === 'cyan-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
-                            <td>{{ item.task }}</td>
-                            <td>{{ item.department }}</td>
-                            <td>{{ item.person }}</td>
-                            <td>{{ formatDate(item.plannedDate) }}</td>
-                            <td>{{ formatDate(item.completedDate) }}</td>
-                            <td>{{ item.signature }}</td>
-                        </tr>
+                    --> 
+                        <template v-for="(tasks, category) in groupedTasks" :key="category">
+                            <tr class="bodyheader">
+                                <td :colspan="6">{{ category }}</td>
+                            </tr>
+                            <tr v-for="item in tasks" :key="item.id" :class="{ 'blue-row': item.colorClass_pv ==='blue-row', 'cyan-row': item.colorClass_rv === 'cyan-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
+                                <td>{{ item.task }}</td>
+                                <td>{{ item.department }}</td>
+                                <td>{{ item.person }}</td>
+                                <td>{{ formatDate(item.plannedDate) }}</td>
+                                <td>{{ formatDate(item.completedDate) }}</td>
+                                <td>{{ item.signature }}</td>
+                            </tr>
+                        </template>
                     </tbody>
                 </table>
             </div>
@@ -50,7 +52,19 @@
 <script>
 
 export default {
-    
+
+    data() {
+        return{
+            categories: {
+                '1. Dokumentation': [],
+                '2. Tätigkeiten': [],
+                '3. Erweiterungspunkte zum Standard PEP': [],
+                '4. Projektspezifische Aufgaben': [],
+                '5. Aufgaben nach der Freigabe des Meilensteins': [],
+            },
+        };
+    },
+
     props: {
         checklistItems: {
             type: Array,
@@ -61,26 +75,21 @@ export default {
             default: -1,
         },
     },
-/*
-    data() {
-        return{
-            categories: ['1. Dokumentation', '2. Tätigkeiten', '3. Erweiterungspunkte zum Standard PEP', '4. Projektspezifische Aufgaben', '5. Aufgaben nach der Freigabe des Meilensteins'],
-        };
-    },
 
-    computed:{
-        categorizedItems() {
-            const categorized = {};
-            for(const category of this.categories) {
-                categorized[category] = [];
-            }
-            for(const item of this.checklistItems) {
-                categorized[item.category].push(item);
-            }
-            return categorized;
+    computed: {
+        groupedTasks() {
+            const grouped = {};
+
+            this.checklistItems.forEach(item => {
+                if(!grouped[item.category]) {
+                    grouped[item.category] = [];
+                }
+                grouped[item.category].push(item);
+            });
+            return grouped;
         },
     },
-*/
+
     methods: {
         formatDate(dateString) {
             if(!dateString) {
@@ -93,8 +102,14 @@ export default {
         },
 
         handleTaskClick(taskId) {
-            console.log('Handling task click for task ID:', taskId);
-            this.$emit('taskClicked', taskId);
+            for(const tasks of Object.values(this.groupedTasks)) {
+                const clickedTask = tasks.find(item => item.id === taskId);
+                if(clickedTask) {
+                    console.log('Handling task click for task ID:', taskId);
+                    this.$emit('taskClicked', taskId);
+                    return;
+                }
+            }
         },
     },
 };
