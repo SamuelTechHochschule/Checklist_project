@@ -13,7 +13,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
                         <tr class="bodyheader">
                             <td colspan="6">1. Dokumentation</td>
                         </tr>
@@ -49,18 +48,15 @@
 </template>
 
 <script>
+
 export default {
-
+    
     props: {
-
         checklistItems: {
-
             type: Array,
             required: true,
         },
-
         selectedTaskId: {
-
             type: Number,
             default: -1,
         },
@@ -86,11 +82,8 @@ export default {
     },
 */
     methods: {
-
         formatDate(dateString) {
-
             if(!dateString) {
-                
                 return '';
             }
 
@@ -100,14 +93,10 @@ export default {
         },
 
         handleTaskClick(taskId) {
-
             console.log('Handling task click for task ID:', taskId);
             this.$emit('taskClicked', taskId);
         },
-
     },
-
-
 };
 </script>
 

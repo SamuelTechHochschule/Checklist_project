@@ -45,14 +45,13 @@
                             <label for="signature">Unterschrift: </label>
                             <input v-model="editedTask.signature" type="text" placeholder="Vornamenkürzel.Nachname"/>
                         </div>
-
                     </div>
+
                     <div class="form-row">
                         <button @click="closeModal">Abbrechen</button>
                         <button @submit.prevent="saveChanges">Bestätigen</button>
                     </div>
                 </form>
-
         </div>
     </div>
 </template>
@@ -61,28 +60,19 @@
 export default {
 
     props: {
-
         isVisible: {
-            
             type: Boolean,
             required: true,
-
         },
-
         taskToEdit: {
-
             type: Object,
             default: null,
-
         }
     },
 
     data() {
-
         return {
-
-            editedTask: { 
-                
+            editedTask: {  
                 id: null,
                 task: "",
                 department: "",
@@ -111,30 +101,22 @@ export default {
     },
 */
     watch: {
-
         taskToEdit: {
-
             handler(newTask) {
-
                 if(newTask) {
-
                     this.editedTask = { ...newTask};
                 }else{
-
                     this.resetEditedTask();
                 }
             },
-
             //Watch wird beim ersten Rendern sofort ausgeführt
             immediate: true,
         },
     },
 
     methods: {
-
         // Änderungen speichern
         saveChanges() {
-
             this.editedTask.plannedDate = this.formatDateforBackend(this.editedTask.plannedDate);
             this.editedTask.completedDate = this.formatDateforBackend(this.editedTask.completedDate);
 
@@ -144,15 +126,12 @@ export default {
 
         // Schließe das Modal
         closeModal() {
-
             this.$emit('close');
         },
 
         //EditedTask nach Speichern clearen
         resetEditedTask() {
-
             this.editedTask = {
-
                 id: null,
                 task: "",
                 department: "",
@@ -166,9 +145,7 @@ export default {
 
         // Datum wird in Format DD.MM.YYYY formatiert
         formatDate(dateString) {
-
             if(!dateString) {
-
                 return '';
             }
 
@@ -179,17 +156,14 @@ export default {
 
         // Formatierung von DD.MM.YYYY in YYYY-MM-DD für Datenbankspeicherung
         formatDateforBackend(dateString) {
-
             console.log(dateString);
 
             if(!dateString) {
-
                 return null;
             }
 
             // Überprüfen, ob dateString ein string ist
             if(typeof dateString !== 'string') {
-
                 console.error('Invalid dateString. Expected a string.');
                 return '';
             }
@@ -197,7 +171,6 @@ export default {
             const dateParts = dateString.split('.');
             // Überprüfen, ob im richtigen Format
             if(!Array.isArray(dateParts) || dateParts.length !== 3) {
-
                 console.error('Invalid date format. Expected DD.MM.YYYY');
                 return '';
             }

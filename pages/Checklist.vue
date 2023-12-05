@@ -103,7 +103,6 @@ export default {
                     throw new Error('Invalid response format');
                 }
                 this.checklistItems = data.map(item => ({
-
                     ...item,
                     isPreliminary: item.colorClass_pv === 'blue-row',
                     isRelease: item.colorClass_rv === 'cyan-row',
@@ -120,20 +119,16 @@ export default {
 
         //Reminder-Button wird nur angzeigt, wenn completedDate oder signature null sind
         shouldshowReminderButton(item) {
-
             return !item.completedDate || !item.signature;
         },
 
         // Handler für Betätigen einer Tabellenreihe
         handleTaskClick(taskId) {
-
             if (this.selectedTaskId === taskId) {
-
                 this.showButtons = false;
                 this.selectedTask = null;
                 this.selectedTaskId = -1;
             } else {
-
                 this.showButtons = true;
                 this.selectedTask = this.checklistItems.find(item => item.id === taskId);
                 this.selectedTaskId = taskId;
@@ -143,30 +138,24 @@ export default {
 
         // Farben der Reihen beim Neuladen updaten
         updateRowColors ({ taskId, colorClass_pv, colorClass_rv }) {
-
             this.$set(this.preliminaryVersions, taskId, colorClass_pv);
             this.$set(this.releaseVersions, taskId, colorClass_rv);
         },
 
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
-
             try{
-
                 const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
-
                     method: 'DELETE',
                 });
 
                 if (!response.ok) {
-
                     throw new Error(`Failed to delete task. Server responded with status ${response.status}`);
                 }
 
                 // Aufgabe aus Array manuell löschen
                 const index = this.checklistItems.findIndex(item => item.id === taskId);
                 if (index !== -1) {
-
                     this.checklistItems.splice(index, 1);
                 }
 
@@ -177,14 +166,12 @@ export default {
 
                 console.log('Task deleted successfully');
             } catch (error) {
-
                 console.error('Error deleting task:', error);
             }
         },
 
         // Aufruf des Modals für die Bearbeitung
         editTask(taskId) {
-
             console.log("editTask-Aufruf");
             
             this.selectedTask = this.checklistItems.find((item) => item.id === taskId);
@@ -194,29 +181,22 @@ export default {
 
         // Änderungen werden gespeichert
         async saveEditedTask(editedTask) {
-
             try{
-
                 const response = await fetch(`http://localhost:5500/api/checklist/edit/${editedTask.id}`, {
-
                     method: 'PUT',
                     headers: {
-
                         'Content-Type': 'application/json',
                     },
-
                     body: JSON.stringify(editedTask),
                 });
 
                 if(!response.ok) {
-
                     throw new Error(`Failed to save edited task. Server responded with status ${response.status}`);
                 }
 
                 // checklistItems-Array wird mit der bearbeiteten Aufgabe aktualisiert
                 const index = this.checklistItems.findIndex((item) => item.id === editedTask.id);
                 if(index !== -1) {
-
                     this.checklistItems.splice(index, 1, editedTask);
                 }
 
@@ -224,7 +204,6 @@ export default {
                 this.isEditModalVisible = false;
                 console.log('Task edited and saved successfully');
             } catch(error) {
-
                 console.error('Error saving edited task:', error);
             }
 
@@ -233,13 +212,11 @@ export default {
 
         // Modal wird geschlossen
         closeEditModal() {
-
             this.isEditModalVisible = false;
         },
 
         // Reminder-Email-Funktion
         sendReminder(taskId) {
-
             console.log('Sending reminder for task ID:', taskId);
         }
     },

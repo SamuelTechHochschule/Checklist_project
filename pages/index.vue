@@ -57,17 +57,14 @@
 
                     if (response.ok){
                         try {
-                            
                             const user = await response.json();
                             this.loginToken = user.loginToken;
 
                             console.log('Login successful:', user);
                             this.$router.push("/checklist");
                         } catch (jsonError) {
-
                             console.error('Error parsing json:', jsonError);
                         }
-
                     } else {
                         console.error('Login error:', response.statusText);
                     }

@@ -56,12 +56,9 @@
 export default {
 
     data(){
-
         return{
-
             isOpen: false,
             newTask: {
-
                 task: '',
                 department: '',
                 person: '',
@@ -76,7 +73,6 @@ export default {
     },
 
     methods: {
-
         // Öffnet Modal 
         openModal() {
             this.isOpen = true;
@@ -90,7 +86,6 @@ export default {
         
         // Fügt Aufgabe hinzu
         addTask() {
-
             // Konfigurierung für Reihenfärbung
             const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
@@ -121,12 +116,10 @@ export default {
 
             // Änderung der Aufgabenbeschreibung am Ende
             if (this.newTask.isPreliminary) {
-
                 this.newTask.task += ' - Preliminary Release';
             }
 
             if (this.newTask.isRelease) {
-
                 this.newTask.task += ' - Final Release';
             }
 
@@ -156,8 +149,7 @@ export default {
             })
             .then(data => {
                 console.log('Task added successfully:', data);
-                if (!data || !data.id) {
-                    
+                if (!data || !data.id) {   
                     console.error('Invalid data received from server:', data);
                     return;
                 }
@@ -165,7 +157,6 @@ export default {
                 this.$emit('taskAdded');
                 this.closeModal();
             })
-
             .catch(error => {
                 console.error('Error adding task:', error);
             })
