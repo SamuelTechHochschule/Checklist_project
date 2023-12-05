@@ -121,8 +121,8 @@ export default {
                 }
                 this.checklistItems = data.map(item => ({
                     ...item,
-                    isPreliminary: item.colorClass_pv === 'blue-row',
-                    isRelease: item.colorClass_rv === 'cyan-row',
+                    isPreliminary: item.colorClass_pv === 'Preliminary-row',
+                    isRelease: item.colorClass_rv === 'Release-row',
                 }));
             } catch (error) {
                 console.error('Error fetching checklist items:', error);

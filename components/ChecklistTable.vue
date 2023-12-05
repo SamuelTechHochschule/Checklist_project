@@ -17,7 +17,7 @@
                             <tr class="bodyheader">
                                 <td :colspan="6">{{ category }}</td>
                             </tr>
-                            <tr v-for="item in tasks" :key="item.id" :class="{ 'blue-row': item.colorClass_pv ==='blue-row', 'cyan-row': item.colorClass_rv === 'cyan-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
+                            <tr v-for="item in tasks" :key="item.id" :class="{ 'Preliminary-row': item.colorClass_pv ==='Preliminary-row', 'Release-row': item.colorClass_rv === 'Release-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
                                 <td>{{ item.task }}</td>
                                 <td>{{ item.department }}</td>
                                 <td>{{ item.person }}</td>
@@ -105,16 +105,16 @@ export default {
         font-size: large;
         background-color: rgba(22, 97, 167, 0.651);
     }
-    .blue-row{
+    .Preliminary-row{
         background-color: rgb(90, 196, 164);
     }
-    .blue-row:hover{
+    .Preliminary-row:hover{
         background-color: rgb(69, 151, 126);
     }
-    .cyan-row{
+    .Release-row{
         background-color: rgb(47, 226, 92);
     }
-    .cyan-row:hover{
+    .Release-row:hover{
         background-color: rgb(38, 184, 74);
     }
     *{
@@ -160,16 +160,16 @@ export default {
         background-color: #f2f2f2;
         border: 1px solid #000000;
     }
-    tbody tr:not(.bodyheader, .blue-row, .cyan-row):hover{
+    tbody tr:not(.bodyheader, .Preliminary-row, .Release-row):hover{
         background-color: #BCBBBB;
     }
-    tbody tr.selected-row:not(.blue-row, .cyan-row){
+    tbody tr.selected-row:not(.Preliminary-row, .Release-row){
         background-color: #9e9d9d;
     }
-    tbody tr.selected-row.cyan-row{
+    tbody tr.selected-row.Release-row{
         background-color: rgb(32, 158, 64);
     }
-    tbody tr.selected-row.blue-row{
+    tbody tr.selected-row.Preliminary-row{
         background-color: rgb(58, 129, 108);
     }
 

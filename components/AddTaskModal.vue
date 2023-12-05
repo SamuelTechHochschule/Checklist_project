@@ -73,7 +73,7 @@ export default {
     },
 
     methods: {
-    
+
         // Öffnet Modal 
         openModal() {
             this.isOpen = true;
@@ -88,8 +88,8 @@ export default {
         // Fügt Aufgabe hinzu
         addTask() {
             // Konfigurierung für Reihenfärbung
-            const colorClass_pv = this.newTask.isPreliminary ? 'blue-row' : '';
-            const colorClass_rv = this.newTask.isRelease ? 'cyan-row' : '';
+            const colorClass_pv = this.newTask.isPreliminary ? 'Preliminary-row' : '';
+            const colorClass_rv = this.newTask.isRelease ? 'Release-row' : '';
 
             // Prüfen ob alle Felder ausgefüllt sind
             if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
