@@ -106,10 +106,16 @@ export default {
         background-color: rgb(69, 196, 69);
     }
     .blue-row{
-        background-color: rgb(105, 105, 245);
+        background-color: rgb(126, 126, 233);
+    }
+    .blue-row:hover{
+        background-color: rgb(107, 107, 197);
     }
     .cyan-row{
-        background-color: rgb(143, 226, 226);
+        background-color: rgb(159, 230, 230);
+    }
+    .cyan-row:hover{
+        background-color: rgb(120, 173, 173);
     }
     *{
         box-sizing: border-box;
@@ -148,7 +154,7 @@ export default {
         background-color: #f2f2f2;
         border: 1px solid #000000;
     }
-    tr:hover{
+    tr:not(.bodyheader, .blue-row, .cyan-row):hover{
         background-color: #BCBBBB;
     }
     .selected-row{
