@@ -1,15 +1,20 @@
 <template>
         <ul>
-            <li>
-                <div class="logo-block" href="/">
-                    <img src="~/assets/Logo.png" alt="Logo" class="logo">
-                </div>
+            <li @click="navigateToHome">
+                <NuxtLink to="/Checklist">
+                    <div class="logo-block" href="/">
+                        <img src="~/assets/Logo.png" alt="Logo" class="logo">
+                    </div>
+                </NuxtLink>
             </li>
-            <li>
-                <div class="logo-Mitarbeiterblock" href="/">
-                    <img src="~/assets/Mitarbeiterliste.png" alt="Mitarbeiterliste" class="mitarbeiterliste">
-                    <p>Mitarbeiterliste</p>
-                </div>
+            <li @click="navigateToMitarbeiterliste">
+                <NuxtLink to="/Mitarbeiterliste">
+                    <div class="logo-Mitarbeiterblock" href="/">
+                        <img src="~/assets/Mitarbeiterliste.png" alt="Mitarbeiterliste" class="mitarbeiterliste">
+                        <p>Mitarbeiterliste</p>
+                    </div>
+                </NuxtLink>
+
             </li>
             <li>
                 <div class="version-block" href="#">
@@ -92,6 +97,16 @@ export default {
     },
 
     methods: {
+
+        // Link to Homepage
+        navigateToHome() {
+            this.$router.push({ name: 'Checklist'});
+        },
+
+        // Link to Mitarbeiterliste
+        navigateToMitarbeiterliste() {
+            this.$router.push({ name: 'Mitarbeiterliste'});
+        },
 
         // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
