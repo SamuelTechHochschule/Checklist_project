@@ -150,11 +150,11 @@ export default {
     td:first-child{
         text-align: left;
     }
-    tr{
+    tbody tr{
         background-color: #f2f2f2;
         border: 1px solid #000000;
     }
-    tr:not(.bodyheader, .blue-row, .cyan-row):hover{
+    tbody tr:not(.bodyheader, .blue-row, .cyan-row):hover{
         background-color: #BCBBBB;
     }
     .selected-row{
