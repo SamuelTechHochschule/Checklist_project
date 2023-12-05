@@ -32,7 +32,14 @@
                             <input type="text" v-model="editedTask.completedDate" placeholder="DD.MM.YYYY"/>
                         </div>
                     </div>
-
+                    <div class="form-row">
+                        <div class="form-column">
+                            <label>Aufgabenart: </label>
+                            <select v-model="newTask.category">
+                                <option v-for="category in categoryOptions" :key="category" :value="category">{{ category }}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-column">
                             <label for="signature">Unterschrift: </label>
@@ -83,8 +90,10 @@ export default {
                 plannedDate: "",
                 completedDate: "",
                 signature: "",
+                category: "",
             },
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
+            categoryOptions: ['1. Dokumentation', '2. Tätigkeiten', '3. Erweiterungspunkte zum Standard PEP', '4. Projektspezifische Aufgaben', '5. Aufgaben nach der Freigabe des Meilensteins'],
         };
     },
 /*
@@ -151,6 +160,7 @@ export default {
                 plannedDate: "",
                 completedDate: "",
                 signature: "",
+                category: "",
             };
         },
 

@@ -13,6 +13,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                       
                         <tr class="bodyheader">
                             <td colspan="6">1. Dokumentation</td>
                         </tr>
@@ -28,6 +29,7 @@
                         <tr class="bodyheader">
                             <td colspan="6">5. Aufgaben nach der Freigabe des Meilensteins</td>
                         </tr>
+
                         <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv ==='blue-row', 'cyan-row': item.colorClass_rv === 'cyan-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
