@@ -39,7 +39,8 @@
 
         <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
 
-        <h2>Abteilung: R&D</h2>
+        <!-- Normalerweise Abteilung des Users -->
+        <h2>Abteilung: Admin</h2>
 
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
@@ -89,6 +90,7 @@ export default {
     created() {
         this.fetchChecklistItems();
     },
+
     methods: {
 
         // Daten aus Datenbank bzw. Backend fetchen
