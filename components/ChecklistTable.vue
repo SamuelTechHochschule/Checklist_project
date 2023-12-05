@@ -4,7 +4,7 @@
                 <table id="table">
                     <thead>
                         <tr>
-                            <th>Erledigungspunkte aus dem PEP</th>
+                            <th class="fixed_column">Erledigungspunkte aus dem PEP</th>
                             <th>FB / Abt.</th>
                             <th>Person</th>
                             <th>Termin geplant</th>
@@ -115,7 +115,7 @@ export default {
         background-color: rgb(159, 230, 230);
     }
     .cyan-row:hover{
-        background-color: rgb(120, 173, 173);
+        background-color: rgb(102, 185, 185);
     }
     *{
         box-sizing: border-box;
@@ -133,6 +133,12 @@ export default {
         content: "";
         clear: both;
         display: table;
+    }
+    .fixed_column{
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     table{
         border-collapse: collapse;
