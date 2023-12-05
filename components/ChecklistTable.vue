@@ -29,7 +29,11 @@
                         <tr class="bodyheader">
                             <td colspan="6">5. Aufgaben nach der Freigabe des Meilensteins</td>
                         </tr>
-
+                    <!--
+                        <tr v-for="category in categories" :key="category">
+                            <td colspan="6">{{ category }}</td>
+                        </tr>
+                    -->    
                         <tr v-for="item in checklistItems" :key="item.id" :class="{ 'blue-row': item.colorClass_pv ==='blue-row', 'cyan-row': item.colorClass_rv === 'cyan-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
                             <td>{{ item.task }}</td>
                             <td>{{ item.department }}</td>
@@ -61,7 +65,26 @@ export default {
             default: -1,
         },
     },
+/*
+    data() {
+        return{
+            categories: ['1. Dokumentation', '2. Tätigkeiten', '3. Erweiterungspunkte zum Standard PEP', '4. Projektspezifische Aufgaben', '5. Aufgaben nach der Freigabe des Meilensteins'],
+        };
+    },
 
+    computed:{
+        categorizedItems() {
+            const categorized = {};
+            for(const category of this.categories) {
+                categorized[category] = [];
+            }
+            for(const item of this.checklistItems) {
+                categorized[item.category].push(item);
+            }
+            return categorized;
+        },
+    },
+*/
     methods: {
 
         formatDate(dateString) {

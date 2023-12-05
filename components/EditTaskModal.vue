@@ -35,7 +35,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <label>Aufgabenart: </label>
-                            <select v-model="newTask.category">
+                            <select v-model="editedTask.category">
                                 <option v-for="category in categoryOptions" :key="category" :value="category">{{ category }}</option>
                             </select>
                         </div>
