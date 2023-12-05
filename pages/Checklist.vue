@@ -2,14 +2,14 @@
         <ul>
             <li @click="navigateToHome">
                 <NuxtLink to="/Checklist">
-                    <div class="logo-block" href="/">
+                    <div class="logo-block">
                         <img src="~/assets/Logo.png" alt="Logo" class="logo">
                     </div>
                 </NuxtLink>
             </li>
             <li @click="navigateToMitarbeiterliste">
                 <NuxtLink to="/Mitarbeiterliste">
-                    <div class="logo-Mitarbeiterblock" href="/">
+                    <div class="Mitarbeiterblock">
                         <img src="~/assets/Mitarbeiterliste.png" alt="Mitarbeiterliste" class="mitarbeiterliste">
                         <p>Mitarbeiterliste</p>
                     </div>

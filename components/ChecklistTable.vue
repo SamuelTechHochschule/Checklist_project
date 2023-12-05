@@ -103,19 +103,19 @@ export default {
     .bodyheader{
         text-align: left;
         font-size: large;
-        background-color: rgb(69, 196, 69);
+        background-color: rgba(22, 97, 167, 0.651);
     }
     .blue-row{
-        background-color: rgb(126, 126, 233);
+        background-color: rgb(90, 196, 164);
     }
     .blue-row:hover{
-        background-color: rgb(107, 107, 197);
+        background-color: rgb(69, 151, 126);
     }
     .cyan-row{
-        background-color: rgb(159, 230, 230);
+        background-color: rgb(47, 226, 92);
     }
     .cyan-row:hover{
-        background-color: rgb(102, 185, 185);
+        background-color: rgb(38, 184, 74);
     }
     *{
         box-sizing: border-box;
@@ -163,8 +163,14 @@ export default {
     tbody tr:not(.bodyheader, .blue-row, .cyan-row):hover{
         background-color: #BCBBBB;
     }
-    .selected-row{
-        background-color: #d4d4d4;
+    tbody tr.selected-row:not(.blue-row, .cyan-row){
+        background-color: #9e9d9d;
+    }
+    tbody tr.selected-row.cyan-row{
+        background-color: rgb(32, 158, 64);
+    }
+    tbody tr.selected-row.blue-row{
+        background-color: rgb(58, 129, 108);
     }
 
 </style>

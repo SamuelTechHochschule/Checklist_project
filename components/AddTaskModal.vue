@@ -73,6 +73,7 @@ export default {
     },
 
     methods: {
+    
         // Öffnet Modal 
         openModal() {
             this.isOpen = true;
