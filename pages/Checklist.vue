@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import AddTaskModal from '~/components/AddTaskModal.vue';
-import EditTaskModal from '~/components/EditTaskModal.vue';
+import AddTaskModal from '~/components/Modals/AddTaskModal.vue';
+import EditTaskModal from '~/components/Modals/EditTaskModal.vue';
 import ChecklistTable from '~/components/ChecklistTable.vue';
 import Taskbar from '~/components/Taskbar.vue';
 

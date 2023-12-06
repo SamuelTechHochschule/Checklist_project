@@ -47,31 +47,50 @@
                 </div>
             </li>
         </ul>
+
+        <SettingsModal :isVisible="isSettingsModalVisible" @close="closeSettingsModal" />
+
     </div>
 </template>
 
 <script>
+import SettingsModal from './Modals/SettingsModal.vue';
+
 export default {
+
+    components: {
+        SettingsModal,
+    },
 
     data() {
         return{
             isUserMenuVisible: false,
+            isSettingsModalVisible: false,
+
         };
     },
 
     methods: {
 
+        // Zeigt Dropdownmenü
         showUserMenu() {
-            console.log("Hover");
             this.isUserMenuVisible = true;
         },
 
+        // Schließt Dropdownmenü
         hideUserMenu() {
             this.isUserMenuVisible = false;
         },
 
+        // Navigiere zur SettingsModal.vue-Komponente
         navigateToSettings() {
+            this.isSettingsModalVisible = true;
             console.log('Navigating to Settings');
+        },
+
+        // Schließe Modal
+        closeSettingsModal() {
+            this.isSettingsModalVisible = false;
         },
 
         logout() {
