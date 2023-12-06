@@ -100,6 +100,13 @@ export default {
 
 <style scoped>
 
+    .fixed_column{
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: break-word;
+    }
     .font-weight-bold{
         font-weight: bold;
     }
@@ -137,12 +144,6 @@ export default {
         content: "";
         clear: both;
         display: table;
-    }
-    .fixed_column{
-        max-width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
     table{
         border-collapse: collapse;
