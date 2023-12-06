@@ -4,7 +4,7 @@
 <!--            <span class="close" @click="closeModal">x</span> -->
             <h3>Task hinzufügen</h3>
             <label>Aufgabenbeschreibung:</label>
-            <input v-model="newTask.task" type="text" />
+            <input v-model="newTask.task" type="text"/>
             
             <div class="form-row">
                 <div class="form-column">
@@ -117,11 +117,11 @@ export default {
 
             // Änderung der Aufgabenbeschreibung am Ende
             if (this.newTask.isPreliminary) {
-                this.newTask.task += ' - Preliminary Release';
+                this.newTask.task += ' - Preliminary Version';
             }
 
             if (this.newTask.isRelease) {
-                this.newTask.task += ' - Final Release';
+                this.newTask.task += ' - Release Version';
             }
 
             fetch('http://localhost:5500/api/checklist/addTask', {

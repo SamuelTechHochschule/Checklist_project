@@ -18,7 +18,7 @@
                                 <td :colspan="6">{{ category }}</td>
                             </tr>
                             <tr v-for="item in tasks" :key="item.id" :class="{ 'Preliminary-row': item.colorClass_pv ==='Preliminary-row', 'Release-row': item.colorClass_rv === 'Release-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
-                                <td>{{ item.task }}</td>
+                                <td :class="{ 'font-weight-bold': item.isPreliminary || item.isRelease }">{{ item.task }}</td>
                                 <td>{{ item.department }}</td>
                                 <td>{{ item.person }}</td>
                                 <td>{{ formatDate(item.plannedDate) }}</td>
@@ -100,6 +100,9 @@ export default {
 
 <style scoped>
 
+    .font-weight-bold{
+        font-weight: bold;
+    }
     .bodyheader{
         text-align: left;
         font-size: large;
