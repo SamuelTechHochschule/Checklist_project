@@ -11,6 +11,7 @@
     "test": "mocha test"
   },
   "devDependencies": {
+    "@element-plus/nuxt": "^1.0.7",
     "@nuxt/devtools": "latest",
     "nuxt": "^3.8.1",
     "ts-node": "^10.9.1",

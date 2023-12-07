@@ -24,14 +24,15 @@
                     <div class="form-row">
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin: </label>
-                            <input type="text" v-model="editedTask.plannedDate" placeholder="DD.MM.YYYY"/>
-                            {{ formatDate(editedTask.plannedDate) }}
+                            <p>Termin: {{ formatDate(editedTask.plannedDate) }}</p>
+                            <el-date-picker v-model="editedTask.plannedDate" type="date" placeholder="DD.MM.YYYY"></el-date-picker>
                         </div>
-
+                    </div>
+                    <div class="form-row">
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
-                            <input type="text" v-model="editedTask.completedDate" placeholder="DD.MM.YYYY"/>
-                            {{ formatDate(editedTask.completedDate) }}
+                            <p>Termin: {{ formatDate(editedTask.completedDate) }}</p>
+                            <el-date-picker v-model="editedTask.completedDate" type="date" placeholder="DD.MM.YYYY"></el-date-picker>
                         </div>
                     </div>
                     <div class="form-row">
@@ -106,8 +107,6 @@ export default {
     methods: {
         // Änderungen speichern
         saveChanges() {
-            this.editedTask.plannedDate = this.formatDateforBackend(this.editedTask.plannedDate);
-            this.editedTask.completedDate = this.formatDateforBackend(this.editedTask.completedDate);
 
             this.$emit("save", this.editedTask);
             this.closeModal();
@@ -142,7 +141,7 @@ export default {
             const date = new Date(dateString);
             return date.toLocaleDateString('de-DE', options);
         },
-
+/*
         // Formatierung von DD.MM.YYYY in YYYY-MM-DD für Datenbankspeicherung
         formatDateforBackend(dateString) {
             console.log(dateString);
@@ -158,15 +157,12 @@ export default {
             }
 
             const dateParts = dateString.split('.');
-            // Überprüfen, ob im richtigen Format
-            if(!Array.isArray(dateParts) || dateParts.length !== 3) {
-                console.error('Invalid date format. Expected DD.MM.YYYY');
-                return '';
-            }
+
 
             const [day, month, year] = dateParts;
             return `${year}-${month}-${day}`;
         },
+        */
     },
 };
 </script>

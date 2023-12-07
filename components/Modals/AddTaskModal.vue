@@ -22,7 +22,7 @@
             <div class="form-row">
                 <div class="form-column">
                     <label>Geplanter Termin:</label>
-                    <input v-model="newTask.plannedDate" type="text" placeholder="DD.MM.YYYY"/>
+                    <el-date-picker v-model="newTask.plannedDate" type="date" placeholder="DD.MM.YYYY"></el-date-picker>
                 </div>
 
                 <div class="form-column">
@@ -102,7 +102,7 @@ export default {
                 alert('Bitte wählen sie nur eine Checkbox aus.');
                 return;
             }
-
+/*
             // Überprüfung, ob Datumsformat korrekt ist
             const dataRegex = /^\d{2}\.\d{2}\.\d{4}$/;
             if (!dataRegex.test(this.newTask.plannedDate)) {
@@ -114,7 +114,7 @@ export default {
             const [day, month, year] = this.newTask.plannedDate.split('.');
             this.newTask.plannedDate = `${year}-${month}-${day}`;
             const formattedPlannedDate = `${year}-${month}-${day}`;
-
+*/
             // Änderung der Aufgabenbeschreibung am Ende
             if (this.newTask.isPreliminary) {
                 this.newTask.task += ' - Preliminary Version';
@@ -133,7 +133,7 @@ export default {
                     task: this.newTask.task,
                     department: this.newTask.department,
                     person: this.newTask.person,
-                    plannedDate: formattedPlannedDate,
+                    plannedDate: this.newTask.plannedDate,
                     completedDate: '',
                     signature: '',
                     category: this.newTask.category,
