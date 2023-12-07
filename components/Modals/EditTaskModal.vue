@@ -23,16 +23,16 @@
 
                     <div class="form-row">
                         <div class="form-column">
-                            <label for="plannedDate">Geplanter Termin: </label>
-                            <p>Termin: {{ formatDate(editedTask.plannedDate) }}</p>
-                            <el-date-picker v-model="editedTask.plannedDate" type="date" placeholder="DD.MM.YYYY"></el-date-picker>
+                            <label for="plannedDate" style="border-bottom: 1px solid #00315E;">Geplanter Termin: </label>
+                            <p style="font-weight: bold;">Termin: {{ formatDate(editedTask.plannedDate) }}</p>
+                            <el-date-picker v-model="editedTask.plannedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-column">
-                            <label for="completedDate">Erledigter Termin: </label>
-                            <p>Termin: {{ formatDate(editedTask.completedDate) }}</p>
-                            <el-date-picker v-model="editedTask.completedDate" type="date" placeholder="DD.MM.YYYY"></el-date-picker>
+                            <label for="completedDate" style="border-bottom: 1px solid #00315E;">Erledigter Termin: </label>
+                            <p style="font-weight: bold;">Termin: {{ formatDate(editedTask.completedDate) }}</p>
+                            <el-date-picker v-model="editedTask.completedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                         </div>
                     </div>
                     <div class="form-row">
@@ -141,28 +141,6 @@ export default {
             const date = new Date(dateString);
             return date.toLocaleDateString('de-DE', options);
         },
-/*
-        // Formatierung von DD.MM.YYYY in YYYY-MM-DD für Datenbankspeicherung
-        formatDateforBackend(dateString) {
-            console.log(dateString);
-
-            if(!dateString) {
-                return null;
-            }
-
-            // Überprüfen, ob dateString ein string ist
-            if(typeof dateString !== 'string') {
-                console.error('Invalid dateString. Expected a string.');
-                return '';
-            }
-
-            const dateParts = dateString.split('.');
-
-
-            const [day, month, year] = dateParts;
-            return `${year}-${month}-${day}`;
-        },
-        */
     },
 };
 </script>
