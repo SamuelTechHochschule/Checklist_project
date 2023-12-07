@@ -94,6 +94,13 @@ export default {
         taskToEdit: {
             handler(newTask) {
                 if(newTask) {
+                    // Überprüfen, ob plannedDate und completedDate Strings sind -> Wenn ja, werden diese in Date-Objekte umgewandelt
+                    if (newTask.plannedDate && typeof newTask.plannedDate === 'string') {
+                        newTask.plannedDate = new Date(newTask.plannedDate);
+                    }
+                    if (newTask.completedDate && typeof newTask.completedDate === 'string') {
+                        newTask.completedDate = new Date(newTask.completedDate);
+                    }                    
                     this.editedTask = { ...newTask};
                 }else{
                     this.resetEditedTask();
@@ -137,8 +144,15 @@ export default {
                 return '';
             }
 
-            const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
             const date = new Date(dateString);
+
+            // Überprüfen, ob date ein gültiges Datum ist
+            if (isNaN(date.getTime())) {
+               console.error('Ungültiges Datum:', dateString);
+               return '';
+            }           
+
+            const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
             return date.toLocaleDateString('de-DE', options);
         },
     },
