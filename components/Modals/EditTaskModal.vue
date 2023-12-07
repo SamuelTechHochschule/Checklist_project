@@ -25,11 +25,13 @@
                         <div class="form-column">
                             <label for="plannedDate">Geplanter Termin: </label>
                             <input type="text" v-model="editedTask.plannedDate" placeholder="DD.MM.YYYY"/>
+                            {{ formatDate(editedTask.plannedDate) }}
                         </div>
 
                         <div class="form-column">
                             <label for="completedDate">Erledigter Termin: </label>
                             <input type="text" v-model="editedTask.completedDate" placeholder="DD.MM.YYYY"/>
+                            {{ formatDate(editedTask.completedDate) }}
                         </div>
                     </div>
                     <div class="form-row">
@@ -86,20 +88,7 @@ export default {
             categoryOptions: ['1. Dokumentation', '2. Tätigkeiten', '3. Erweiterungspunkte zum Standard PEP', '4. Projektspezifische Aufgaben', '5. Aufgaben nach der Freigabe des Meilensteins'],
         };
     },
-/*
-    computed: {
 
-        formattedPlannedDate: function() {
-
-            return this.formatDate(this.editedTask.plannedDate);
-        },
-
-        formattedCompleteDate: function() {
-
-            return this.formatDate(this.editedTask.completedDate);
-        },
-    },
-*/
     watch: {
         taskToEdit: {
             handler(newTask) {
@@ -179,7 +168,6 @@ export default {
             return `${year}-${month}-${day}`;
         },
     },
-   
 };
 </script>
 
