@@ -112,6 +112,8 @@ export default {
     }
     .bodyheader{
         text-align: left;
+        position: sticky;
+        left: 0;
         font-size: large;
         background-color: rgba(22, 97, 167, 0.651);
         border-bottom: 2px solid #000000;
