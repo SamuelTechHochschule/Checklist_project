@@ -69,7 +69,19 @@ export default {
                 }
                 grouped[item.category].push(item);
             });
-            return grouped;
+
+            // Kategorien nach Reihenfolge sortieren
+            const sortedCategories = Object.keys(grouped).sort((a, b) => {
+                return parseInt(a) - parseInt(b);
+            });
+
+            // Neues Objekt mit sortierten Kategorien
+            const sortedGrouped = {};
+            sortedCategories.forEach(category => {
+                sortedGrouped[category] = grouped[category];
+            });
+
+            return sortedGrouped;
         },
     },
 
@@ -112,8 +124,6 @@ export default {
     }
     .bodyheader{
         text-align: left;
-        position: sticky;
-        left: 0;
         font-size: large;
         background-color: rgba(22, 97, 167, 0.651);
         border-bottom: 2px solid #000000;
