@@ -4,7 +4,7 @@
                 <table id="table">
                     <thead>
                         <tr>
-                            <th class="fixed_column">Erledigungspunkte aus dem PEP</th>
+                            <th style="width: 750px;">Erledigungspunkte aus dem PEP</th>
                             <th>FB / Abt.</th>
                             <th>Person</th>
                             <th>Termin geplant</th>
@@ -18,7 +18,11 @@
                                 <td :colspan="6">{{ category }}</td>
                             </tr>
                             <tr v-for="item in tasks" :key="item.id" :class="{ 'Preliminary-row': item.colorClass_pv ==='Preliminary-row', 'Release-row': item.colorClass_rv === 'Release-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
-                                <td :class="{ 'font-weight-bold': item.isPreliminary || item.isRelease }">{{ item.task }}</td>
+                                <td :class="{ 'font-weight-bold': item.isPreliminary || item.isRelease }">
+                                    <div>
+                                        {{ item.task }}
+                                    </div>
+                                </td>
                                 <td>{{ item.department }}</td>
                                 <td>{{ item.person }}</td>
                                 <td>{{ formatDate(item.plannedDate) }}</td>
@@ -112,13 +116,6 @@ export default {
 
 <style scoped>
 
-    .fixed_column{
-        max-width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        word-wrap: break-word;
-    }
     .font-weight-bold{
         font-weight: bold;
     }
@@ -172,6 +169,10 @@ export default {
     }
     td:first-child{
         text-align: left;
+    }
+    td:first-child div{
+        width: 700px;
+        word-wrap: break-word;
     }
     tbody tr{
         background-color: #f2f2f2;
