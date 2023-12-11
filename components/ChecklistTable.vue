@@ -1,5 +1,6 @@
 <template>
     <div class="row">
+        <div class="table-container">
             <div class="column">
                 <table id="table">
                     <thead>
@@ -33,6 +34,7 @@
                     </tbody>
                 </table>
             </div>
+        </div>
     </div>
 </template>
 
@@ -175,7 +177,7 @@ export default {
         word-wrap: break-word;
     }
     tbody tr{
-        background-color: #f2f2f2;
+        background-color: #dbdbdb;
         border: 1px solid #000000;
     }
     tbody tr:not(.bodyheader, .Preliminary-row, .Release-row):hover{
