@@ -3,15 +3,6 @@
         <div class="modal-content">
             <h3>Einstellungen</h3>
             <div class="form-row">
-                <div class="form-column">
-                    <label for="language">Sprache ändern: </label>
-                    <select v-model="selectedLanguage" id="language">
-                        <option value="de">Deutsch</option>
-                        <option value="en">Englisch</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
                 <div class="form-columm">
                     <label for="darkMode">Darkmode:</label>
                     <button @click="toggleDarkMode">Darkmode</button>
@@ -35,12 +26,6 @@ export default {
     props: {
         isVisible: Boolean,
     },
-
-    data() {
-        return{
-            selectedLanguage: 'de',
-        };
-    },  
     
     methods: {
         toggleDarkMode() {
