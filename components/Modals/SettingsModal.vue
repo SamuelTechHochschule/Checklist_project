@@ -1,28 +1,28 @@
 <template>
     <body>
         <div class="modal" v-if="isVisible">
-        <div class="modal-content">
-            <h3>Einstellungen</h3>
-            <div class="form-row">
-                <div class="form-columm">
-                    <label for="darkMode">Darkmode:</label>
-                    <button @click="toggleDarkMode">{{ darkMode ? 'Lightmode' : 'Darkmode' }}</button>
+            <div class="modal-content" :class="{ 'dark-mode-modal': darkMode }">
+                <h3>Einstellungen</h3>
+                <div class="form-row">
+                    <div class="form-columm">
+                        <label for="darkMode">Darkmode:</label>
+                        <button @click="toggleDarkMode">{{ darkMode ? 'Lightmode' : 'Darkmode' }}</button>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-column">
-                    <button @click="saveSettings">Bestätigen</button>
-                    <button @click="closeModal">Abbrechen</button>
+                <div class="form-row">
+                    <div class="form-column">
+                        <button @click="saveSettings">Bestätigen</button>
+                        <button @click="closeModal">Abbrechen</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </body>
 
 </template>
 
 <script>
-
+import { useDarkModeStore } from '~/store/darkMode';
 
 export default {
 
@@ -30,19 +30,15 @@ export default {
         isVisible: Boolean,
     },
 
-    data() {
-        return {
-            darkMode: false,
+    setup() {
+        const darkModeStore = useDarkModeStore();
+        return{
+            darkMode: darkModeStore.darkMode,
+            toggleDarkMode: darkModeStore.toggleDarkMode,
         };
     },
     
     methods: {
-        toggleDarkMode() {
-            this.darkMode = !this.darkMode;
-            document.body.classList.toggle("dark-mode", this.darkMode);
-            console.log('Darkmode umschalten');
-        },
-
         saveSettings() {
             console.log("Gespeichert")
             this.closeModal();
@@ -57,15 +53,6 @@ export default {
 </script>
 
 <style scoped>
-
-    body{
-        color: #000000;
-        background-color: #ffffff;
-    }
-    body.dark-mode{
-        background-color: #1a1a1a;
-        color: #ffffff;
-    }
     .modal{
         position: fixed;
         z-index: 1;
@@ -95,4 +82,5 @@ export default {
     .form-column:last-child{
         margin-right: 0;
     }
+
 </style>
