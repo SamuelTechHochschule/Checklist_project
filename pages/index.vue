@@ -42,9 +42,8 @@
                         this.$router.push("/checklist");
                         return;
                     }
-                    const response = await fetch('http://localhost:5500/', {
+                    const response = await fetch('http://localhost:5500/login', {
                         method: 'POST', 
-//                        mode: 'no-cors',
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -52,7 +51,7 @@
                             username: this.username,
                             password: this.password,
                         }),
-                        credentials: 'include',
+                        //credentials: 'include', Erstmals ohne credentials
                     });
 
                     if (response.ok){

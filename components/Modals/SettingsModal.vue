@@ -1,7 +1,6 @@
 <template>
-    <body>
-        <div class="modal" v-if="isVisible">
-            <div class="modal-content" :class="{ 'dark-mode-modal': darkMode }">
+    <div class="modal" v-if="isVisible">
+            <div class="modal-content" :class="{ 'dark-mode': darkMode }">
                 <h3>Einstellungen</h3>
                 <div class="form-row">
                     <div class="form-columm">
@@ -17,8 +16,6 @@
                 </div>
             </div>
         </div>
-    </body>
-
 </template>
 
 <script>
@@ -47,12 +44,15 @@ export default {
         closeModal() {
             this.$emit('close');
         },
-    }
-    
-}
+    },  
+};
 </script>
 
 <style scoped>
+    .dark-mode{
+        background-color: #1f2937;
+        color: #dbdada;
+    }
     .modal{
         position: fixed;
         z-index: 1;
@@ -82,5 +82,6 @@ export default {
     .form-column:last-child{
         margin-right: 0;
     }
+
 
 </style>

@@ -11,7 +11,7 @@ export const useDarkModeStore = defineStore({
         toggleDarkMode() {
             this.darkMode = !this.darkMode;
             document.body.classList.toggle("dark-mode", this.darkMode);
-            console.log('Darkmode umschalten');
+            console.log('Darkmode umschalten', this.darkMode);
         },
     },
 });

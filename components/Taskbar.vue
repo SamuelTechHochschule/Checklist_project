@@ -93,7 +93,25 @@ export default {
             this.isSettingsModalVisible = false;
         },
 
+        // User abmelden
         logout() {
+            fetch('http://localhost:5500/logout', {
+                method: 'POST',
+//                credentials: 'include', Erstmals ohne credentials
+            })
+            .then(response => {
+                if(response.ok) {
+                    console.log('Logout erfolgreich');
+                    // Zurückschicken an Index-Page
+                    this.$router.push({ path: '/' });
+                } else {
+                    console.error('Logout fehlgeschlagen (Innerhalb):', error);
+                }
+            })
+            .catch(error => {
+                console.error('Logout fehlgeschlagen (Außerhalb):', error)
+            });
+
             console.log('Logging out');
         },
 
