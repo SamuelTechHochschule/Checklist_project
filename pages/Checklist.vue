@@ -114,8 +114,9 @@ export default {
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
             try{
-                const response = await fetch(`/deleteTask`, {
+                const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
                     method: 'DELETE',
+                    body: null,
                 });
 
                 if (!response.ok) {
@@ -136,6 +137,15 @@ export default {
                 console.log('Task deleted successfully');
             } catch (error) {
                 console.error('Error deleting task:', error);
+
+                if(error.response) {
+                    console.error('Server responded with status:', error.response.status);
+                    console.error('Response data:', error.response.data);
+                } else if(error.request) {
+                    console.error('No response received from the server');
+                } else {
+                    console.error('Error setting up the request', error.message);
+                }
             }
         },
 
@@ -151,7 +161,7 @@ export default {
         // Änderungen werden gespeichert
         async saveEditedTask(editedTask) {
             try{
-                const response = await fetch(`/editTask`, {
+                const response = await fetch(`/editTask/${editedTask}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

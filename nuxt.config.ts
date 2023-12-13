@@ -12,8 +12,8 @@ export default defineNuxtConfig({
     '/logout' : { proxy: process.env.URL + '/logout' },
     '/checklist' : { proxy: process.env.URL + '/api/checklist' },
     '/addTask' : { proxy: process.env.URL + '/api/checklist/addTask' },
-    '/editTask' : { proxy: 'http://localhost:5500/api/checklist/edit/{taskId}' },
-    '/deleteTask' : { proxy: 'http://localhost:5500/api/checklist/delete/{taskId}' },
+    '/editTask/*' : { proxy: process.env.URL + '/api/checklist/edit/{taskId}' },
+    //'/deleteTask/*' : { proxy: process.env.URL + '/api/checklist/delete/{taskId}' },
   },
 
 })
