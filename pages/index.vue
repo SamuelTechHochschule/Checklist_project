@@ -42,8 +42,9 @@
                         this.$router.push("/checklist");
                         return;
                     }
-                    const response = await fetch('http://localhost:5500/login', {
+                    const response = await fetch('/login', {
                         method: 'POST', 
+//                        mode: 'no-cors',
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -51,14 +52,14 @@
                             username: this.username,
                             password: this.password,
                         }),
-                        //credentials: 'include', Erstmals ohne credentials
+                        credentials: 'include',
                     });
 
                     if (response.ok){
                         try {
                             const user = await response.json();
                             this.loginToken = user.loginToken;
-
+                            console.log(response);
                             console.log('Login successful:', user);
                             this.$router.push("/checklist");
                         } catch (jsonError) {

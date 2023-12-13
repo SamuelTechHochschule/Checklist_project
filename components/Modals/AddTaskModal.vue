@@ -112,7 +112,7 @@ export default {
                 this.newTask.task += ' - Release Version';
             }
 
-            fetch('http://localhost:5500/api/checklist/addTask', {
+            fetch('/addTask', {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',

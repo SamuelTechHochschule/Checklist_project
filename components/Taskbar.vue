@@ -97,7 +97,8 @@ export default {
         logout() {
             fetch('http://localhost:5500/logout', {
                 method: 'POST',
-//                credentials: 'include', Erstmals ohne credentials
+                mode: 'no-cors',
+                credentials: 'include',
             })
             .then(response => {
                 if(response.ok) {
@@ -105,11 +106,13 @@ export default {
                     // Zurückschicken an Index-Page
                     this.$router.push({ path: '/' });
                 } else {
-                    console.error('Logout fehlgeschlagen (Innerhalb):', error);
+                    console.log(response);
+                    console.error('Logout fehlgeschlagen (Innerhalb)');
                 }
             })
             .catch(error => {
-                console.error('Logout fehlgeschlagen (Außerhalb):', error)
+                console.error('Logout fehlgeschlagen (Außerhalb):', error);
+                console.error('Response status:', error && error.status);
             });
 
             console.log('Logging out');

@@ -63,7 +63,7 @@ export default {
         // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
             try {
-                const response = await fetch('http://localhost:5500/api/checklist');
+                const response = await fetch('/checklist');
                 if (!response.ok) {
                     throw new Error(`Server responded with status ${response.status}`);
                 }
@@ -114,7 +114,7 @@ export default {
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
             try{
-                const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
+                const response = await fetch(`/deleteTask`, {
                     method: 'DELETE',
                 });
 
@@ -151,7 +151,7 @@ export default {
         // Änderungen werden gespeichert
         async saveEditedTask(editedTask) {
             try{
-                const response = await fetch(`http://localhost:5500/api/checklist/edit/${editedTask.id}`, {
+                const response = await fetch(`/editTask`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
