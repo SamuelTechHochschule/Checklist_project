@@ -95,9 +95,8 @@ export default {
 
         // User abmelden
         logout() {
-            fetch('http://localhost:5500/logout', {
+            fetch('/logout', {
                 method: 'POST',
-                mode: 'no-cors',
                 credentials: 'include',
             })
             .then(response => {
