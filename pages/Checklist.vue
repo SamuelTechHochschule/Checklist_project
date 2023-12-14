@@ -32,8 +32,23 @@ import AddTaskModal from '~/components/Modals/AddTaskModal.vue';
 import EditTaskModal from '~/components/Modals/EditTaskModal.vue';
 import ChecklistTable from '~/components/ChecklistTable.vue';
 import Taskbar from '~/components/Taskbar.vue';
+import { useAuthStore } from '~/store/authentication';
 
 export default {
+
+    beforeRouteEnter(to, from, next) {
+        const authStore = useAuthStore();
+
+        // Überprüfen, ob der Benutzer authenifiziert ist
+        if(!authStore.isLoggedIn) {
+            // User ist nicht angemeldet, zurück in Login-Seite leiten
+            next({ path: '/' });
+
+        } else {
+            // Benutzer ist angemeldet, Zugriff erlauben
+            next();
+        }
+    },
 
     components: {
         AddTaskModal,

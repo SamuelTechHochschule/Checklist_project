@@ -55,6 +55,7 @@
 
 <script>
 import SettingsModal from './Modals/SettingsModal.vue';
+import { useAuthStore } from '~/store/authentication';
 
 export default {
 
@@ -102,6 +103,10 @@ export default {
             .then(response => {
                 if(response.ok) {
                     console.log('Logout erfolgreich');
+
+                    //User im Store abmelden
+                    useAuthStore().logoutUser();
+
                     // Zurückschicken an Index-Page
                     this.$router.push({ path: '/' });
                 } else {

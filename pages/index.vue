@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { useAuthStore } from '~/store/authentication'
 
     export default{
         data(){
@@ -37,6 +38,10 @@
                 try {
                     if(this.username === "dummyUser" && this.password === "dummyPassword") {
                         this.loginToken = "dummyToken";
+
+                            // User im Store anmelden
+                            useAuthStore().loginUser(this.loginToken);
+                            
                         console.log("Login successful (Dummy):", this.loginToken);
 
                         this.$router.push("/checklist");
@@ -44,7 +49,6 @@
                     }
                     const response = await fetch('/login', {
                         method: 'POST', 
-//                        mode: 'no-cors',
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -59,7 +63,10 @@
                         try {
                             const user = await response.json();
                             this.loginToken = user.loginToken;
-                            console.log(response);
+
+                            // User im Store anmelden
+                            useAuthStore().loginUser(this.loginToken);
+
                             console.log('Login successful:', user);
                             this.$router.push("/checklist");
                         } catch (jsonError) {
