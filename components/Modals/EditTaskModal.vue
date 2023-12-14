@@ -95,10 +95,10 @@ export default {
             handler(newTask) {
                 if(newTask) {
                     // Überprüfen, ob plannedDate und completedDate Strings sind -> Wenn ja, werden diese in Date-Objekte umgewandelt
-                    if (newTask.plannedDate && typeof newTask.plannedDate === 'string') {
+                    if (newTask.plannedDate && !(newTask.plannedDate instanceof Date)) {
                         newTask.plannedDate = new Date(newTask.plannedDate);
                     }
-                    if (newTask.completedDate && typeof newTask.completedDate === 'string') {
+                    if (newTask.completedDate && !(newTask.completedDate instanceof Date)) {
                         newTask.completedDate = new Date(newTask.completedDate);
                     }                    
                     this.editedTask = { ...newTask};
