@@ -1,28 +1,32 @@
 <template>
+    <div class="fixed_column">
+        <Taskbar />    
 
-    <Taskbar />    
+        <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
 
-    <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
+        <!-- Normalerweise Abteilung des Users -->
+        <h2>Abteilung: Admin</h2>
 
-    <!-- Normalerweise Abteilung des Users -->
-    <h2>Abteilung: Admin</h2>
+        <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
-    <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
+        <div v-if="showButtons" class="button-container">
+            <button v-if="shouldshowReminderButton(selectedTask)" @click="sendReminder(selectedTask.id)">Reminder schicken</button>
+            <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
+            <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
+        </div>
+    </div>
+
 
     <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
-    <ChecklistTable :checklistItems="checklistItems"
-     :selectedTaskId="selectedTaskId" 
-     @taskClicked="handleTaskClick" 
-     @updateRowColors="updateRowColors" 
-     @deleteItemFromChecklist="deleteItemFromChecklist"
-     @sendReminder="sendReminder"/>
-    
-    <div v-if="showButtons" class="button-container">
-        <button v-if="shouldshowReminderButton(selectedTask)" @click="sendReminder(selectedTask.id)">Reminder schicken</button>
-        <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
-        <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
-    </div>
+    <div class="table">
+        <ChecklistTable :checklistItems="checklistItems"
+         :selectedTaskId="selectedTaskId" 
+         @taskClicked="handleTaskClick" 
+         @updateRowColors="updateRowColors" 
+         @deleteItemFromChecklist="deleteItemFromChecklist"
+         @sendReminder="sendReminder"/>
+    </div>    
 
     <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 </template>
@@ -218,6 +222,16 @@ export default {
 </script>
 
 <style scoped>
+    .fixed_column{
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+    .table{
+        padding-top: 250px; 
+    }
     h2{
         color:#00315E;
     }

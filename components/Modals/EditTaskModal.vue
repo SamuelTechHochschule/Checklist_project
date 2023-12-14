@@ -94,7 +94,7 @@ export default {
         taskToEdit: {
             handler(newTask) {
                 if(newTask) {
-                    // Überprüfen, ob plannedDate und completedDate Strings sind -> Wenn ja, werden diese in Date-Objekte umgewandelt
+                    // Überprüfen, ob plannedDate und completedDate bereits Date-Objekte sind -> Wenn nicht, werden diese in Date-Objekte umgewandelt
                     if (newTask.plannedDate && !(newTask.plannedDate instanceof Date)) {
                         newTask.plannedDate = new Date(newTask.plannedDate);
                     }
