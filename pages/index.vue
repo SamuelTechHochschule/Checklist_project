@@ -14,7 +14,7 @@
                 <label for="password">Password:</label>
                 <input v-model="password" type="password" id="password" placeholder="Your password" required>
 
-                <p class="forgotpw">Forgot your password?</p>
+                <p v-if="loginError" class="error-message">Der Benutzername oder das Passwort ist falsch!</p>
 
                 <button class="weiter-button" type="submit">Weiter</button>
             </form>
@@ -31,16 +31,18 @@ import { useAuthStore } from '~/store/authentication'
                 username: '',
                 password: '',
                 loginToken: '',
+                loginError: false,
             };
         },
         methods: {
             async loginUser() {
                 try {
+                    // Dummy-User
                     if(this.username === "dummyUser" && this.password === "dummyPassword") {
                         this.loginToken = "dummyToken";
 
-                            // User im Store anmelden
-                            useAuthStore().loginUser(this.loginToken);
+                        // User im Store anmelden
+                        useAuthStore().loginUser(this.loginToken);
                             
                         console.log("Login successful (Dummy):", this.loginToken);
 
@@ -73,6 +75,7 @@ import { useAuthStore } from '~/store/authentication'
                             console.error('Error parsing json:', jsonError);
                         }
                     } else {
+                        this.loginError = true;
                         console.error('Login error:', response.statusText);
                     }
                 } catch (error) {
@@ -162,9 +165,9 @@ import { useAuthStore } from '~/store/authentication'
         background-color: #447bb3;
 
     }
-    .forgotpw{
+    .error-message{
         text-align: right;
-        color: #7C97AE;
+        color: red;
         font-size: x-small;
         margin-bottom: 10px;
         font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
