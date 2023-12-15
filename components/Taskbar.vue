@@ -28,10 +28,16 @@
                     <p>Ansicht</p>
                 </div>
             </li>
-            <li>
+            <li @mouseenter="showFilterMenu" @mouseleave="hideFilterMenu">
                 <div class="filter-block">
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
                     <p>Filter</p>
+                </div>
+                <div v-if="isFilterMenuVisible" class="filter-menu">
+                    <label for="departmentOptions">Nach Abteilung sortieren:</label>
+                    <select v-model="selectedDepartment" @change="handleDepartmentChange">
+                        <option v-for="department in departmentOptions" :key="department" :value="department"></option>
+                    </select>
                 </div>
             </li>
             <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu">
@@ -67,7 +73,8 @@ export default {
         return{
             isUserMenuVisible: false,
             isSettingsModalVisible: false,
-
+            isFilterMenuVisible: false,
+            departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
         };
     },
 
@@ -81,6 +88,14 @@ export default {
         // Schließt Dropdownmenü
         hideUserMenu() {
             this.isUserMenuVisible = false;
+        },
+
+        showFilterMenu() {
+            this.isFilterMenuVisible = true;
+        },
+
+        hideFilterMenu() {
+            this.isFilterMenuVisible = false;
         },
 
         // Navigiere zur SettingsModal.vue-Komponente
@@ -205,6 +220,13 @@ export default {
         width: 50px;
         height: 45px; 
         margin-top: 20px;
+    }
+    .filter-menu{
+        position: absolute;
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        z-index: 1;
+        flex-direction: column;        
     }
     .account-block{
         padding-right: 30px;
