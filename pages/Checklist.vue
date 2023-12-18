@@ -1,5 +1,10 @@
 <template>
     <div class="fixed_column">
+
+        <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
+
+        <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
+
         <Taskbar />    
 
         <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
@@ -16,9 +21,6 @@
         </div>
     </div>
 
-
-    <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
-
     <div class="table">
         <ChecklistTable :checklistItems="checklistItems"
          :selectedTaskId="selectedTaskId" 
@@ -28,7 +30,6 @@
          @sendReminder="sendReminder"/>
     </div>    
 
-    <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 </template>
 
 <script>
@@ -133,7 +134,7 @@ export default {
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
             try{
-                const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
+                const response = await fetch(`/deleteTask/${taskId}`, {
                     method: 'DELETE',
                 });
 
