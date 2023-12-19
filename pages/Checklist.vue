@@ -134,7 +134,7 @@ export default {
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
             try{
-                const response = await fetch(`/deleteTask/${taskId}`, {
+                const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
                     method: 'DELETE',
                 });
 

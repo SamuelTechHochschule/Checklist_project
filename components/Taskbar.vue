@@ -28,17 +28,12 @@
                     <p>Ansicht</p>
                 </div>
             </li>
-            <li @mouseenter="showFilterMenu" @mouseleave="hideFilterMenu">
-                <div class="filter-block">
+            <li>
+                <div class="filter-block" @click="openFilterModal">
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
                     <p>Filter</p>
                 </div>
-                <div v-if="isFilterMenuVisible" class="filter-menu">
-                    <label for="departmentOptions">Nach Abteilung sortieren:</label>
-                    <select v-model="selectedDepartment" @change="handleDepartmentChange">
-                        <option v-for="department in departmentOptions" :key="department" :value="department"></option>
-                    </select>
-                </div>
+                <FilterModal :isVisible="isFilterModalVisible" @close="closeFilterModal"/>
             </li>
             <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu">
                 <div class="account-block">
@@ -60,6 +55,7 @@
 </template>
 
 <script>
+import FilterModal from './Modals/FilterModal.vue';
 import SettingsModal from './Modals/SettingsModal.vue';
 import { useAuthStore } from '~/store/authentication';
 
@@ -67,14 +63,14 @@ export default {
 
     components: {
         SettingsModal,
+        FilterModal,
     },
 
     data() {
         return{
             isUserMenuVisible: false,
             isSettingsModalVisible: false,
-            isFilterMenuVisible: false,
-            departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
+            isFilterModalVisible: false,
         };
     },
 
@@ -90,12 +86,12 @@ export default {
             this.isUserMenuVisible = false;
         },
 
-        showFilterMenu() {
-            this.isFilterMenuVisible = true;
+        openFilterModal() {
+            this.isFilterModalVisible = true;
         },
 
-        hideFilterMenu() {
-            this.isFilterMenuVisible = false;
+        closeFilterModal() {
+            this.isFilterModalVisible = false;
         },
 
         // Navigiere zur SettingsModal.vue-Komponente
@@ -220,13 +216,6 @@ export default {
         width: 50px;
         height: 45px; 
         margin-top: 20px;
-    }
-    .filter-menu{
-        position: absolute;
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-        z-index: 1;
-        flex-direction: column;        
     }
     .account-block{
         padding-right: 30px;
