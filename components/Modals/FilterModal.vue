@@ -2,13 +2,9 @@
     <div class="modal" v-if="isVisible">
         <div class="modal-content">
             <h3>Filter Einstellungen</h3>
-                <label>
-                    <input type="checkbox" v-model="isSortByCategoryChecked">
-                    Nach Aufgabenbereich sortieren
-                </label>
                 <div class="form-row">
-                        <button @click="closeModal">Abbrechen</button>
-                        <button @submit.prevent="saveChanges">Bestätigen</button>
+                    <button @click="closeModal">Abbrechen</button>
+                    <button @click="saveChanges">Bestätigen</button>
                 </div>
         </div>
     </div>
@@ -22,7 +18,7 @@ export default {
     },
             
     methods: {
-        saveSettings() {
+        saveChanges() {
             console.log("Gespeichert")
             this.closeModal();
         },  
