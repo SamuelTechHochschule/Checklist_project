@@ -3,8 +3,9 @@
         <div class="modal-content">
             <h3>Filter Einstellungen</h3>
                 <div class="form-row">
+                    <input type="checkbox" v-model="isDepartmentFilterActive">
                     <label for="departmentFilter">Nach Abteilung sortieren:</label>
-                    <select v-model="selectedDepartment" id="departmentFilter">
+                    <select v-model="selectedDepartment" id="departmentFilter" :disabled="!isDepartmentFilterActive">
                         <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }}</option>
                     </select>
                     <button @click="closeModal">Abbrechen</button>
@@ -24,13 +25,18 @@ export default {
     data() {
         return {
             selectedDepartment: '',
+            isDepartmentFilterActive: false,
             departmentOptions: ['Alphabetical', 'AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
         };
     },
             
     methods: {
         saveChanges() {
-            this.$emit('save', { selectedDepartment: this.selectedDepartment });
+            if(this.isDepartmentFilterActive) {
+                this.$emit('save', { selectedDepartment: this.selectedDepartment });
+            } else {
+                this.$emit('save', { selectedDepartment: '' });
+            }
             this.closeModal();
         },  
 
