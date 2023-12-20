@@ -237,6 +237,7 @@ export default {
         position: fixed;
         width: 100%;
         z-index: 1000;
+        top: 0;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         background-color: #f8f8f8;
     }
