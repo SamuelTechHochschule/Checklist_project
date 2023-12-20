@@ -33,7 +33,7 @@
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
                     <p>Filter</p>
                 </div>
-                <FilterModal :isVisible="isFilterModalVisible" @close="closeFilterModal"/>
+                <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @close="closeFilterModal"/>
             </li>
             <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu">
                 <div class="account-block">
@@ -92,6 +92,10 @@ export default {
 
         closeFilterModal() {
             this.isFilterModalVisible = false;
+        },
+        
+        handleFilterChanges(filterOptions) {
+            this.$emit('filterChanged', filterOptions);
         },
 
         // Navigiere zur SettingsModal.vue-Komponente

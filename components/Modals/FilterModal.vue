@@ -3,6 +3,10 @@
         <div class="modal-content">
             <h3>Filter Einstellungen</h3>
                 <div class="form-row">
+                    <label for="departmentFilter">Nach Abteilung sortieren:</label>
+                    <select v-model="selectedDepartment" id="departmentFilter">
+                        <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }}</option>
+                    </select>
                     <button @click="closeModal">Abbrechen</button>
                     <button @click="saveChanges">Bestätigen</button>
                 </div>
@@ -16,10 +20,17 @@ export default {
     props: {
         isVisible: Boolean,
     },
+
+    data() {
+        return {
+            selectedDepartment: '',
+            departmentOptions: ['Alphabetical', 'AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
+        };
+    },
             
     methods: {
         saveChanges() {
-            console.log("Gespeichert")
+            this.$emit('save', { selectedDepartment: this.selectedDepartment });
             this.closeModal();
         },  
 

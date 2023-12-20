@@ -5,7 +5,7 @@
 
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
-        <Taskbar />    
+        <Taskbar @filterChanged="handleFilterChanges"/>    
 
         <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
 
@@ -40,7 +40,7 @@ import Taskbar from '~/components/Taskbar.vue';
 import { useAuthStore } from '~/store/authentication';
 
 export default {
-
+/*
     beforeRouteEnter(to, from, next) {
         const authStore = useAuthStore();
 
@@ -54,7 +54,7 @@ export default {
             next();
         }
     },
-
+*/
     components: {
         AddTaskModal,
         ChecklistTable,
@@ -71,6 +71,9 @@ export default {
             selectedTaskId: -1,
             preliminaryVersions: {},
             releaseVersions: {},
+            filterOptions: {
+                selectedDepartment: '',
+            },
         };
     },
 
@@ -83,7 +86,8 @@ export default {
         // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
             try {
-                const response = await fetch('/checklist');
+                const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
+                const response = await fetch(`/checklist?${departmentParam}`);
                 if (!response.ok) {
                     throw new Error(`Server responded with status ${response.status}`);
                 }
@@ -99,6 +103,13 @@ export default {
             } catch (error) {
                 console.error('Error fetching checklist items:', error);
             }
+        },
+
+        // Handler für Änderung im FilterModal
+        handleFilterChanges(filterOptions) {
+            console.log('Filter options changed:', filterOptions);
+            this.filterOptions = { ...this.filterOptions, ...filterOptions };
+            this.fetchChecklistItems();
         },
 
         // Modal öffnen
