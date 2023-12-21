@@ -31,7 +31,7 @@
             <li>
                 <div class="filter-block" @click="openFilterModal">
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
-                    <p>Filter/Sortieren</p>
+                    <p>Filter</p>
                 </div>
                 <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @close="closeFilterModal"/>
             </li>
