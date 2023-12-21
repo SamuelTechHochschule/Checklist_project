@@ -11,7 +11,6 @@
                         </select>
                     </div>
                 </div>
-                <h3>Sortier Einstellungen</h3>
                 <div class="form-row">
                     <div class="form-column">
                         <input type="checkbox" v-model="filterOptions.showIncompleteTasks">
