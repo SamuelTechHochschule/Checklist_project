@@ -73,6 +73,7 @@ export default {
             releaseVersions: {},
             filterOptions: {
                 selectedDepartment: '',
+                showIncompleteTasks: false,
             },
         };
     },
@@ -87,7 +88,8 @@ export default {
         async fetchChecklistItems() {
             try {
                 const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
-                const response = await fetch(`/checklist?${departmentParam}`);
+                const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
+                const response = await fetch(`/checklist?${departmentParam}${incompleteTaskParam}`);
                 if (!response.ok) {
                     throw new Error(`Server responded with status ${response.status}`);
                 }

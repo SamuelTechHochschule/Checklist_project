@@ -3,11 +3,22 @@
         <div class="modal-content">
             <h3>Filter Einstellungen</h3>
                 <div class="form-row">
-                    <input type="checkbox" v-model="isDepartmentFilterActive">
-                    <label for="departmentFilter">Nach Abteilung sortieren:</label>
-                    <select v-model="selectedDepartment" id="departmentFilter" :disabled="!isDepartmentFilterActive">
-                        <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }}</option>
-                    </select>
+                    <div class="column">
+                        <input type="checkbox" v-model="isDepartmentFilterActive">
+                        <label for="departmentFilter">Nach Abteilung filtern:</label>
+                        <select v-model="selectedDepartment" id="departmentFilter" :disabled="!isDepartmentFilterActive">
+                            <option v-for="department in departmentOptions" :key="department" :value="department">{{ department }}</option>
+                        </select>
+                    </div>
+                </div>
+                <h3>Sortier Einstellungen</h3>
+                <div class="form-row">
+                    <div class="form-column">
+                        <input type="checkbox" v-model="filterOptions.showIncompleteTasks">
+                        <label>Nach nicht-erledigten Aufgaben filtern</label>
+                    </div>
+                </div>
+                <div class="form-row">
                     <button @click="closeModal">Abbrechen</button>
                     <button @click="saveChanges">Bestätigen</button>
                 </div>
@@ -26,7 +37,8 @@ export default {
         return {
             selectedDepartment: '',
             isDepartmentFilterActive: false,
-            departmentOptions: ['Alphabetical', 'AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
+            filterOptions: {},
+            departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
         };
     },
             
@@ -37,6 +49,7 @@ export default {
             } else {
                 this.$emit('save', { selectedDepartment: '' });
             }
+            this.$emit('save', this.filterOptions);
             this.closeModal();
         },  
 
@@ -71,4 +84,11 @@ export default {
         justify-content: space-between;
         margin-top: 20px;
     }
+    .form-column{
+        flex: 1;
+        margin-right: 10px;
+    }
+    .form-column:last-child{
+        margin-right: 0;
+    }   
 </style>
