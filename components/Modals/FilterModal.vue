@@ -17,6 +17,13 @@
                         <label>Nach nicht-erledigten Aufgaben filtern</label>
                     </div>
                 </div>
+                <!-- Kann erst codiert werden, wenn ldap-Server funktioniert -->
+                <div class="form-row">
+                    <div class="form-column">
+                        <input type="checkbox">
+                        <label>Nach Person suchen:</label>
+                    </div>
+                </div>
                 <div class="form-row">
                     <button @click="closeModal">Abbrechen</button>
                     <button @click="saveChanges">Bestätigen</button>

@@ -21,13 +21,16 @@
         </div>
     </div>
 
-    <div class="table">
-        <ChecklistTable :checklistItems="checklistItems"
-         :selectedTaskId="selectedTaskId" 
-         @taskClicked="handleTaskClick" 
-         @updateRowColors="updateRowColors" 
-         @deleteItemFromChecklist="deleteItemFromChecklist"
-         @sendReminder="sendReminder"/>
+    <div class="table" v-if="selectedView === 'checklist'">
+            <ChecklistTable :checklistItems="checklistItems"
+             :selectedTaskId="selectedTaskId" 
+             @taskClicked="handleTaskClick" 
+             @updateRowColors="updateRowColors" 
+             @deleteItemFromChecklist="deleteItemFromChecklist"
+             @sendReminder="sendReminder"/>        
+    </div>
+    <div v-else>
+        <CalenderView :tasks="checklistItems" />
     </div>    
 
 </template>
@@ -37,6 +40,7 @@ import AddTaskModal from '~/components/Modals/AddTaskModal.vue';
 import EditTaskModal from '~/components/Modals/EditTaskModal.vue';
 import ChecklistTable from '~/components/ChecklistTable.vue';
 import Taskbar from '~/components/Taskbar.vue';
+import CalenderView from '~/components/CalenderView.vue';
 import { useAuthStore } from '~/store/authentication';
 
 export default {
@@ -58,6 +62,7 @@ export default {
     components: {
         AddTaskModal,
         ChecklistTable,
+        CalenderView,
         EditTaskModal,
         Taskbar,
     },
@@ -75,6 +80,7 @@ export default {
                 selectedDepartment: '',
                 showIncompleteTasks: false,
             },
+            selectedView: 'checklist',
         };
     },
 
@@ -84,11 +90,17 @@ export default {
 
     methods: {
 
+        // Zwischen Checklist und Kalender wechseln
+        toggleView(view) {
+            this.selectedView = view;
+        },
+
         // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
             try {
                 const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
                 const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
+
                 const response = await fetch(`/checklist?${departmentParam}${incompleteTaskParam}`);
                 if (!response.ok) {
                     throw new Error(`Server responded with status ${response.status}`);
@@ -147,6 +159,7 @@ export default {
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
             try{
+                // Proxy nicht funktionsfähig bei DELETE-Methode
                 const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
                     method: 'DELETE',
                 });
