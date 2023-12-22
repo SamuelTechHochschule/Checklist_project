@@ -5,7 +5,7 @@
 
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
-        <Taskbar @filterChanged="handleFilterChanges"/>    
+        <Taskbar @filterChanged="handleFilterChanges" @toggleView="toggleView"/>    
 
         <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
 
@@ -92,6 +92,7 @@ export default {
 
         // Zwischen Checklist und Kalender wechseln
         toggleView(view) {
+            console.log("Receive view:", view);
             this.selectedView = view;
         },
 
