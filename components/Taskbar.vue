@@ -25,11 +25,6 @@
                     <ul>
                         <li v-for="version in versions" :key="version.id" @click="selectVersion(version)">
                             {{ version.name }}
-                            <ul v-if="selectedVersion && selectedVersion.id === version.id">
-                                <li v-for="milestone in version.milestones" :key="milestone.id" @click="selectMilestone(milestone)">
-                                    {{ milestone.name }}
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -94,23 +89,14 @@ export default {
             versions: [
                 {
                     id: 1,
-                    name: 'Version 6.1',
-                    milestones: [
-                        {id: 1, name: 'Meilenstein 0'},
-                        {id: 2, name: 'Meilenstein 1'},
-                    ],
+                    name: 'Neo Suite 6.1',
                 },
                 {
                     id: 2,
-                    name: 'Version 6.2',
-                    milestones: [
-                        {id: 1, name: 'Meilenstein 0'},
-                        {id: 2, name: 'Meilenstein 1'},
-                    ],
+                    name: 'Neo Suite 6.2',
                 },
             ],
             selectedVersion: null,
-            selectedMilestone: null,
         };
     },
 
@@ -140,12 +126,6 @@ export default {
         selectVersion(version) {
             this.selectedVersion = version;
             this.$emit('versionSelected', version);
-        },
-
-        // Wähle Meilenstein aus
-        selectMilestone(milestone) {
-            console.log('Selecting milestone:', milestone);
-            this.$emit('milestoneSelected', milestone);
         },
 
         // Zwischen Checklist und Kalender wechseln

@@ -5,7 +5,7 @@
 
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
-        <Taskbar @filterChanged="handleFilterChanges" @toggleView="toggleView" @versionSelected="handleVersionSelected" @milestoneSelected="handleMilestoneSelected"/>    
+        <Taskbar @filterChanged="handleFilterChanges" @toggleView="toggleView" @versionSelected="handleVersionSelected" />    
 
         <h2>{{ generateTitle() }}</h2>
 
@@ -82,7 +82,6 @@ export default {
             },
             selectedView: 'checklist',
             selectedVersion: null,
-            selectedMilestone: null,
         };
     },
 
@@ -98,17 +97,10 @@ export default {
             this.updateTitle();
         },
 
-        // Handler für Auswahl des Meilensteins
-        handleMilestoneSelected(milestone) {
-            this.selectedMilestone = milestone;
-            this.updateTitle();
-        },
-
         // Generiert Überschrift auf ausgewählte Version bzw. Meilenstein
         generateTitle() {
             const versionName = this.selectedVersion ? this.selectedVersion.name : 'XX';
-            const milestoneName = this.selectedMilestone ? this.selectedMilestone.name : 'XY';
-            return `Checkliste zum ${milestoneName} | Versionsfreigabe: ${versionName}`;
+            return `Checkliste zur Versionsfreigabe: ${versionName}`;
         },
 
         // Aktualisiert Überschrift
