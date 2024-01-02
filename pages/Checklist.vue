@@ -30,7 +30,7 @@
              @sendReminder="sendReminder"/>        
     </div>
     <div v-else>
-        <CalenderView :tasks="checklistItems" />
+        <CalenderView :checklistItems="checklistItems" />
     </div>    
 
 </template>
@@ -102,7 +102,7 @@ export default {
                 const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
                 const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
 
-                const response = await fetch(`/checklist?${departmentParam}${incompleteTaskParam}`);
+                const response = await fetch(`http://localhost:5500/api/checklist?${departmentParam}${incompleteTaskParam}`);
                 if (!response.ok) {
                     throw new Error(`Server responded with status ${response.status}`);
                 }
