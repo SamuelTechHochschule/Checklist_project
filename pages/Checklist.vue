@@ -29,7 +29,7 @@
              @deleteItemFromChecklist="deleteItemFromChecklist"
              @sendReminder="sendReminder"/>        
     </div>
-    <div v-else>
+    <div v-else class="calendar-container">
         <CalenderView :checklistItems="checklistItems" />
     </div>    
 
@@ -249,6 +249,11 @@ export default {
 </script>
 
 <style scoped>
+
+    .calendar-container{
+        flex-grow: 1;
+        padding: 0 250px;
+    }
     .fixed_column{
         position: fixed;
         width: 100%;
