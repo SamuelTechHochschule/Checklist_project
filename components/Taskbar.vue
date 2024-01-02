@@ -16,10 +16,22 @@
                     </div>
                 </NuxtLink>
             </li>
-            <li>
+            <li @mouseenter="showVersionMenu" @mouseleave="hideVersionMenu"> 
                 <div class="version-block">
                     <img src="~/assets/Version.png" alt="Version" class="version">
                     <p>Version</p>
+                </div>
+                <div v-if="isVersionMenuVisible" class="version-menu">
+                    <ul>
+                        <li v-for="version in versions" :key="version.id" @click="selectVersion(version)">
+                            {{ version.name }}
+                            <ul v-if="selectedVersion && selectedVersion.id === version.id">
+                                <li v-for="milestone in version.milestones" :key="milestone.id" @click="selectMilestone(milestone)">
+                                    {{ milestone.name }}
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </li>
             <li @mouseenter="showViewMenu" @mouseleave="hideViewMenu">
@@ -78,6 +90,27 @@ export default {
             isViewMenuVisible: false,
             isSettingsModalVisible: false,
             isFilterModalVisible: false,
+            isVersionMenuVisible: false,
+            versions: [
+                {
+                    id: 1,
+                    name: 'Version 6.1',
+                    milestones: [
+                        {id: 1, name: 'Meilenstein 0'},
+                        {id: 2, name: 'Meilenstein 1'},
+                    ],
+                },
+                {
+                    id: 2,
+                    name: 'Version 6.2',
+                    milestones: [
+                        {id: 1, name: 'Meilenstein 0'},
+                        {id: 2, name: 'Meilenstein 1'},
+                    ],
+                },
+            ],
+            selectedVersion: null,
+            selectedMilestone: null,
         };
     },
 
@@ -91,6 +124,28 @@ export default {
         // Schließt Dropdownmenü von Ansicht
         hideViewMenu() {
             this.isViewMenuVisible = false;
+        },
+
+        // Zeigt Dropdownmenü von Version
+        showVersionMenu() {
+            this.isVersionMenuVisible = true;
+        },
+
+        // Schließt Dropdownmenü von Version
+        hideVersionMenu() {
+            this.isVersionMenuVisible = false;
+        },
+
+        // Wähle Version aus
+        selectVersion(version) {
+            this.selectedVersion = version;
+            this.$emit('versionSelected', version);
+        },
+
+        // Wähle Meilenstein aus
+        selectMilestone(milestone) {
+            console.log('Selecting milestone:', milestone);
+            this.$emit('milestoneSelected', milestone);
         },
 
         // Zwischen Checklist und Kalender wechseln
@@ -248,6 +303,26 @@ export default {
         border-bottom: 1px solid #ccc; 
     }
     .view-menu li:hover {
+        background-color: #f0f0f0;
+    }
+    .version-menu{
+        position: absolute;
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        z-index: 1;
+        flex-direction: column;
+    }
+    .version-menu ul{
+        list-style-type: none;
+        padding: 0;
+        margin: 0;  
+    }
+    .version-menu li {
+        padding: 8px;
+        cursor: pointer;
+        border-bottom: 1px solid #ccc; 
+    }
+    .version-menu li:hover {
         background-color: #f0f0f0;
     }
     .filter-block{

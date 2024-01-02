@@ -5,9 +5,9 @@
 
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
-        <Taskbar @filterChanged="handleFilterChanges" @toggleView="toggleView"/>    
+        <Taskbar @filterChanged="handleFilterChanges" @toggleView="toggleView" @versionSelected="handleVersionSelected" @milestoneSelected="handleMilestoneSelected"/>    
 
-        <h2>Checkliste zum Meilenstein XX | Versionsfreigabe: XY</h2>
+        <h2>{{ generateTitle() }}</h2>
 
         <!-- Normalerweise Abteilung des Users -->
         <h2>Abteilung: Admin</h2>
@@ -81,6 +81,8 @@ export default {
                 showIncompleteTasks: false,
             },
             selectedView: 'checklist',
+            selectedVersion: null,
+            selectedMilestone: null,
         };
     },
 
@@ -89,6 +91,31 @@ export default {
     },
 
     methods: {
+
+        // Handler für Auswahl der Version
+        handleVersionSelected(version) {
+            this.selectedVersion = version;
+            this.updateTitle();
+        },
+
+        // Handler für Auswahl des Meilensteins
+        handleMilestoneSelected(milestone) {
+            this.selectedMilestone = milestone;
+            this.updateTitle();
+        },
+
+        // Generiert Überschrift auf ausgewählte Version bzw. Meilenstein
+        generateTitle() {
+            const versionName = this.selectedVersion ? this.selectedVersion.name : 'XX';
+            const milestoneName = this.selectedMilestone ? this.selectedMilestone.name : 'XY';
+            return `Checkliste zum ${milestoneName} | Versionsfreigabe: ${versionName}`;
+        },
+
+        // Aktualisiert Überschrift
+        updateTitle() {
+          const newTitle = this.generateTitle();
+          console.log("Updating title:", newTitle);  
+        },
 
         // Zwischen Checklist und Kalender wechseln
         toggleView(view) {
