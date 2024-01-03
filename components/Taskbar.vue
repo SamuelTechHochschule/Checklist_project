@@ -16,17 +16,10 @@
                     </div>
                 </NuxtLink>
             </li>
-            <li @mouseenter="showVersionMenu" @mouseleave="hideVersionMenu"> 
+            <li> 
                 <div class="version-block">
                     <img src="~/assets/Version.png" alt="Version" class="version">
                     <p>Version</p>
-                </div>
-                <div v-if="isVersionMenuVisible" class="version-menu">
-                    <ul>
-                        <li v-for="version in versions" :key="version.id" @click="selectVersion(version)">
-                            {{ version.name }}
-                        </li>
-                    </ul>
                 </div>
             </li>
             <li @mouseenter="showViewMenu" @mouseleave="hideViewMenu">
@@ -86,17 +79,6 @@ export default {
             isSettingsModalVisible: false,
             isFilterModalVisible: false,
             isVersionMenuVisible: false,
-            versions: [
-                {
-                    id: 1,
-                    name: 'Neo Suite 6.1',
-                },
-                {
-                    id: 2,
-                    name: 'Neo Suite 6.2',
-                },
-            ],
-            selectedVersion: null,
         };
     },
 
@@ -110,22 +92,6 @@ export default {
         // Schließt Dropdownmenü von Ansicht
         hideViewMenu() {
             this.isViewMenuVisible = false;
-        },
-
-        // Zeigt Dropdownmenü von Version
-        showVersionMenu() {
-            this.isVersionMenuVisible = true;
-        },
-
-        // Schließt Dropdownmenü von Version
-        hideVersionMenu() {
-            this.isVersionMenuVisible = false;
-        },
-
-        // Wähle Version aus
-        selectVersion(version) {
-            this.selectedVersion = version;
-            this.$emit('versionSelected', version);
         },
 
         // Zwischen Checklist und Kalender wechseln

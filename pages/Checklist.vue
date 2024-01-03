@@ -1,6 +1,8 @@
 <template>
     <div class="fixed_column">
 
+        <VersionModal v-if="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/>
+
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
@@ -38,6 +40,7 @@
 <script>
 import AddTaskModal from '~/components/Modals/AddTaskModal.vue';
 import EditTaskModal from '~/components/Modals/EditTaskModal.vue';
+import VersionModal from '~/components/Modals/VersionModal.vue';
 import ChecklistTable from '~/components/ChecklistTable.vue';
 import Taskbar from '~/components/Taskbar.vue';
 import CalenderView from '~/components/CalenderView.vue';
@@ -65,6 +68,7 @@ export default {
         CalenderView,
         EditTaskModal,
         Taskbar,
+        VersionModal,
     },
 
     data() {
@@ -82,14 +86,26 @@ export default {
             },
             selectedView: 'checklist',
             selectedVersion: null,
+            isVersionModalVisible: false,
         };
     },
 
     created() {
+        this.openVersionModal();
         this.fetchChecklistItems();
     },
 
     methods: {
+
+        // Version-Modal wird geöffnet
+        openVersionModal() {
+            this.isVersionModalVisible = true;
+        },
+
+        // Schließt Version-Modal
+        closeVersionModal() {
+            this.isVersionModalVisible = false;
+        },
 
         // Handler für Auswahl der Version
         handleVersionSelected(version) {
