@@ -3,7 +3,7 @@
 
         <VersionModal v-if="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
 
-        <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
+        <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" :selectedVersion="selectedVersion"/>
 
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 

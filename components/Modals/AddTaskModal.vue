@@ -55,6 +55,10 @@
 
 export default {
 
+    props: [
+        'selectedVersion'
+    ],
+
     data(){
         return{
             isOpen: false,
@@ -66,6 +70,7 @@ export default {
                 isPreliminary: false,
                 isRelease: false,
                 category: '',
+                version: '',
             },
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
             categoryOptions: ['1. Dokumentation', '2. Tätigkeiten', '3. Erweiterungspunkte zum Standard PEP', '4. Projektspezifische Aufgaben', '5. Aufgaben nach der Freigabe des Meilensteins'],
@@ -112,6 +117,10 @@ export default {
                 this.newTask.task += ' - Release Version';
             }
 
+            // Hinzufügen der Versionsinformationen
+            console.log('Selected Version:', this.selectedVersion);
+            this.newTask.version = this.selectedVersion.name;
+
             fetch('/addTask', {
                 method: 'POST',
                 headers:{
@@ -127,6 +136,7 @@ export default {
                     category: this.newTask.category,
                     colorClass_pv,
                     colorClass_rv,
+                    version: this.newTask.version,
                 }),
             })
             .then(response => {
