@@ -1,7 +1,7 @@
 <template>
     <div class="fixed_column">
 
-        <VersionModal v-if="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/>
+        <VersionModal v-if="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" />
 
@@ -87,12 +87,12 @@ export default {
             selectedView: 'checklist',
             selectedVersion: null,
             isVersionModalVisible: false,
+            isChecklistLoaded: false,
         };
     },
 
     created() {
         this.openVersionModal();
-        this.fetchChecklistItems();
     },
 
     methods: {
@@ -111,6 +111,7 @@ export default {
         handleVersionSelected(version) {
             this.selectedVersion = version;
             this.updateTitle();
+            this.fetchChecklistItems();
         },
 
         // Generiert Überschrift auf ausgewählte Version bzw. Meilenstein
@@ -131,25 +132,36 @@ export default {
             this.selectedView = view;
         },
 
+        // Lädt die Checklist, wenn eine Version ausgewählt wurde
+        async loadChecklist() {
+            if (this.selectedVersion) {
+                await this.fetchChecklistItems();
+                this.isChecklistLoaded = true;
+            }
+        },
+
         // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
             try {
-                const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
-                const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
+                if(!this.isChecklistLoaded) {
+                    const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
+                    const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
+                    const versionParam = `&version=${encodeURIComponent(this.selectedVersion.name)}`;
 
-                const response = await fetch(`http://localhost:5500/api/checklist?${departmentParam}${incompleteTaskParam}`);
-                if (!response.ok) {
-                    throw new Error(`Server responded with status ${response.status}`);
+                    const response = await fetch(`http://localhost:5500/api/checklist?${departmentParam}${incompleteTaskParam}${versionParam}`);
+                    if (!response.ok) {
+                        throw new Error(`Server responded with status ${response.status}`);
+                    }
+                    const data = await response.json();
+                    if (!data || !Array.isArray(data)) {
+                        throw new Error('Invalid response format');
+                    }
+                    this.checklistItems = data.map(item => ({
+                        ...item,
+                        isPreliminary: item.colorClass_pv === 'Preliminary-row',
+                        isRelease: item.colorClass_rv === 'Release-row',
+                    }));
                 }
-                const data = await response.json();
-                if (!data || !Array.isArray(data)) {
-                    throw new Error('Invalid response format');
-                }
-                this.checklistItems = data.map(item => ({
-                    ...item,
-                    isPreliminary: item.colorClass_pv === 'Preliminary-row',
-                    isRelease: item.colorClass_rv === 'Release-row',
-                }));
             } catch (error) {
                 console.error('Error fetching checklist items:', error);
             }

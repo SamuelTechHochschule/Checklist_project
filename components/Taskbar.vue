@@ -21,6 +21,7 @@
                     <img src="~/assets/Version.png" alt="Version" class="version">
                     <p>Version</p>
                 </div>
+            <!--    <VersionModal :isVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> -->
             </li>
             <li @mouseenter="showViewMenu" @mouseleave="hideViewMenu">
                 <div class="view-block">
@@ -63,6 +64,7 @@
 <script>
 import FilterModal from './Modals/FilterModal.vue';
 import SettingsModal from './Modals/SettingsModal.vue';
+import VersionModal from './Modals/VersionModal.vue';
 import { useAuthStore } from '~/store/authentication';
 
 export default {
@@ -70,6 +72,7 @@ export default {
     components: {
         SettingsModal,
         FilterModal,
+        VersionModal,
     },
 
     data() {
@@ -78,11 +81,26 @@ export default {
             isViewMenuVisible: false,
             isSettingsModalVisible: false,
             isFilterModalVisible: false,
-            isVersionMenuVisible: false,
+            isVersionModalVisible: false,
         };
     },
 
     methods: {
+
+        // Öffnet Version Modal
+        openVersionModal() {
+            this.isVersionModalVisible = true;
+        },
+
+        // Schließt Version Modal
+        closeVersionModal() {
+            this.isVersionModalVisible = false;
+        },
+
+        handleVersionSelected(version) {
+            console.log("Selected Version:", version);
+            this.$emit('versionSelected', version);
+        },
 
         // Zeigt Dropdownmenü von Ansicht
         showViewMenu() {

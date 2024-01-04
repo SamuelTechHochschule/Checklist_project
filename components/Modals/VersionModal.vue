@@ -17,16 +17,20 @@
 <script>
 export default {
 
+    props: {
+        isVisible: Boolean,
+    },
+
     data() {
         return {
             versions: [
                 {
                     id: 1,
-                    name: 'Neo Suite 6.1',
+                    name: 'Neo Suite 7.0',
                 },
                 {
                     id: 2,
-                    name: 'Neo Suite 6.2',
+                    name: 'Neo Suite 7.1',
                 },
             ],
             selectedVersion: null,
