@@ -13,13 +13,13 @@
             <div v-if="creatingNewVersion" class="form-column">
                 <div class="form-row">
                     <label for="newVersionName">Name der Versionsfreigabe:</label>
-                    <input v-model="newVersionName" type="text" id="newVersionName">
+                    <input v-model="newVersionName" type="text" id="newVersionName" required>
 
                     <label for="preliminaryrelease">Datum für das Preliminary Release angeben:</label>
-                    <input v-model="preliminaryrelease" type="text" id="preliminaryrelease">
+                    <input v-model="preliminaryrelease" type="text" id="preliminaryrelease" required>
 
                     <label for="finalrelease">Datum für das Final Release angeben:</label>
-                    <input v-model="finalrelease" type="text" id="finalrelease">
+                    <input v-model="finalrelease" type="text" id="finalrelease" required>
                 </div>
 
             </div>
