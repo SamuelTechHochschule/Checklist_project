@@ -11,13 +11,18 @@
             <button @click="confirmSelection" >Bestätigen</button>
 
             <div v-if="creatingNewVersion" class="form-column">
+                <h3>Daten für neue Version angeben:</h3>
                 <div class="form-row">
                     <label for="newVersionName">Name der Versionsfreigabe:</label>
                     <input v-model="newVersionName" type="text" id="newVersionName" required>
+                </div>
 
+                <div class="form-row">
                     <label for="preliminaryrelease">Datum für das Preliminary Release angeben:</label>
                     <input v-model="preliminaryrelease" type="text" id="preliminaryrelease" required>
+                </div>
 
+                <div class="form-row">
                     <label for="finalrelease">Datum für das Final Release angeben:</label>
                     <input v-model="finalrelease" type="text" id="finalrelease" required>
                 </div>
@@ -83,12 +88,34 @@ export default {
                     preliminaryrelease: this.preliminaryrelease,
                     finalrelease: this.finalrelease,
                 };
-                console.log('New Version:', newVersion);
 
-                // Fügt erstellte Version der Liste hinzu
-                this.versions.push(newVersion);
+                // Hinzufügen der Aufgabe in die Datenbank
+                try {
+                    const response = await fetch('http://localhost:5500/api/versions/addVersion', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(newVersion),
+                    });
 
-                this.closeModal();
+                    if(!response.ok) {
+                        throw new Error(`Server responded with status ${response.status}`);
+                    }
+
+                    const createdVersion = await response.json();
+                    console.log('Created Version', createdVersion);
+
+                    // Neu erstellte Version selektiert
+                    this.selectedVersion = createdVersion;
+
+                    // Fügt erstellte Version der Liste hinzu
+                    this.versions.push(newVersion);
+
+                    this.closeModal();
+                } catch(error) {
+                    console.error('Error creating new version:', error);
+                }
             } else {
                 console.error('Keine Version ausgewählt')
             }
