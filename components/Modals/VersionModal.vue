@@ -1,5 +1,5 @@
 <template>
-    <div class="modal">
+    <div class="modal" v-if="isVersionModalVisible">
         <div class="modal-content">
             <h3>Wählen Sie eine Versionsfreigabe oder erstellen Sie eine neue:</h3>
             <ul>
@@ -9,6 +9,20 @@
             </ul>
             <button @click="createNewVersion">Neue Version erstellen</button>
             <button @click="confirmSelection" >Bestätigen</button>
+
+            <div v-if="creatingNewVersion" class="form-column">
+                <div class="form-row">
+                    <label for="newVersionName">Name der Versionsfreigabe:</label>
+                    <input v-model="newVersionName" type="text" id="newVersionName">
+
+                    <label for="preliminaryrelease">Datum für das Preliminary Release angeben:</label>
+                    <input v-model="preliminaryrelease" type="text" id="preliminaryrelease">
+
+                    <label for="finalrelease">Datum für das Final Release angeben:</label>
+                    <input v-model="finalrelease" type="text" id="finalrelease">
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -18,39 +32,62 @@
 export default {
 
     props: {
-        isVisible: Boolean,
+        isVersionModalVisible: Boolean,
     },
 
     data() {
         return {
-            versions: [
-                {
-                    id: 1,
-                    name: 'Neo Suite 7.0',
-                },
-                {
-                    id: 2,
-                    name: 'Neo Suite 7.1',
-                },
-            ],
+            versions: [],
             selectedVersion: null,
+            creatingNewVersion: false,
+            newVersionName: '',
+            preliminaryrelease: '',
+            finalrelease: '',
         };
     },
     
     methods: {
 
+        async fetchVersions() {
+            try {
+                const response = await fetch('http://localhost:5500/api/versions');
+                if(!response.ok) {
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+                this.versions = data;
+            } catch(error) {
+                console.error('Error fetching versions:', error);
+            }
+        },
+
         selectVersion(version) {
             this.selectedVersion = version;
+            this.creatingNewVersion = false;
         },
 
         createNewVersion() {
-
+            this.creatingNewVersion = true;
         },
 
-        confirmSelection() {
+        async confirmSelection() {
             if(this.selectedVersion) {
                 this.$emit('versionSelected', this.selectedVersion);
                 console.log('Emit Version');
+                this.closeModal();
+            } else if(this.creatingNewVersion && this.newVersionName) {
+                const newVersion = {
+                    name: this.newVersionName,
+                    preliminaryrelease: this.preliminaryrelease,
+                    finalrelease: this.finalrelease,
+                };
+                console.log('New Version:', newVersion);
+
+                // Fügt erstellte Version der Liste hinzu
+                this.versions.push(newVersion);
+
                 this.closeModal();
             } else {
                 console.error('Keine Version ausgewählt')
@@ -58,8 +95,15 @@ export default {
         },
         
         closeModal() {
+            console.log("Erhält Anweisung")
             this.$emit('close');
         },
+    },
+
+    async mounted() {
+        if(this.isVersionModalVisible) {
+            await this.fetchVersions();
+        }
     },
 };
 </script>

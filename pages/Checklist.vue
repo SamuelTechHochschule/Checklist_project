@@ -1,7 +1,7 @@
 <template>
     <div class="fixed_column">
 
-        <VersionModal v-if="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
+        <VersionModal :isVersionModalVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
 
         <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" :selectedVersion="selectedVersion"/>
 
@@ -104,6 +104,7 @@ export default {
 
         // Schließt Version-Modal
         closeVersionModal() {
+            console.log("Weiß Bescheid");
             this.isVersionModalVisible = false;
         },
 

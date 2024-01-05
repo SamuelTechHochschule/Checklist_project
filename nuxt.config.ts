@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     '/addTask' : { proxy: process.env.URL + '/api/checklist/addTask' },
     '/editTask/*' : { proxy: process.env.URL + '/api/checklist/edit/{taskId}' },
    // '/deleteTask/*' : { proxy: process.env.URL + '/api/checklist/delete/{taskId}' },
+   // '/version' : { proxy: process.env.URL + '/api/versions' },
   },
 
 })
