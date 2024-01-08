@@ -62,7 +62,7 @@ export default {
 
                 const data = await response.json();
                 console.log(data);
-                this.versions = data;
+                this.versions = data.sort((a, b) => a.name.localeCompare(b.name));
             } catch(error) {
                 console.error('Error fetching versions:', error);
             }
