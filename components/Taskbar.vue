@@ -49,6 +49,7 @@
                 <div v-if="isUserMenuVisible" class="user-menu">
                     <ul>
                         <li @click="navigateToSettings">Einstellung</li>
+                        <li @click="exportChecklist">Checkliste exportieren</li>
                         <li @click="logout">Logout</li>
                     </ul>
                 </div>
@@ -68,6 +69,13 @@ import { useAuthStore } from '~/store/authentication';
 
 export default {
 
+    props: {
+        checklistItems: {
+            type: Array,
+            required: true,
+        },
+    },
+    
     components: {
         SettingsModal,
         FilterModal,
@@ -84,6 +92,42 @@ export default {
     },
 
     methods: {
+
+        // Exportiere Checklist
+        exportChecklist() {
+
+        if (!this.checklistItems || this.checklistItems.length === 0) {
+            console.error('Checklist is empty or undefined. Cannot export.');
+            return;
+        }
+
+            const tasksToExport = this.checklistItems;
+
+            // Überprüfung, ob es Aufgabe gibt
+            if(tasksToExport.length === 0) {
+                console.warn('Keine Aufgaben zum Exportieren vorhanden');
+                return;
+            }
+
+            // Aufgaben in JSON konvertieren
+            const tasksJson = JSON.stringify(tasksToExport, null, 2);
+
+            // Blob mit Json-Inhalt erstellen
+            const blob = new Blob([tasksJson], { type: 'application/json' });
+
+            // Dateinamen für Exportdatei erstellen
+            const filename = 'checklist_export.json';
+
+            // Download-Link erstellen
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+
+            // Aufräumen
+            document.body.removeChild(link);
+        },
 
         // Öffnet VersionModal
         openVersionModal() {
