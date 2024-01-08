@@ -50,6 +50,7 @@
                     <ul>
                         <li @click="navigateToSettings">Einstellung</li>
                         <li @click="exportChecklist">Checkliste exportieren</li>
+                        <li @click="importChecklist">Checkliste importieren</li>
                         <li @click="logout">Logout</li>
                     </ul>
                 </div>
@@ -75,7 +76,7 @@ export default {
             required: true,
         },
     },
-    
+
     components: {
         SettingsModal,
         FilterModal,
@@ -127,6 +128,32 @@ export default {
 
             // Aufräumen
             document.body.removeChild(link);
+        },
+
+        // Importiere Checklist
+        importChecklist() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.addEventListener('change', this.handleFileSelect);
+            input.click();
+        },
+
+        // Handler für Dateiauswahl
+        handleFileSelect(event) {
+            const file = event.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        console.log('Imported Data:', importedData);
+                    } catch (error) {
+                        console.error('Error parsing imported JSON:', error);
+                    }
+                };
+                reader.readAsText(file);
+            }
         },
 
         // Öffnet VersionModal
