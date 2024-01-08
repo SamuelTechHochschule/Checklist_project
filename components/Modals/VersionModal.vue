@@ -112,6 +112,9 @@ export default {
                     // Fügt erstellte Version der Liste hinzu
                     this.versions.push(newVersion);
 
+                    // Selektierte Version emitten
+                    this.$emit('versionSelected', createdVersion);
+
                     this.closeModal();
                 } catch(error) {
                     console.error('Error creating new version:', error);
