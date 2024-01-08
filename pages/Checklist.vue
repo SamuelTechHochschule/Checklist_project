@@ -7,7 +7,7 @@
 
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
-        <Taskbar @filterChanged="handleFilterChanges" @toggleView="toggleView" @versionSelected="handleVersionSelected" />    
+        <Taskbar @filterChanged="handleFilterChanges" @toggleView="toggleView" @versionSelected="handleVersionSelected" @open-version-modal="openVersionModal" />    
 
         <h2>{{ generateTitle() }}</h2>
 

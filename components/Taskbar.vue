@@ -17,11 +17,10 @@
                 </NuxtLink>
             </li>
             <li> 
-                <div class="version-block">
+                <div class="version-block" @click="openVersionModal">
                     <img src="~/assets/Version.png" alt="Version" class="version">
                     <p>Version</p>
                 </div>
-            <!--    <VersionModal :isVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> -->
             </li>
             <li @mouseenter="showViewMenu" @mouseleave="hideViewMenu">
                 <div class="view-block">
@@ -81,25 +80,14 @@ export default {
             isViewMenuVisible: false,
             isSettingsModalVisible: false,
             isFilterModalVisible: false,
-            isVersionModalVisible: false,
         };
     },
 
     methods: {
 
-        // Öffnet Version Modal
+        // Öffnet VersionModal
         openVersionModal() {
-            this.isVersionModalVisible = true;
-        },
-
-        // Schließt Version Modal
-        closeVersionModal() {
-            this.isVersionModalVisible = false;
-        },
-
-        handleVersionSelected(version) {
-            console.log("Selected Version:", version);
-            this.$emit('versionSelected', version);
+            this.$emit('open-version-modal');
         },
 
         // Zeigt Dropdownmenü von Ansicht
@@ -224,6 +212,7 @@ export default {
     .version-block{
         padding-right: 30px;
         padding-left: 30px;
+        cursor: pointer;
     }
     .version-block:hover{
         background-color: #d2e1f0;
@@ -267,26 +256,6 @@ export default {
         border-bottom: 1px solid #ccc; 
     }
     .view-menu li:hover {
-        background-color: #f0f0f0;
-    }
-    .version-menu{
-        position: absolute;
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-        z-index: 1;
-        flex-direction: column;
-    }
-    .version-menu ul{
-        list-style-type: none;
-        padding: 0;
-        margin: 0;  
-    }
-    .version-menu li {
-        padding: 8px;
-        cursor: pointer;
-        border-bottom: 1px solid #ccc; 
-    }
-    .version-menu li:hover {
         background-color: #f0f0f0;
     }
     .filter-block{
