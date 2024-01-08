@@ -20,11 +20,12 @@
                 </div>
             </div>
             <div class="form-row">
+            <!--
                 <div class="form-column">
                     <label>Geplanter Termin:</label>
                     <el-date-picker v-model="newTask.plannedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                 </div>
-
+            -->
                 <div class="form-column">
                     <label>Preliminary Version:</label>
                     <input v-model="newTask.isPreliminary" type="checkbox" />
@@ -74,6 +75,7 @@ export default {
             },
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
             categoryOptions: ['1. Dokumentation', '2. Tätigkeiten', '3. Erweiterungspunkte zum Standard PEP', '4. Projektspezifische Aufgaben', '5. Aufgaben nach der Freigabe des Meilensteins'],
+            selectedVersionType: null,
         };
     },
 
@@ -89,6 +91,29 @@ export default {
             this.isOpen = false;
             this.resetNewTask();
         },
+
+        // Methode für das ausgewählte Datum der Version
+        getSelectedVersionData() {
+            if(this.selectedVersion) {
+                if(this.selectedVersionType === 'preliminary') {
+                    return this.selectedVersion.preliminaryrelease;
+                } else if(this.selectedVersionType === 'release') {
+                    return this.selectedVersion.finalrelease;
+                }
+            } else {
+                return null;
+            }
+        },
+
+        updateSelectedVersionType() {
+            if(this.newTask.isPreliminary) {
+                this.selectedVersionType = 'preliminary';
+            } else if(this.newTask.isRelease) {
+                this.selectedVersionType = 'release';
+            } else {
+                this.selectedVersionType = null;
+            }
+        },
         
         // Fügt Aufgabe hinzu
         addTask() {
@@ -97,7 +122,7 @@ export default {
             const colorClass_rv = this.newTask.isRelease ? 'Release-row' : '';
 
             // Prüfen ob alle Felder ausgefüllt sind
-            if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
+            if (!this.newTask.task || !this.newTask.department || !this.newTask.person) {
                 alert('Bitte füllen Sie alle Felder aus!');
                 return;
             }
@@ -120,6 +145,15 @@ export default {
             // Hinzufügen der Versionsinformationen
             console.log('Selected Version:', this.selectedVersion);
             this.newTask.version = this.selectedVersion.name;
+
+            // Aufruf der Methode
+            this.updateSelectedVersionType();            
+
+            // Datum der ausgewählten Version abrufen
+            const versionDate = this.getSelectedVersionData();
+            if(versionDate) {
+                this.newTask.plannedDate = versionDate;
+            }
 
             fetch('/addTask', {
                 method: 'POST',
