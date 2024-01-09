@@ -11,6 +11,7 @@
                  @toggleView="toggleView" 
                  @versionSelected="handleVersionSelected" 
                  @open-version-modal="openVersionModal" 
+                 @importChecklist="importChecklist"
                  :checklistItems="checklistItems"/>    
 
         <h2>{{ generateTitle() }}</h2>
@@ -100,6 +101,32 @@ export default {
     },
 
     methods: {
+
+        // Importiere Checklist
+        importChecklist() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.addEventListener('change', this.handleFileSelect);
+            input.click();
+        },
+
+        // Handler für Dateiauswahl
+        handleFileSelect(event) {
+            const file = event.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+
+                    } catch (error) {
+                        console.error('Error parsing imported JSON:', error);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        },
 
         // Version-Modal wird geöffnet
         openVersionModal() {
