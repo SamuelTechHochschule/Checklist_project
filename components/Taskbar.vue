@@ -117,7 +117,7 @@ export default {
             const blob = new Blob([tasksJson], { type: 'application/json' });
 
             // Dateinamen für Exportdatei erstellen
-            const filename = 'checklist_export.json';
+            const filename = 'checklist.json';
 
             // Download-Link erstellen
             const link = document.createElement('a');

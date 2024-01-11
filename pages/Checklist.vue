@@ -117,15 +117,46 @@ export default {
             if(file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
+                    console.log(e.target.result);
+                    const content = e.target.result.replace(/^\uFEFF/, '');
                     try {
                         const importedData = JSON.parse(e.target.result);
-
+                        console.log('Parsed importierte Daten:', importedData);
+                        this.importChecklistItems(importedData);
                     } catch (error) {
                         console.error('Error parsing imported JSON:', error);
                     }
                 };
                 reader.readAsText(file);
             }
+        },
+
+        // Importierte Daten an Backend senden
+        importChecklistItems(importedData) {
+            console.log('Importierten Daten:', importedData);
+            fetch('http://localhost:5500/api/checklist/import', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify({
+                    version: this.selectedVersion.name,
+                    checklistItems: importedData,
+                }),
+            })
+            .then(response => {
+                if(!response.ok) {
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Importierte Checklist-Aufgaben:', data);
+                this.fetchChecklistItems();
+            })
+            .catch(error => {
+                console.error('Error importing checklist items:', error);
+            });
         },
 
         // Version-Modal wird geöffnet
