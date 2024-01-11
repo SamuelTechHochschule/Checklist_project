@@ -75,6 +75,10 @@ export default {
             type: Array,
             required: true,
         },
+        selectedVersion: {
+            type: Object,
+            required: true,
+        },
     },
 
     components: {
@@ -117,7 +121,7 @@ export default {
             const blob = new Blob([tasksJson], { type: 'application/json' });
 
             // Dateinamen für Exportdatei erstellen
-            const filename = 'checklist.json';
+            const filename = `Checkliste_${this.selectedVersion.name}.json`;
 
             // Download-Link erstellen
             const link = document.createElement('a');

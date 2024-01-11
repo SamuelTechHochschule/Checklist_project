@@ -12,6 +12,7 @@
                  @versionSelected="handleVersionSelected" 
                  @open-version-modal="openVersionModal" 
                  @importChecklist="importChecklist"
+                 :selectedVersion="selectedVersion"
                  :checklistItems="checklistItems"/>    
 
         <h2>{{ generateTitle() }}</h2>
