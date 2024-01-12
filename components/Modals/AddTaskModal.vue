@@ -20,12 +20,11 @@
                 </div>
             </div>
             <div class="form-row">
-            <!--
                 <div class="form-column">
                     <label>Geplanter Termin:</label>
                     <el-date-picker v-model="newTask.plannedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                 </div>
-            -->
+
                 <div class="form-column">
                     <label>Preliminary Version:</label>
                     <input v-model="newTask.isPreliminary" type="checkbox" />
