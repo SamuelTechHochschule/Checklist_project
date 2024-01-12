@@ -1,14 +1,12 @@
 <template>
     <div class="modal" v-if="isVersionModalVisible">
         <div class="modal-content">
-            <h3>Wählen Sie eine Versionsfreigabe oder erstellen Sie eine neue:</h3>
+            <h3>Wählen/Erstellen/Bearbeiten Sie eine Versionsfreigabe:</h3>
             <ul>
                 <li v-for="version in versions" :key="version.id" @click="selectVersion(version)" :class="{ selected: selectedVersion === version }">
                     {{ version.name }}
                 </li>
             </ul>
-            <button @click="createNewVersion">Neue Version erstellen</button>
-            <button @click="confirmSelection" >Bestätigen</button>
 
             <div v-if="creatingNewVersion" class="form-column">
                 <h3>Daten für neue Version angeben:</h3>
@@ -19,15 +17,37 @@
 
                 <div class="form-row">
                     <label for="preliminaryrelease">Datum für das Preliminary Release angeben:</label>
-                    <input v-model="preliminaryrelease" type="text" id="preliminaryrelease" required>
+                    <el-date-picker v-model="preliminaryrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                 </div>
 
                 <div class="form-row">
                     <label for="finalrelease">Datum für das Final Release angeben:</label>
-                    <input v-model="finalrelease" type="text" id="finalrelease" required>
+                    <el-date-picker v-model="finalrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                </div>
+            </div>
+
+            <div v-if="editingVersion">
+                <h3>Version {{ selectedVersion.name }} bearbeiten</h3>
+                <div class="form-row">
+                    <label for="editedVersionName">Name der Versionsfreigabe:</label>
+                    <input v-model="editedVersionName" type="text" id="editedVersionName">
                 </div>
 
+                <div class="form-row">
+                    <label for="editedPreliminaryRelease">Datum für das Preliminary Release:</label>
+                    <el-date-picker v-model="editedPreliminaryRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                </div>
+
+                <div class="form-row">
+                    <label for="editedFinalRelease">Datum für das Final Release:</label>
+                    <el-date-picker v-model="editedFinalRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                </div>
+                <button @click="saveEditedVersion">Bestätigen</button>
             </div>
+
+            <button @click="createNewVersion">Neue Version erstellen</button>
+            <button @click="confirmSelection" >Bestätigen</button>
+            <button v-if="selectedVersion" @click="editSelectedVersion">Version bearbeiten</button>
         </div>
 
     </div>
@@ -46,12 +66,111 @@ export default {
             selectedVersion: null,
             creatingNewVersion: false,
             newVersionName: '',
-            preliminaryrelease: '',
-            finalrelease: '',
+            preliminaryrelease: new Date(),
+            finalrelease: new Date(),
+            editingVersion: false,
+            editedVersionName: '',
+            editedPreliminaryRelease: new Date(),
+            editedFinalRelease: new Date(),
         };
+    },
+
+    watch: {
+        // Überprüfen, ob preliminaryrelease und finalrelease bereits Date-Objekte sind -> Wenn nicht, werden diese in Date-Objekte umgewandelt
+        preliminaryrelease: {
+            handler(newValue) {
+                if(this.preliminaryrelease && !(this.preliminaryrelease instanceof Date)) {
+                    this.preliminaryrelease = new Date(newValue);
+                }
+            },
+            immediate: true,
+        },
+
+        finalrelease: {
+            handler(newValue) {
+                if(this.finalrelease && !(this.finalrelease instanceof Date)) {
+                    this.finalrelease = new Date(newValue);
+                }
+            },
+            immediate: true,
+        },
+
+        editedPreliminaryRelease: {
+            handler(newValue) {
+                if (this.editedPreliminaryRelease && !(this.editedPreliminaryRelease instanceof Date)) {
+                    this.editedPreliminaryRelease = new Date(newValue);
+                }
+            },
+            immediate: true,
+        },
+        
+        editedFinalRelease: {
+            handler(newValue) {
+                if (this.editedFinalRelease && !(this.editedFinalRelease instanceof Date)) {
+                    this.editedFinalRelease = new Date(newValue);
+                }
+            },
+            immediate: true,
+        },
     },
     
     methods: {
+
+        // Version bearbeiten
+        editSelectedVersion() {
+            if(this.selectedVersion) {
+                this.editedVersionName = this.selectedVersion.name;
+                this.editedPreliminaryRelease = this.selectedVersion.preliminaryrelease;
+                this.editedFinalRelease = this.selectedVersion.finalrelease;
+
+                if(this.editingVersion) {
+                    this.editingVersion = false;
+                } else {
+                    this.editingVersion = true;
+                }
+            } else {
+                console.error('Keine Version ausgewählt');
+            }
+            console.log('Version bearbeiten:', this.selectedVersion)
+        },
+
+        // Bearbeitete Version speichern
+        async saveEditedVersion() {
+            if(this.selectedVersion && this.editedVersionName) {
+                const editedVersion = {
+                    id: this.selectedVersion.id,
+                    name: this.editedVersionName,
+                    preliminaryrelease: this.editedPreliminaryRelease,
+                    finalrelease: this.editedFinalRelease,
+                };
+
+                try {
+                    const response = await fetch(`http://localhost:5500/api/version/editVersion/${this.selectedVersion.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type' : 'application/json',
+                        },
+                        body: JSON.stringify(editedVersion),
+                    });
+
+                    if(!response.ok) {
+                        throw new Error(`Server responded with status ${response.status}`)
+                    }
+
+                    // Aktualisieren der lokalen Version mit bearbeiteten Daten
+                    Object.assign(this.selectedVersion, editedVersion);
+
+                    // Bearbeitungs-Formular schließen
+                    this.editingVersion = false;
+                
+                    console.log('Version erfolgreich bearbeitet', this.selectedVersion);
+                } catch(error) {
+                    console.error('Fehler beim Bearbeiten der Version:', error);
+                } 
+            } else {
+                    console.error('Ungültige Daten für die Bearbeitung');
+            }
+        },
 
         async fetchVersions() {
             try {
@@ -73,8 +192,13 @@ export default {
             this.creatingNewVersion = false;
         },
 
+        // 
         createNewVersion() {
-            this.creatingNewVersion = true;
+            if(this.creatingNewVersion) {
+                this.creatingNewVersion = false;
+            } else {
+                this.creatingNewVersion = true;
+            }
         },
 
         async confirmSelection() {
@@ -139,6 +263,15 @@ export default {
 </script>
 
 <style scoped>
+
+    .dashed-line{
+        width: 970px;
+        height: 1px;
+        border-bottom: 1px dashed #000000;
+        position: absolute;
+        top: 56%;
+        transform: translateY(-0.5px);
+    }
 
     ul{
         list-style-type: none;
