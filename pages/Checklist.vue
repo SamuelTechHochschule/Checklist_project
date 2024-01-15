@@ -178,7 +178,7 @@ export default {
             this.fetchChecklistItems();
         },
 
-        // Generiert Überschrift auf ausgewählte Version bzw. Meilenstein
+        // Generiert Überschrift auf ausgewählte Version 
         generateTitle() {
             const versionName = this.selectedVersion ? this.selectedVersion.name : 'XX';
             return `Checkliste zur Versionsfreigabe: ${versionName}`;
