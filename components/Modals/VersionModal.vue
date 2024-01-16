@@ -208,6 +208,9 @@ export default {
             } else {
                 this.creatingNewVersion = true;
             }
+            
+            // Entfernen der Selektion, falls Aufgabe selektiert wurde
+            this.selectedVersion = null;
         },
 
         // Bestätigung für eine neue Version
