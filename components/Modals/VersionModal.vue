@@ -197,8 +197,13 @@ export default {
         },
 
         selectVersion(version) {
-            this.selectedVersion = version;
-            this.creatingNewVersion = false;
+            if(this.selectedVersion === version) {
+                this.selectedVersion = null;
+            } else {
+                this.selectedVersion = version;
+                this.creatingNewVersion = false;
+            }
+
         },
 
         // Neue Version erstellen
