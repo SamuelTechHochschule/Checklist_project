@@ -24,6 +24,9 @@
                     <label for="finalrelease">Datum für das Final Release angeben:</label>
                     <el-date-picker v-model="finalrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                 </div>
+
+                <button @click="confirmNewVersion">Neue Version bestätigen</button>
+                <button @click="cancelNewVersion">Abbrechen</button>
             </div>
 
             <div v-if="editingVersion">
@@ -66,12 +69,13 @@ export default {
             selectedVersion: null,
             creatingNewVersion: false,
             newVersionName: '',
-            preliminaryrelease: new Date(),
-            finalrelease: new Date(),
+            preliminaryrelease: '',
+            finalrelease: '',
             editingVersion: false,
             editedVersionName: '',
             editedPreliminaryRelease: new Date(),
             editedFinalRelease: new Date(),
+            daystoAdd: 1,
         };
     },
 
@@ -136,6 +140,7 @@ export default {
 
         // Bearbeitete Version speichern
         async saveEditedVersion() {
+            console.log('saveEditedVersion wird aufgerufen')
             if(this.selectedVersion && this.editedVersionName) {
                 const editedVersion = {
                     id: this.selectedVersion.id,
@@ -143,6 +148,10 @@ export default {
                     preliminaryrelease: this.editedPreliminaryRelease,
                     finalrelease: this.editedFinalRelease,
                 };
+
+                // Tag hinzufügen zu Datum
+                editedVersion.preliminaryrelease.setDate(editedVersion.preliminaryrelease.getDate() + this.daystoAdd);
+                editedVersion.finalrelease.setDate(editedVersion.finalrelease.getDate() + this.daystoAdd);
 
                 try {
                     const response = await fetch(`http://localhost:5500/api/version/editVersion/${this.selectedVersion.id}`, {
@@ -192,7 +201,7 @@ export default {
             this.creatingNewVersion = false;
         },
 
-        // 
+        // Neue Version erstellen
         createNewVersion() {
             if(this.creatingNewVersion) {
                 this.creatingNewVersion = false;
@@ -201,19 +210,16 @@ export default {
             }
         },
 
-        async confirmSelection() {
-            if(this.selectedVersion) {
-                this.$emit('versionSelected', this.selectedVersion);
-                console.log('Emit Version');
-                this.closeModal();
-            } else if(this.creatingNewVersion && this.newVersionName) {
+        // Bestätigung für eine neue Version
+        async confirmNewVersion() {
+            if(this.newVersionName) {
                 const newVersion = {
                     name: this.newVersionName,
                     preliminaryrelease: this.preliminaryrelease,
                     finalrelease: this.finalrelease,
                 };
 
-                // Hinzufügen der Aufgabe in die Datenbank
+                // Logik zum Hinzufügen der neuen Version in die Datenbank
                 try {
                     const response = await fetch('http://localhost:5500/api/versions/addVersion', {
                         method: 'POST',
@@ -230,22 +236,40 @@ export default {
                     const createdVersion = await response.json();
                     console.log('Created Version', createdVersion);
 
-                    // Neu erstellte Version selektiert
-                    this.selectedVersion = createdVersion;
-
                     // Fügt erstellte Version der Liste hinzu
                     this.versions.push(newVersion);
 
-                    // Selektierte Version emitten
-                    this.$emit('versionSelected', createdVersion);
+                    // Bearbeitungs-Formular schließen
+                    this.creatingNewVersion = false;
 
-                    this.closeModal();
+                    // Eingabefelder zurücksetzen
+                    this.newVersionName = '';
+                    this.preliminaryrelease = '';
+                    this.finalrelease = '';
+
                 } catch(error) {
                     console.error('Error creating new version:', error);
-                }
+                }                
             } else {
-                console.error('Keine Version ausgewählt')
+                console.error('Ungültige Daten für die Erstellung der neuen Version');
             }
+        },
+
+
+
+        // Abbrechen der Erstellung einer neuen Version
+        cancelNewVersion() {
+            this.creatingNewVersion = false;
+            this.newVersionName = '';
+            this.preliminaryrelease = '';
+            this.finalrelease = '';
+        },
+
+        async confirmSelection() {
+                this.$emit('versionSelected', this.selectedVersion);
+                console.log('Emit Version');
+                this.closeModal();
+
         },
         
         closeModal() {

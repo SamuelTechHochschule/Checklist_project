@@ -90,7 +90,7 @@ export default {
             this.isOpen = false;
             this.resetNewTask();
         },
-
+/*
         // Methode für das ausgewählte Datum der Version
         getSelectedVersionData() {
             if(this.selectedVersion) {
@@ -113,7 +113,7 @@ export default {
                 this.selectedVersionType = null;
             }
         },
-        
+ */       
         // Fügt Aufgabe hinzu
         addTask() {
             // Konfigurierung für Reihenfärbung
@@ -121,7 +121,7 @@ export default {
             const colorClass_rv = this.newTask.isRelease ? 'Release-row' : '';
 
             // Prüfen ob alle Felder ausgefüllt sind
-            if (!this.newTask.task || !this.newTask.department || !this.newTask.person) {
+            if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
                 alert('Bitte füllen Sie alle Felder aus!');
                 return;
             }
@@ -144,7 +144,7 @@ export default {
             // Hinzufügen der Versionsinformationen
             console.log('Selected Version:', this.selectedVersion);
             this.newTask.version = this.selectedVersion.name;
-
+/*
             // Aufruf der Methode
             this.updateSelectedVersionType();            
 
@@ -153,7 +153,7 @@ export default {
             if(versionDate) {
                 this.newTask.plannedDate = versionDate;
             }
-
+*/
             fetch('/addTask', {
                 method: 'POST',
                 headers:{
