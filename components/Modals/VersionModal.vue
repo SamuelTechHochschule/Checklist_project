@@ -263,7 +263,11 @@ export default {
 
         // Bestätigung für eine neue Version
         async confirmNewVersion() {
-            if(this.newVersionName) {
+            if(this.newVersionName && this.preliminaryrelease && this.finalrelease) {
+                // 1 Tage hinzuzufügen für Datenbank
+                this.preliminaryrelease.setDate(this.preliminaryrelease.getDate() + this.daystoAdd);
+                this.finalrelease.setDate(this.finalrelease.getDate() + this.daystoAdd);
+
                 const newVersion = {
                     name: this.newVersionName,
                     preliminaryrelease: this.preliminaryrelease,
