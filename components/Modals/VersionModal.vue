@@ -48,8 +48,8 @@
                 <button @click="saveEditedVersion">Bestätigen</button>
             </div>
 
-            <button @click="createNewVersion">Neue Version erstellen</button>
-            <button @click="confirmSelection" >Bestätigen</button>
+            <button @click="createNewVersion" v-if="showCreateButton">Neue Version erstellen</button>
+            <button @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
             <button v-if="selectedVersion" @click="editSelectedVersion">Version bearbeiten</button>
         </div>
 
@@ -76,6 +76,8 @@ export default {
             editedPreliminaryRelease: new Date(),
             editedFinalRelease: new Date(),
             daystoAdd: 1,
+            showCreateButton: true, 
+            showConfirmButton: true,
         };
     },
 
@@ -129,9 +131,14 @@ export default {
 
                 if(this.editingVersion) {
                     this.editingVersion = false;
+                    this.showCreateButton = true;
+                    this.showConfirmButton = true;
                 } else {
                     this.editingVersion = true;
+                    this.showCreateButton = false;
+                    this.showConfirmButton = false;
                 }
+
             } else {
                 console.error('Keine Version ausgewählt');
             }
@@ -171,6 +178,8 @@ export default {
 
                     // Bearbeitungs-Formular schließen
                     this.editingVersion = false;
+                    this.showCreateButton = true;
+                    this.showConfirmButton = true;
                 
                     console.log('Version erfolgreich bearbeitet', this.selectedVersion);
                 } catch(error) {
@@ -210,8 +219,12 @@ export default {
         createNewVersion() {
             if(this.creatingNewVersion) {
                 this.creatingNewVersion = false;
+                this.showCreateButton = true;
+                this.showConfirmButton = true;
             } else {
                 this.creatingNewVersion = true;
+                this.showCreateButton = false;
+                this.showConfirmButton = false;
             }
             
             // Entfernen der Selektion, falls Aufgabe selektiert wurde
@@ -249,6 +262,8 @@ export default {
 
                     // Bearbeitungs-Formular schließen
                     this.creatingNewVersion = false;
+                    this.showCreateButton = true;
+                    this.showConfirmButton = true;
 
                     // Eingabefelder zurücksetzen
                     this.newVersionName = '';
@@ -268,6 +283,8 @@ export default {
         // Abbrechen der Erstellung einer neuen Version
         cancelNewVersion() {
             this.creatingNewVersion = false;
+            this.showCreateButton = true;
+            this.showConfirmButton = true;
             this.newVersionName = '';
             this.preliminaryrelease = '';
             this.finalrelease = '';
