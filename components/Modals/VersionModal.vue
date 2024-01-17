@@ -120,7 +120,15 @@ export default {
             },
             immediate: true,
         },
+
+        selectedVersion(newSelectedVersion) {
+            if(this.editingVersion) {
+                this.loadSelectedVersionData(newSelectedVersion);
+            }
+        },
     },
+
+
     
     methods: {
 
@@ -138,9 +146,7 @@ export default {
         // Version bearbeiten
         editSelectedVersion() {
             if(this.selectedVersion) {
-                this.editedVersionName = this.selectedVersion.name;
-                this.editedPreliminaryRelease = this.selectedVersion.preliminaryrelease;
-                this.editedFinalRelease = this.selectedVersion.finalrelease;
+                this.loadSelectedVersionData(this.selectedVersion);
 
                 if(this.editingVersion) {
                     this.editingVersion = false;
@@ -158,6 +164,12 @@ export default {
                 console.error('Keine Version ausgewählt');
             }
             console.log('Version bearbeiten:', this.selectedVersion)
+        },
+        
+        loadSelectedVersionData(version) {
+            this.editedVersionName = version.name;
+            this.editedPreliminaryRelease = version.preliminaryrelease;
+            this.editedFinalRelease = version.finalrelease;
         },
 
         // Bearbeitete Version speichern
