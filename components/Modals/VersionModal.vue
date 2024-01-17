@@ -45,7 +45,8 @@
                     <label for="editedFinalRelease">Datum für das Final Release:</label>
                     <el-date-picker v-model="editedFinalRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                 </div>
-                <button @click="saveEditedVersion">Bestätigen</button>
+                <button @click="saveEditedVersion">Bearbeitung bestätigen</button>
+                <button @click="cancelEditVersion">Abbrechen</button>
             </div>
 
             <button @click="createNewVersion" v-if="showCreateButton">Neue Version erstellen</button>
@@ -121,6 +122,16 @@ export default {
     },
     
     methods: {
+
+        // Bearbeitung abbrechen
+        cancelEditVersion() {
+            this.editingVersion = false;
+            this.showCreateButton = true;
+            this.showConfirmButton = true;
+            this.editedVersionName = '';
+            this.editedPreliminaryRelease = '';
+            this.editedFinalRelease =  '';
+        },
 
         // Version bearbeiten
         editSelectedVersion() {
