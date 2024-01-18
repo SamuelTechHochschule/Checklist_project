@@ -26,7 +26,7 @@
                                 </td>
                                 <td>{{ item.department }}</td>
                                 <td>{{ item.person }}</td>
-                                <td :class="{'overdue-task': isTaskOverdue(item)}">{{ formatDate(item.plannedDate) }}</td>
+                                <td :class="{'overdue-cell': isTaskOverdue(item), 'near-due-cell': isPlannedDateNear(item), 'normal-cell': isPlannedDateNormal(item)}">{{ formatDate(item.plannedDate) }}</td>
                                 <td>{{ formatDate(item.completedDate) }}</td>
                                 <td>{{ item.signature }}</td>
                             </tr>
@@ -100,6 +100,19 @@ export default {
             return plannedDate < currentDate && !item.completedDate && !item.signature;
         },
 
+        isPlannedDateNear(item) {
+            const plannedDate = new Date(item.plannedDate);
+            const currentDate = new Date();
+            const timeDifference = plannedDate - currentDate;
+            const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            
+            return daysDifference >= 0 && daysDifference <= 7 && !item.completedDate && !item.signature;
+        },
+
+        isPlannedDateNormal(item) {
+            return !this.isTaskOverdue(item) && !this.isPlannedDateNear(item);
+        },
+
         formatDate(dateString) {
             if(!dateString) {
                 return '';
@@ -126,7 +139,15 @@ export default {
 
 <style scoped>
 
-    .overdue-task{
+    .normal-cell{
+        background-color: rgb(34, 209, 34);
+    }
+
+    .near-due-cell{
+        background-color: rgb(221, 165, 59);
+    }
+
+    .overdue-cell{
         background-color: rgb(218, 54, 54);
     }
 
