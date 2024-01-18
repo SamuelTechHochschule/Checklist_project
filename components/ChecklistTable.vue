@@ -26,7 +26,7 @@
                                 </td>
                                 <td>{{ item.department }}</td>
                                 <td>{{ item.person }}</td>
-                                <td>{{ formatDate(item.plannedDate) }}</td>
+                                <td :class="{'overdue-task': isTaskOverdue(item)}">{{ formatDate(item.plannedDate) }}</td>
                                 <td>{{ formatDate(item.completedDate) }}</td>
                                 <td>{{ item.signature }}</td>
                             </tr>
@@ -92,6 +92,14 @@ export default {
     },
 
     methods: {
+
+        isTaskOverdue(item) {
+            const plannedDate = new Date(item.plannedDate);
+            const currentDate = new Date();
+            
+            return plannedDate < currentDate && !item.completedDate && !item.signature;
+        },
+
         formatDate(dateString) {
             if(!dateString) {
                 return '';
@@ -117,6 +125,10 @@ export default {
 </script>
 
 <style scoped>
+
+    .overdue-task{
+        background-color: rgb(218, 54, 54);
+    }
 
     .font-weight-bold{
         font-weight: bold;
