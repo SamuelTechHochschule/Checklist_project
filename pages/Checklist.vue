@@ -100,7 +100,20 @@ export default {
         this.openVersionModal();
     },
 
+    watch: {
+        selectedVersion: {
+            handler: 'handleSelectedVersionChange',
+            immediate: true,
+        },
+    },
+
     methods: {
+
+        // Fetchen wenn Versionb gewechselt wird
+        async handleSelectedVersionChange(newSelectedVersion) {
+            console.log('Version ausgewählt:', newSelectedVersion);
+            await this.fetchChecklistItems();
+        },
 
         // Importiere Checklist
         importChecklist() {

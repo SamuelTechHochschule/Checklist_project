@@ -313,8 +313,6 @@ export default {
             }
         },
 
-
-
         // Abbrechen der Erstellung einer neuen Version
         cancelNewVersion() {
             this.creatingNewVersion = false;
