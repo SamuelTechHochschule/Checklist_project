@@ -388,6 +388,7 @@ export default {
         padding: 20px;
         border: 1px solid #888;
         width: 60%;
+        color: #00315E;
     }
     .form-row{
         display: flex;
