@@ -18,7 +18,7 @@
                             <tr class="bodyheader">
                                 <td :colspan="6">{{ category }}</td>
                             </tr>
-                            <tr v-for="item in tasks" :key="item.id" :class="{ 'Preliminary-row': item.colorClass_pv ==='Preliminary-row', 'Release-row': item.colorClass_rv === 'Release-row', 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
+                            <tr v-for="item in tasks" :key="item.id" :class="{ 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
                                 <td :class="{ 'font-weight-bold': item.isPreliminary || item.isRelease }">
                                     <div>
                                         {{ item.task }}
@@ -126,18 +126,6 @@ export default {
         font-size: large;
         background-color: rgba(22, 97, 167, 0.651);
         border-bottom: 2px solid #000000;
-    }
-    .Preliminary-row{
-        background-color: rgb(90, 196, 164);
-    }
-    .Preliminary-row:hover{
-        background-color: rgb(69, 151, 126);
-    }
-    .Release-row{
-        background-color: rgb(47, 226, 92);
-    }
-    .Release-row:hover{
-        background-color: rgb(38, 184, 74);
     }
     *{
         box-sizing: border-box;

@@ -32,8 +32,7 @@
     <div class="table" v-if="selectedView === 'checklist'">
             <ChecklistTable :checklistItems="checklistItems"
              :selectedTaskId="selectedTaskId" 
-             @taskClicked="handleTaskClick" 
-             @updateRowColors="updateRowColors" 
+             @taskClicked="handleTaskClick"  
              @deleteItemFromChecklist="deleteItemFromChecklist"
              @sendReminder="sendReminder"/>        
     </div>
@@ -267,12 +266,6 @@ export default {
                 this.selectedTaskId = taskId;
             }
 
-        },
-
-        // Farben der Reihen beim Neuladen updaten
-        updateRowColors ({ taskId, colorClass_pv, colorClass_rv }) {
-            this.$set(this.preliminaryVersions, taskId, colorClass_pv);
-            this.$set(this.releaseVersions, taskId, colorClass_rv);
         },
 
         // Aufgaben löschen
