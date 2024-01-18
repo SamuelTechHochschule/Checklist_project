@@ -17,8 +17,8 @@
 
         <h2>{{ generateTitle() }}</h2>
 
-        <!-- Normalerweise Abteilung des Users -->
-        <h2>Abteilung: Admin</h2>
+        <!-- Datum der Versionsfreigabe -->
+        <h2 v-if="selectedVersion">Preliminary Release: {{ formatDate(selectedVersion.preliminaryrelease) }} | Final Release: {{ formatDate(selectedVersion.finalrelease) }}</h2>
 
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
@@ -176,6 +176,13 @@ export default {
             this.selectedVersion = version;
             this.updateTitle();
             this.fetchChecklistItems();
+        },
+
+        // Formatiert Datum für die Anzeige
+        formatDate(date) {
+            if(!date) return '';
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(date).toLocaleDateString('de-DE', options);
         },
 
         // Generiert Überschrift auf ausgewählte Version 
