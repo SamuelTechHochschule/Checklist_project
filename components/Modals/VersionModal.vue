@@ -325,9 +325,14 @@ export default {
         },
 
         async confirmSelection() {
+            if(this.selectedVersion) {
                 this.$emit('versionSelected', this.selectedVersion);
                 console.log('Emit Version');
                 this.closeModal();
+            } else {
+                alert("Bitte wählen Sie eine Version");
+                console.error('Version muss gewählt werden');
+            }
 
         },
         
