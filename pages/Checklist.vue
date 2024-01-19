@@ -1,4 +1,9 @@
 <template>
+
+    <div v-if="isLoading" class="modal">
+            <svg class="loading-indicator"></svg>
+    </div>
+
     <div class="fixed_column">
 
         <VersionModal :isVersionModalVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
@@ -27,6 +32,7 @@
             <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
+        
     </div>
 
     <div class="table" v-if="selectedView === 'checklist'">
@@ -93,6 +99,7 @@ export default {
             selectedVersion: null,
             isVersionModalVisible: false,
             isChecklistLoaded: false,
+            isLoading: false, // Variable für Loading Indicator
         };
     },
 
@@ -226,6 +233,9 @@ export default {
         // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
             try {
+                // Daten werden geladen
+                this.isLoading = true;
+
                 if(!this.isChecklistLoaded) {
                     const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
                     const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
@@ -247,6 +257,9 @@ export default {
                 }
             } catch (error) {
                 console.error('Error fetching checklist items:', error);
+            } finally {
+                // Daten werden nicht mehr geladen
+                this.isLoading = false;
             }
         },
 
@@ -373,6 +386,35 @@ export default {
 </script>
 
 <style scoped>
+
+    .modal{
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(131, 131, 131, 0.4);
+    }
+
+    .loading-indicator{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        height: 50px;
+        border: 5px solid #3498db;
+        border-top: 5px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin{
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 
     .calendar-container{
         flex-grow: 1;
