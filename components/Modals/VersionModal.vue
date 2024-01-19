@@ -51,6 +51,7 @@
 
             <button @click="createNewVersion" v-if="showCreateButton">Neue Version erstellen</button>
             <button @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
+            <button @click="deleteVersion" v-if="showDeleteButton">Version löschen</button>
             <button v-if="selectedVersion && showEditButton" @click="editSelectedVersion">Version bearbeiten</button>
         </div>
 
@@ -77,9 +78,10 @@ export default {
             editedPreliminaryRelease: new Date(),
             editedFinalRelease: new Date(),
             daystoAdd: 1,
-            showCreateButton: true, 
-            showConfirmButton: true,
-            showEditButton: true,
+            showCreateButton: true, // Variable für das Erscheinen des Knopfes
+            showConfirmButton: true, // Variable für das Erscheinen des Knopfes
+            showEditButton: true, // Variable für das Erscheinen des Knopfes
+            showDeleteButton: true, // Variable für das Erscheinen des Knopfes
         };
     },
 
@@ -138,6 +140,7 @@ export default {
             this.showCreateButton = true;
             this.showConfirmButton = true;
             this.showEditButton = true;
+            this.showDeleteButton = true;
             this.editedVersionName = '';
             this.editedPreliminaryRelease = '';
             this.editedFinalRelease =  '';
@@ -153,11 +156,13 @@ export default {
                     this.showCreateButton = true;
                     this.showConfirmButton = true;
                     this.showEditButton = true;
+                    this.showDeleteButton = true;
                 } else {
                     this.editingVersion = true;
                     this.showCreateButton = false;
                     this.showConfirmButton = false;
                     this.showEditButton = false;
+                    this.showDeleteButton = false;
                 }
 
             } else {
@@ -208,6 +213,7 @@ export default {
                     this.showCreateButton = true;
                     this.showConfirmButton = true;
                     this.showEditButton = true;
+                    this.showDeleteButton = true;
                 
                     console.log('Version erfolgreich bearbeitet', this.selectedVersion);
                 } catch(error) {
@@ -243,6 +249,39 @@ export default {
 
         },
 
+        async deleteVersion() {
+            if(this.selectedVersion) {
+                const confirmed = window.confirm(`Sind Sie sicher, dass Sie die Version '${this.selectedVersion.name}' löschen möchten? Alle Daten zu dieser Version werden mit gelöscht.`)
+
+                if(confirmed) {
+                    try {
+                        const response = await fetch(`http://localhost:5500/api/version/deleteVersion/${this.selectedVersion.id}`, {
+                            method: 'DELETE',
+                        });
+
+                        if(!response.ok) {
+                            throw new Error(`Server responded with status: ${response.status}`);
+                        }
+
+                        // Version wird aus der Liste gelöscht
+                        const index = this.versions.findIndex(version => version.id === this.selectedVersion.id);
+                        if(index !== -1) {
+                            this.versions.splice(index, 1);
+                        }
+
+                        // Auswahl zurücksetzen
+                        this.selectedVersion = null;
+
+                        console.log('Version erfolgreich gelöscht');
+                    } catch(error) {
+                        console.error('Fehler beim Löschen der Version:', error);
+                    }
+                }
+            } else {
+                console.error('Keine Version ausgewählt');
+            }
+        },
+
         // Neue Version erstellen
         createNewVersion() {
             if(this.creatingNewVersion) {
@@ -250,11 +289,13 @@ export default {
                 this.showCreateButton = true;
                 this.showConfirmButton = true;
                 this.showEditButton = true;
+                this.showDeleteButton = true;
             } else {
                 this.creatingNewVersion = true;
                 this.showCreateButton = false;
                 this.showConfirmButton = false;
                 this.showEditButton = false;
+                this.showDeleteButton = false;
             }
             
             // Entfernen der Selektion, falls Aufgabe selektiert wurde
@@ -276,7 +317,7 @@ export default {
 
                 // Logik zum Hinzufügen der neuen Version in die Datenbank
                 try {
-                    const response = await fetch('http://localhost:5500/api/versions/addVersion', {
+                    const response = await fetch('http://localhost:5500/api/version/addVersion', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -299,6 +340,7 @@ export default {
                     this.showCreateButton = true;
                     this.showConfirmButton = true;
                     this.showEditButton = true;
+                    this.showDeleteButton = true;
 
                     // Eingabefelder zurücksetzen
                     this.newVersionName = '';
@@ -319,6 +361,7 @@ export default {
             this.showCreateButton = true;
             this.showConfirmButton = true;
             this.showEditButton = true;
+            this.showDeleteButton = true;
             this.newVersionName = '';
             this.preliminaryrelease = '';
             this.finalrelease = '';
