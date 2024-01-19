@@ -1,4 +1,7 @@
 <template>
+
+    <LoadingModal :is-loading="isLoading" />
+
     <div class="navbar">
         <img src="~/assets/Logo.png" alt="Logo" class="image">
     </div>
@@ -23,20 +26,29 @@
 </template>
 
 <script>
+import LoadingModal from '~/components/Modals/LoadingModal.vue';
 import { useAuthStore } from '~/store/authentication'
 
     export default{
+
+        components: {
+            LoadingModal,
+        },
+
         data(){
             return {
                 username: '',
                 password: '',
                 loginToken: '',
                 loginError: false,
+                isLoading: false, // Variable für Loading Indicator
             };
         },
         methods: {
             async loginUser() {
                 try {
+                    // Daten werden geladen
+                    this.isLoading = true;
                     // Dummy-User
                     if(this.username === "dummyUser" && this.password === "dummyPassword") {
                         this.loginToken = "dummyToken";
@@ -80,6 +92,9 @@ import { useAuthStore } from '~/store/authentication'
                     }
                 } catch (error) {
                     console.error('Network error:', error);
+                } finally {
+                    // Daten werden nicht mehr geladen
+                    this.isLoading = false;
                 }
             },
         },
