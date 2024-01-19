@@ -51,7 +51,7 @@
 
             <button @click="createNewVersion" v-if="showCreateButton">Neue Version erstellen</button>
             <button @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
-            <button @click="deleteVersion" v-if="showDeleteButton">Version löschen</button>
+            <button @click="deleteVersion" v-if="selectedVersion && showDeleteButton">Version löschen</button>
             <button v-if="selectedVersion && showEditButton" @click="editSelectedVersion">Version bearbeiten</button>
         </div>
 
