@@ -272,7 +272,7 @@ export default {
                         // Auswahl zurücksetzen
                         this.selectedVersion = null;
 
-                        console.log('Version erfolgreich gelöscht');
+                        console.log('Version und zugehörige Aufgaben erfolgreich gelöscht');
                     } catch(error) {
                         console.error('Fehler beim Löschen der Version:', error);
                     }
