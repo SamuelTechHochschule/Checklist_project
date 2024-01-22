@@ -291,7 +291,6 @@ export default {
                 this.selectedTask = this.checklistItems.find(item => item.id === taskId);
                 this.selectedTaskId = taskId;
             }
-
         },
 
         // Aufgaben löschen
