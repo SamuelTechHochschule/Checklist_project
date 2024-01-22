@@ -255,7 +255,7 @@ export default {
 
                 if(confirmed) {
                     try {
-                        const response = await fetch(`http://localhost:5500/api/version/deleteVersion/${this.selectedVersion.id}`, {
+                        const response = await fetch(`http://localhost:5500/api/version/deleteVersion/${this.selectedVersion.name}`, {
                             method: 'DELETE',
                         });
 
@@ -264,7 +264,7 @@ export default {
                         }
 
                         // Version wird aus der Liste gelöscht
-                        const index = this.versions.findIndex(version => version.id === this.selectedVersion.id);
+                        const index = this.versions.findIndex(version => version.name === this.selectedVersion.name);
                         if(index !== -1) {
                             this.versions.splice(index, 1);
                         }
