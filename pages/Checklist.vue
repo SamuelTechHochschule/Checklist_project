@@ -290,7 +290,7 @@ export default {
                 this.showButtons = true;
                 this.selectedTask = this.checklistItems.find(item => item.id === taskId);
                 this.selectedTaskId = taskId;
-            }
+             }
         },
 
         // Aufgaben löschen

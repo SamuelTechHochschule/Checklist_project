@@ -124,15 +124,14 @@ export default {
         },
 
         handleTaskClick(taskId) {
-            const index = this.selectedTasks.indexOf(taskId);
-            if(index === -1) {
-                this.selectedTasks.push(taskId);
-            } else {
-                this.selectedTasks.splice(index, 1);
+            for(const tasks of Object.values(this.groupedTasks)) {
+                const clickedTask = tasks.find(item => item.id === taskId);
+                if(clickedTask) {
+                    console.log('Handling task click for task ID:', taskId);
+                    this.$emit('taskClicked', taskId);
+                    return;
+                }
             }
-
-            console.log('Handling task click for task ID:', taskId)
-            this.$emit('taskClicked', taskId);
         },
     },
 };
