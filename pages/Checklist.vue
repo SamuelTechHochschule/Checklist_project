@@ -23,6 +23,8 @@
         <!-- Datum der Versionsfreigabe -->
         <h2 v-if="selectedVersion">Preliminary Release: {{ formatDate(selectedVersion.preliminaryrelease) }} | Final Release: {{ formatDate(selectedVersion.finalrelease) }}</h2>
 
+        <button class="multiselektor" @click="toggleMultiselector">{{ multiselectorActivated ? 'Multiselektor deaktivieren' : 'Multiselektor aktivieren' }}</button>
+
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
         <div v-if="showButtons" class="button-container">
@@ -36,6 +38,7 @@
     <div class="table" v-if="selectedView === 'checklist'">
             <ChecklistTable :checklistItems="checklistItems"
              :selectedTaskId="selectedTaskId" 
+             :multiselectorActivated="multiselectorActivated"
              @taskClicked="handleTaskClick"  
              @deleteItemFromChecklist="deleteItemFromChecklist"
              @sendReminder="sendReminder"/>        
@@ -100,6 +103,7 @@ export default {
             isVersionModalVisible: false,
             isChecklistLoaded: false,
             isLoading: false, // Variable für Loading Indicator
+            multiselectorActivated: false, // Variable um Multiselektor zu aktivieren
         };
     },
 
@@ -116,7 +120,12 @@ export default {
 
     methods: {
 
-        // Fetchen wenn Versionb gewechselt wird
+        // Multiselektor aktivieren
+        toggleMultiselector() {
+            this.multiselectorActivated = !this.multiselectorActivated;
+        },
+
+        // Fetchen wenn Version gewechselt wird
         async handleSelectedVersionChange(newSelectedVersion) {
             console.log('Version ausgewählt:', newSelectedVersion);
             await this.fetchChecklistItems();
@@ -407,6 +416,12 @@ export default {
     .add-Task-Button{
         position: absolute;
         top: 188px;
+        right: 180px;
+        height: 30px;
+    }
+    .multiselektor{
+        position: absolute;
+        top: 188px;
         right: 10px;
         height: 30px;
     }
@@ -414,7 +429,7 @@ export default {
         position: absolute;
         margin-top: 20px;
         top: 169px;
-        right: 125px;
+        right: 290px;
     }
     .button-container button{
         margin-right: 20px;

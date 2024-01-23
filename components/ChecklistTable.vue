@@ -11,12 +11,13 @@
                             <th>Termin geplant</th>
                             <th>Termin erledigt</th>
                             <th>Unterschrift erledigt</th>
+                            <th v-if="showMultiselector"> </th>
                         </tr>
                     </thead>
                     <tbody>
                         <template v-for="(tasks, category) in groupedTasks" :key="category">
                             <tr class="bodyheader">
-                                <td :colspan="6">{{ category }}</td>
+                                <td :colspan="7">{{ category }}</td>
                             </tr>
                             <tr v-for="item in tasks" :key="item.id" :class="{ 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
                                 <td :class="{ 'font-weight-bold': item.isPreliminary || item.isRelease }">
@@ -29,6 +30,9 @@
                                 <td :class="{'overdue-cell': isTaskOverdue(item), 'near-due-cell': isPlannedDateNear(item), 'normal-cell': isPlannedDateNormal(item)}">{{ formatDate(item.plannedDate) }}</td>
                                 <td>{{ formatDate(item.completedDate) }}</td>
                                 <td>{{ item.signature }}</td>
+                                <td v-if="showMultiselector">
+                                    <input type="checkbox">
+                                </td>
                             </tr>
                         </template>
                     </tbody>
@@ -63,9 +67,17 @@ export default {
             type: Number,
             default: -1,
         },
+        multiselectorActivated: {
+            type: Boolean,
+            default: false,
+        }
     },
 
     computed: {
+        showMultiselector() {
+            return this.multiselectorActivated;
+        },
+
         groupedTasks() {
             const grouped = {};
 
