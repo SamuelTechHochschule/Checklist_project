@@ -201,17 +201,11 @@ export default {
         background-color: #dbdbdb;
         border: 1px solid #000000;
     }
-    tbody tr:not(.bodyheader, .Preliminary-row, .Release-row):hover{
+    tbody tr:not(.bodyheader):hover{
         background-color: #BCBBBB;
     }
-    tbody tr.selected-row:not(.Preliminary-row, .Release-row){
+    tbody tr.selected-row{
         background-color: #9e9d9d;
-    }
-    tbody tr.selected-row.Release-row{
-        background-color: rgb(32, 158, 64);
-    }
-    tbody tr.selected-row.Preliminary-row{
-        background-color: rgb(58, 129, 108);
     }
 
 </style>
