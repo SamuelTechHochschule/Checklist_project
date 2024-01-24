@@ -28,7 +28,7 @@
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
         <div v-if="showButtons && !multiselectorActivated" class="button-container">
-            <button v-if="shouldshowReminderButton(selectedTask)" @click="sendReminder(selectedTask.id)">Reminder schicken</button>
+            <button @click="sendReminder(selectedTask.id)">Reminder schicken</button>
             <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
@@ -300,12 +300,7 @@ export default {
         openModal() {
             this.$refs.addTaskModal.openModal();
         },
-
-        //Reminder-Button wird nur angzeigt, wenn completedDate oder signature null sind
-        shouldshowReminderButton(item) {
-            return !item.completedDate || !item.signature;
-        },
-
+        
         // Handler für Betätigen einer Tabellenreihe
         handleTaskClick(taskId) {
             if(!this.multiselectorActivated) {
