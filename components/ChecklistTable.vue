@@ -19,7 +19,10 @@
                             <tr class="bodyheader">
                                 <td :colspan="7">{{ category }}</td>
                             </tr>
-                            <tr v-for="item in tasks" :key="item.id" :class="{ 'selected-row': item.id === selectedTaskId}" @click="handleTaskClick(item.id)">
+                            <tr v-for="item in tasks"
+                                :key="item.id" 
+                                :class="{ 'selected-row': (item.id === selectedTaskId && !multiselectorActivated) || (multiselectorActivated && selectedTasks.includes(item.id))}" 
+                                @click="showMultiselector ? handleCheckboxClick(item.id) : handleTaskClick(item.id)">
                                 <td :class="{ 'font-weight-bold': item.isPreliminary || item.isRelease }">
                                     <div>
                                         {{ item.task }}
@@ -31,7 +34,7 @@
                                 <td>{{ formatDate(item.completedDate) }}</td>
                                 <td>{{ item.signature }}</td>
                                 <td v-if="showMultiselector">
-                                    <input type="checkbox">
+                                    <input type="checkbox" v-model="selectedTasks" :value="item.id">
                                 </td>
                             </tr>
                         </template>
@@ -55,6 +58,7 @@ export default {
                 '4. Projektspezifische Aufgaben': [],
                 '5. Aufgaben nach der Freigabe des Meilensteins': [],
             },
+            selectedTasks: [],
         };
     },
 
@@ -144,6 +148,18 @@ export default {
                     return;
                 }
             }
+        },
+
+        handleCheckboxClick(taskId) {
+            const taskIndex = this.selectedTasks.findIndex((id) => id === taskId);
+            if (taskIndex !== -1) {
+              this.selectedTasks.splice(taskIndex, 1);
+            } else {
+              this.selectedTasks.push(taskId);
+            }
+            this.showButtons = this.selectedTasks.length > 0;
+
+            this.$emit('taskClicked', taskId);
         },
     },
 };

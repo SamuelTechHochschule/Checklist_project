@@ -27,10 +27,15 @@
 
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
-        <div v-if="showButtons" class="button-container">
+        <div v-if="showButtons && !multiselectorActivated" class="button-container">
             <button v-if="shouldshowReminderButton(selectedTask)" @click="sendReminder(selectedTask.id)">Reminder schicken</button>
             <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
+        </div>
+
+        <div v-if="showButtons && multiselectorActivated" class="button-container">
+            <button>Reminder schicken</button>
+            <button @click="deleteSelectedTasks">Task löschen</button>
         </div>
         
     </div>
@@ -88,6 +93,7 @@ export default {
     data() {
         return {
             checklistItems: [],
+            selectedTasks: [], // Array, um Aufgaben zur Selektierung zu speichern
             showButtons: false,
             selectedTask: null,
             isEditModalVisible: false,
@@ -122,7 +128,18 @@ export default {
 
         // Multiselektor aktivieren
         toggleMultiselector() {
-            this.multiselectorActivated = !this.multiselectorActivated;
+            if(this.multiselectorActivated) {
+                this.multiselectorActivated = false;
+                this.selectedTasks = [];
+            } else {
+                this.multiselectorActivated = true;
+            }
+
+            if(this.multiselectorActivated) {
+                this.showButtons = false;
+                this.selectedTask = null;
+                this.selectedTaskId = -1;
+            }
         },
 
         // Fetchen wenn Version gewechselt wird
@@ -291,15 +308,34 @@ export default {
 
         // Handler für Betätigen einer Tabellenreihe
         handleTaskClick(taskId) {
-            if (this.selectedTaskId === taskId) {
-                this.showButtons = false;
-                this.selectedTask = null;
-                this.selectedTaskId = -1;
+            if(!this.multiselectorActivated) {
+                if (this.selectedTaskId === taskId) {
+                    this.showButtons = false;
+                    this.selectedTask = null;
+                    this.selectedTaskId = -1;
+                } else {
+                    this.showButtons = true;
+                    this.selectedTask = this.checklistItems.find(item => item.id === taskId);
+                    this.selectedTaskId = taskId;
+                }
             } else {
-                this.showButtons = true;
-                this.selectedTask = this.checklistItems.find(item => item.id === taskId);
-                this.selectedTaskId = taskId;
-             }
+                const taskIndex = this.selectedTasks.findIndex((id) => id === taskId);
+                if(taskIndex !== -1) {
+                    this.selectedTasks.splice(taskIndex, 1);
+                } else {
+                    this.selectedTasks.push(taskId);
+                }
+
+                this.showButtons = this.selectedTasks.length > 0;
+            }    
+        },
+
+        deleteSelectedTasks() {
+            for(const taskId of this.selectedTasks) {
+                this.deleteItemFromChecklist(taskId);
+            }
+
+            this.selectedTasks = [];
         },
 
         // Aufgaben löschen
