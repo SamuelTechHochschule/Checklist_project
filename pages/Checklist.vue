@@ -135,6 +135,7 @@ export default {
                 this.multiselectorActivated = true;
             }
 
+            // Einzelauswahl resetten, wenn Multiselector aktiviert wird
             if(this.multiselectorActivated) {
                 this.showButtons = false;
                 this.selectedTask = null;
@@ -300,7 +301,7 @@ export default {
         openModal() {
             this.$refs.addTaskModal.openModal();
         },
-        
+
         // Handler für Betätigen einer Tabellenreihe
         handleTaskClick(taskId) {
             if(!this.multiselectorActivated) {
