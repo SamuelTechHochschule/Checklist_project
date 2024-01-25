@@ -333,11 +333,6 @@ export default {
             this.fetchChecklistItems();
         },
 
-        // Handler für Änderung im FilterModal
-        handleSortChanges(sortByID) {
-            console.log('Sorty by ID:', sortByID);
-        },
-
         // Modal öffnen
         openModal() {
             this.$refs.addTaskModal.openModal();

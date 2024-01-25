@@ -58,7 +58,6 @@ export default {
             isDepartmentFilterActive: false,
             filterOptions: {},
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
-            sortByID: true, // Standardmäßig Aufgaben nach ID sortieren
         };
     },
             
@@ -70,7 +69,6 @@ export default {
                 this.$emit('save', { selectedDepartment: '' });
             }
             this.$emit('save', this.filterOptions);
-            this.$emit('saveSort', this.sortByID);
             this.closeModal();
         },  
 
