@@ -28,13 +28,13 @@
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
         <div v-if="showButtons && !multiselectorActivated" class="button-container">
-            <button @click="sendReminder(selectedTask.id)">Reminder schicken</button>
+            <button v-if="showReminderButton">Reminder schicken</button>
             <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
 
         <div v-if="showButtons && multiselectorActivated" class="button-container">
-            <button>Reminder schicken</button>
+            <button v-if="showReminderButton">Reminder schicken</button>
             <button @click="deleteSelectedTasks">Task löschen</button>
         </div>
         
@@ -46,8 +46,7 @@
              :multiselectorActivated="multiselectorActivated"
              :clearSelectedTasks="multiselectorActivated"
              @taskClicked="handleTaskClick"  
-             @deleteItemFromChecklist="deleteItemFromChecklist"
-             @sendReminder="sendReminder"/>        
+             @deleteItemFromChecklist="deleteItemFromChecklist"/>        
     </div>
     <div v-else class="calendar-container">
         <CalenderView :checklistItems="checklistItems" />
@@ -122,6 +121,19 @@ export default {
         selectedVersion: {
             handler: 'handleSelectedVersionChange',
             immediate: true,
+        },
+    },
+
+    computed: {
+        showReminderButton() {
+            if(this.multiselectorActivated) {
+                return this.selectedTasks.every(taskId => {
+                    const task = this.checklistItems.find(item => item.id === taskId);
+                    return !task.completedDate && !task.signature;
+                });
+            } else {
+                return this.selectedTask ? (!this.selectedTask.completedDate && !this.selectedTask.signature) : false;
+            }
         },
     },
 
@@ -423,11 +435,6 @@ export default {
         closeEditModal() {
             this.isEditModalVisible = false;
         },
-
-        // Reminder-Email-Funktion
-        sendReminder(taskId) {
-            console.log('Sending reminder for task ID:', taskId);
-        }
     },
 };
 </script>
