@@ -130,7 +130,9 @@ export default {
         toggleMultiselector() {
             if(this.multiselectorActivated) {
                 this.multiselectorActivated = false;
+                console.log(this.selectedTasks);
                 this.selectedTasks = [];
+                console.log(this.selectedTasks);
             } else {
                 this.multiselectorActivated = true;
             }

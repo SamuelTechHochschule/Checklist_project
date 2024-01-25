@@ -74,7 +74,7 @@ export default {
         multiselectorActivated: {
             type: Boolean,
             default: false,
-        }
+        },
     },
 
     computed: {
@@ -158,6 +158,8 @@ export default {
               this.selectedTasks.push(taskId);
             }
             this.showButtons = this.selectedTasks.length > 0;
+
+            console.log('Table:', this.selectedTasks);
 
             this.$emit('taskClicked', taskId);
         },
