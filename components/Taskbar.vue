@@ -39,7 +39,7 @@
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
                     <p>Filter</p>
                 </div>
-                <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @close="closeFilterModal"/>
+                <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @saveSort="handleSortChanges" @close="closeFilterModal"/>
             </li>
             <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu">
                 <div class="account-block">
@@ -179,6 +179,11 @@ export default {
         
         handleFilterChanges(filterOptions) {
             this.$emit('filterChanged', filterOptions);
+        },
+
+        // Handler für das Sortieren der Aufgaben
+        handleSortChanges(sortByID) {
+            this.$emit('sortChanged', sortByID);
         },
 
         // Navigiere zur SettingsModal.vue-Komponente

@@ -11,6 +11,7 @@
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
         <Taskbar @filterChanged="handleFilterChanges" 
+                 @sortChanged="handleSortChanges"
                  @toggleView="toggleView" 
                  @versionSelected="handleVersionSelected" 
                  @open-version-modal="openVersionModal" 
@@ -331,6 +332,10 @@ export default {
             console.log('Filter options changed:', filterOptions);
             this.filterOptions = { ...this.filterOptions, ...filterOptions };
             this.fetchChecklistItems();
+        },
+
+        handleSortChanges(sortByID) {
+            console.log('Sorting by ID:', sortByID);
         },
 
         // Modal öffnen
