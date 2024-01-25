@@ -129,15 +129,32 @@ export default {
             if(this.multiselectorActivated) {
                 return this.selectedTasks.every(taskId => {
                     const task = this.checklistItems.find(item => item.id === taskId);
-                    return !task.completedDate && !task.signature;
+                    return this.isTaskNearDue(task) || this.isTaskOverdue(task) && !task.completedDate && !task.signature;
                 });
             } else {
-                return this.selectedTask ? (!this.selectedTask.completedDate && !this.selectedTask.signature) : false;
+                return this.selectedTask ? (this.isTaskNearDue(this.selectedTask) || this.isTaskOverdue(this.selectedTask) && !this.selectedTask.completedDate && !this.selectedTask.signature) : false;
             }
         },
     },
 
     methods: {
+
+        // Reminder nur bei orange markierten Aufgaben
+        isTaskNearDue(item) {
+            const plannedDate = new Date(item.plannedDate);
+            const currentDate = new Date();
+            const timeDifference = plannedDate - currentDate;
+            const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+            return daysDifference >= 0 && daysDifference <= 7;
+        },
+
+        isTaskOverdue(item) {
+            const plannedDate = new Date(item.plannedDate);
+            const currentDate = new Date();
+
+            return plannedDate < currentDate && !item.completedDate && !item.signature; 
+        },
 
         // Multiselektor aktivieren
         toggleMultiselector() {
