@@ -181,6 +181,11 @@ export default {
             this.$emit('filterChanged', filterOptions);
         },
 
+        // Handler für die Sortierung
+        handleSortChanges(sortByID) {
+            this.$emit('sortChanged', sortByID);
+        },
+
         // Navigiere zur SettingsModal.vue-Komponente
         navigateToSettings() {
             this.isSettingsModalVisible = true;
