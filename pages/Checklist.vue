@@ -44,6 +44,7 @@
             <ChecklistTable :checklistItems="checklistItems"
              :selectedTaskId="selectedTaskId" 
              :multiselectorActivated="multiselectorActivated"
+             :clearSelectedTasks="multiselectorActivated"
              @taskClicked="handleTaskClick"  
              @deleteItemFromChecklist="deleteItemFromChecklist"
              @sendReminder="sendReminder"/>        
@@ -95,7 +96,7 @@ export default {
             checklistItems: [],
             selectedTasks: [], // Array, um Aufgaben zur Selektierung zu speichern
             showButtons: false,
-            selectedTask: null,
+            selectedTask: null, // Variable für einzelne Selektierung der Aufgaben
             isEditModalVisible: false,
             selectedTaskId: -1,
             preliminaryVersions: {},
@@ -130,9 +131,7 @@ export default {
         toggleMultiselector() {
             if(this.multiselectorActivated) {
                 this.multiselectorActivated = false;
-                console.log(this.selectedTasks);
-                this.selectedTasks = [];
-                console.log(this.selectedTasks);
+                this.clearSelectedTasks();
             } else {
                 this.multiselectorActivated = true;
             }
@@ -143,6 +142,12 @@ export default {
                 this.selectedTask = null;
                 this.selectedTaskId = -1;
             }
+        },
+
+        // Array selectedTasks leeren
+        clearSelectedTasks() {
+            this.selectedTasks = [];
+            this.showButtons = false;
         },
 
         // Fetchen wenn Version gewechselt wird

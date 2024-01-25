@@ -75,6 +75,16 @@ export default {
             type: Boolean,
             default: false,
         },
+        clearSelectedTasks: {
+            type: Boolean,
+            default: false,
+        },
+    },
+
+    watch: {
+        clearSelectedTasks() {
+            this.selectedTasks = [];
+        },
     },
 
     computed: {
