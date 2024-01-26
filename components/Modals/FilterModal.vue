@@ -24,17 +24,19 @@
                         <label>Nach Person suchen:</label>
                     </div>
                 </div>
+<!--                
             <h3>Sortier Einstellungen</h3>
                 <div class="form-row">
                     <div class="form-column">
-                        <input type="checkbox">
+                        <input type="checkbox" >
                         <label>Nach geplanten Datum sortieren</label>
                     </div>
                 </div>
+            -->    
             <div class="form-row">
                 <button @click="closeModal">Abbrechen</button>
                 <button @click="saveChangesforfilter">Bestätigen</button>
-                <button @click="saveChangesforSort">Sortierung bestätigen</button>
+                <!--<button @click="saveChangesforSort">Sortierung bestätigen</button> -->
             </div>
         </div>
     </div>
@@ -67,11 +69,6 @@ export default {
 
             this.closeModal();
         },  
-
-        saveChangesforSort() {
-
-            this.closeModal();
-        },
 
         closeModal() {
             this.$emit('close');

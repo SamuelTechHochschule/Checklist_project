@@ -11,13 +11,12 @@
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
         <Taskbar @filterChanged="handleFilterChanges" 
-                 @sortChanged="handleSortChanges"
                  @toggleView="toggleView" 
                  @versionSelected="handleVersionSelected" 
                  @open-version-modal="openVersionModal" 
                  @importChecklist="importChecklist"
                  :selectedVersion="selectedVersion"
-                 :checklistItems="checklistItems"/>    
+                 :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" -->
 
         <h2>{{ generateTitle() }}</h2>
 
@@ -334,9 +333,11 @@ export default {
             this.fetchChecklistItems();
         },
 
+/*
         handleSortChanges() {
 
         },
+*/
 
         // Modal öffnen
         openModal() {

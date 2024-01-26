@@ -181,10 +181,12 @@ export default {
             this.$emit('filterChanged', filterOptions);
         },
 
+/*     
         // Handler für das Sortieren der Aufgaben
         handleSortChanges() {
 
         },
+*/
 
         // Navigiere zur SettingsModal.vue-Komponente
         navigateToSettings() {
