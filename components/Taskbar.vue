@@ -182,8 +182,8 @@ export default {
         },
 
         // Handler für das Sortieren der Aufgaben
-        handleSortChanges(sortByID) {
-            this.$emit('sortChanged', sortByID);
+        handleSortChanges() {
+
         },
 
         // Navigiere zur SettingsModal.vue-Komponente

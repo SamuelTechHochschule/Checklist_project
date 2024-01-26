@@ -26,12 +26,6 @@
                 </div>
             <h3>Sortier Einstellungen</h3>
                 <div class="form-row">
-                    <div class="column">
-                        <input type="checkbox" v-model="sortByID">
-                        <label>Nach ID sortieren (Standardeinstellung)</label>
-                    </div>
-                </div>
-                <div class="form-row">
                     <div class="form-column">
                         <input type="checkbox">
                         <label>Nach geplanten Datum sortieren</label>
@@ -39,7 +33,8 @@
                 </div>
             <div class="form-row">
                 <button @click="closeModal">Abbrechen</button>
-                <button @click="saveChanges">Bestätigen</button>
+                <button @click="saveChangesforfilter">Bestätigen</button>
+                <button @click="saveChangesforSort">Sortierung bestätigen</button>
             </div>
         </div>
     </div>
@@ -58,23 +53,25 @@ export default {
             isDepartmentFilterActive: false,
             filterOptions: {},
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
-            sortByID: true, // Variable für Sortieren der Aufgaben nach der ID
         };
     },
             
     methods: {
-        saveChanges() {
+        saveChangesforfilter() {
             if(this.isDepartmentFilterActive) {
                 this.$emit('save', { selectedDepartment: this.selectedDepartment });
             } else {
                 this.$emit('save', { selectedDepartment: '' });
             }
-            this.$emit('save', this.filterOptions);
-
-            this.$emit('saveSort', this.sortByID);
+                this.$emit('save', this.filterOptions);
 
             this.closeModal();
         },  
+
+        saveChangesforSort() {
+
+            this.closeModal();
+        },
 
         closeModal() {
             this.$emit('close');

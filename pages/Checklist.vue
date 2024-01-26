@@ -317,7 +317,7 @@ export default {
                         ...item,
                         isPreliminary: item.colorClass_pv === 'Preliminary-row',
                         isRelease: item.colorClass_rv === 'Release-row',
-                    }));
+                    })).sort((a, b) => a.id - b.id);
                 }
             } catch (error) {
                 console.error('Error fetching checklist items:', error);
@@ -334,8 +334,8 @@ export default {
             this.fetchChecklistItems();
         },
 
-        handleSortChanges(sortByID) {
-            console.log('Sorting by ID:', sortByID);
+        handleSortChanges() {
+
         },
 
         // Modal öffnen
