@@ -39,7 +39,7 @@
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
                     <p>Filter</p>
                 </div>
-                <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @saveSort="handleSortChanges" @close="closeFilterModal"/>
+                <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @close="closeFilterModal"/> <!-- @saveSort="handleSortChanges" -->
             </li>
             <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu">
                 <div class="account-block">

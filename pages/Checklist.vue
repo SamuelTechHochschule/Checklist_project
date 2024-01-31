@@ -16,7 +16,7 @@
                  @open-version-modal="openVersionModal" 
                  @importChecklist="importChecklist"
                  :selectedVersion="selectedVersion"
-                 :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" -->
+                 :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" --> 
 
         <h2>{{ generateTitle() }}</h2>
 
@@ -28,13 +28,13 @@
         <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
         <div v-if="showButtons && !multiselectorActivated" class="button-container">
-            <button v-if="showReminderButton">Reminder schicken</button>
+            <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
             <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
             <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
         </div>
 
         <div v-if="showButtons && multiselectorActivated" class="button-container">
-            <button v-if="showReminderButton">Reminder schicken</button>
+            <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
             <button @click="deleteSelectedTasks">Task löschen</button>
         </div>
         
@@ -110,6 +110,7 @@ export default {
             isChecklistLoaded: false,
             isLoading: false, // Variable für Loading Indicator
             multiselectorActivated: false, // Variable um Multiselektor zu aktivieren
+            reminderEmailRecipient: 'k.huebner@asc.de',
         };
     },
 
@@ -138,6 +139,58 @@ export default {
     },
 
     methods: {
+
+        // Bedingungsprüfen für Senden der Reminder-E-Mails
+        async sendReminderEmail() {
+            try {
+
+                if(!this.reminderEmailRecipient) {
+                    console.error('Reminder email recipient is not set');
+                    return;
+                }
+
+                if(this.multiselectorActivated && this.selectedTasks.length > 0) {
+                    for(const taskId of this.selectedTasks) {
+                        const task = this.checklistItems.find(item => item.id === taskId);
+                        if(task) {
+                            await this.sendEmailForTask(task);
+                        }
+                    }
+                } else if(!this.multiselectorActivated && this.selectedTask) {
+                    console.log(this.selectedTask);
+                    await this.sendEmailForTask(this.selectedTask);
+                } else {
+                    console.warn('Keine Aufgaben ausgewählt für Erinnerungs-E-Mail');
+                }
+            } catch(error) {
+                console.error('Fehler beim Senden der Erinnerungs-E-Mails:', error);
+            }
+            //window.open(`mailto:k.huebner@asc.de?subject=Test&body=Test`);
+        },
+
+        // Senden der Reminder-E-Mails
+        async sendEmailForTask(task) {
+            console.log(task);
+            if(task) {
+                const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        to: this.reminderEmailRecipient,
+                        subject: 'Erinnerung',
+                        body: `Erledigen Sie bitte die folgende Aufgabe: ${task.task}`,
+                    }),
+                });
+
+                if(!response.ok) {
+                    throw new Error(`Fehler beim Senden der E-Mail für Aufgabe ${task.task}`);
+                }
+            } else {
+                console.warn('Ungültige Aufgabe für Erinnerungs-E-Mail');
+            }
+        },
 
         // Reminder nur bei orange markierten Aufgaben
         isTaskNearDue(item) {
