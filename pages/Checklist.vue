@@ -110,7 +110,7 @@ export default {
             isChecklistLoaded: false,
             isLoading: false, // Variable für Loading Indicator
             multiselectorActivated: false, // Variable um Multiselektor zu aktivieren
-            reminderEmailRecipient: 'k.huebner@asc.de',
+            reminderEmailRecipient: 's.savasta@asc.de',
         };
     },
 
@@ -180,13 +180,15 @@ export default {
                     body: JSON.stringify({
                         to: this.reminderEmailRecipient,
                         subject: 'Erinnerung',
-                        body: `Erledigen Sie bitte die folgende Aufgabe: ${task.task}`,
+                        body: `Die folgende Aufgabe: "${task.task}" muss noch in der Checkliste erledigt werden. Bitte bearbeiten Sie die Aufgabe in den nächsten Tagen`,
                     }),
                 });
 
                 if(!response.ok) {
                     throw new Error(`Fehler beim Senden der E-Mail für Aufgabe ${task.task}`);
                 }
+
+                alert(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${this.reminderEmailRecipient} gesendet`);
             } else {
                 console.warn('Ungültige Aufgabe für Erinnerungs-E-Mail');
             }
