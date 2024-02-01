@@ -110,7 +110,7 @@ export default {
             isChecklistLoaded: false,
             isLoading: false, // Variable für Loading Indicator
             multiselectorActivated: false, // Variable um Multiselektor zu aktivieren
-            reminderEmailRecipient: 'k.huebner@asc.de',
+            reminderEmailRecipient: 's.savasta@asc.de',
         };
     },
 
@@ -156,12 +156,14 @@ export default {
                             await this.sendEmailForTask(task);
                         }
                     }
+                    this.multiselectorActivated = false;
                 } else if(!this.multiselectorActivated && this.selectedTask) {
                     console.log(this.selectedTask);
                     await this.sendEmailForTask(this.selectedTask);
                   
                     this.selectedTask = null;
                     this.selectedTaskId = -1;
+                    this.showButtons = false;
                 } else {
                     console.warn('Keine Aufgaben ausgewählt für Erinnerungs-E-Mail');
                 }
