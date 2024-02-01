@@ -17,6 +17,10 @@ export default defineNuxtConfig({
    // '/version' : { proxy: process.env.URL + '/api/versions' },
   },
 
+  build: {
+    transpile: ['vue-toastification']    
+  }
+
 })
 
 

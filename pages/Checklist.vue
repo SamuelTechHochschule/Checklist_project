@@ -64,6 +64,8 @@ import Taskbar from '~/components/Taskbar.vue';
 import CalenderView from '~/components/CalenderView.vue';
 import { useAuthStore } from '~/store/authentication';
 
+import { useToast } from 'vue-toastification';
+
 export default {
 /*
     beforeRouteEnter(to, from, next) {
@@ -203,6 +205,7 @@ export default {
         // Senden der Reminder-E-Mails
         async sendEmailForTask(task) {
             console.log(task);
+            const toast = useToast();
             if(task) {
                 const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
                     method: 'POST',
@@ -220,7 +223,7 @@ export default {
                     throw new Error(`Fehler beim Senden der E-Mail für Aufgabe ${task.task}`);
                 }
 
-                alert(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${this.reminderEmailRecipient} gesendet`);
+                toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${this.reminderEmailRecipient} gesendet`)
                 this.markTaskAsNotified(task.id);
             } else {
                 console.warn('Ungültige Aufgabe für Erinnerungs-E-Mail');
