@@ -93,6 +93,7 @@ export default {
     
         // Fügt Aufgabe hinzu
         addTask() {
+            const toast = useToast();
             // Konfigurierung für Reihenfärbung
             const colorClass_pv = this.newTask.isPreliminary ? 'Preliminary-row' : '';
             const colorClass_rv = this.newTask.isRelease ? 'Release-row' : '';
@@ -119,7 +120,6 @@ export default {
             }
 
             // Hinzufügen der Versionsinformationen
-            console.log('Selected Version:', this.selectedVersion);
             this.newTask.version = this.selectedVersion.name;
 /*
             // Aufruf der Methode
@@ -150,14 +150,13 @@ export default {
                 }),
             })
             .then(response => {
-                console.log('Server response:', response);
                 if(!response.ok){
                     throw new Error(`Server responded with status ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('Task added successfully:', data);
+                toast.success('Aufgabe wurde erfolgreich hinzugefügt');
                 if (!data || !data.id) {   
                     console.error('Invalid data received from server:', data);
                     return;

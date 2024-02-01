@@ -170,7 +170,6 @@ export default {
             } else {
                 toast.error('Keine Version ausgewählt')
             }
-            console.log('Version bearbeiten:', this.selectedVersion)
         },
         
         loadSelectedVersionData(version) {
@@ -182,7 +181,6 @@ export default {
         // Bearbeitete Version speichern
         async saveEditedVersion() {
             const toast = useToast();
-            console.log('saveEditedVersion wird aufgerufen')
             if(this.selectedVersion && this.editedVersionName) {
                 const editedVersion = {
                     id: this.selectedVersion.id,
@@ -218,7 +216,7 @@ export default {
                     this.showEditButton = true;
                     this.showDeleteButton = true;
                 
-                    console.log('Version erfolgreich bearbeitet', this.selectedVersion);
+                    toast.success('Version wurde erfolgreich bearbeitet');
                 } catch(error) {
                     toast.error('Fehler beim Bearbeiten der Version!\n Für mehr Informationen öffnen Sie die Konsole!');
                     console.error('Fehler beim Bearbeiten der Version:', error);
@@ -237,7 +235,6 @@ export default {
                 }
 
                 const data = await response.json();
-                console.log(data);
                 this.versions = data.sort((a, b) => a.name.localeCompare(b.name));
             } catch(error) {
                 toast.error('Fehler beim fetchen der Versionen!\n Für mehr Informationen öffnen Sie die Konsole!');
@@ -279,7 +276,7 @@ export default {
                         // Auswahl zurücksetzen
                         this.selectedVersion = null;
 
-                        console.log('Version und zugehörige Aufgaben erfolgreich gelöscht');
+                        toast.success('Version und ihre zugehörigen Aufgaben wurden erfolgreich gelöscht');
                     } catch(error) {
                         toast.error('Fehler beim Löschen der Version!\n Für mehr Informationen öffnen Sie die Konsole!');
                         console.error('Fehler beim Löschen der Version:', error);
@@ -339,7 +336,7 @@ export default {
                     }
 
                     const createdVersion = await response.json();
-                    console.log('Created Version', createdVersion);
+                    toast.success(`Version wurde erfolgreich hinzugefügt`)
 
                     // Fügt erstellte Version der Liste hinzu
                     this.versions.push(newVersion);
@@ -381,7 +378,6 @@ export default {
             const toast = useToast();
             if(this.selectedVersion) {
                 this.$emit('versionSelected', this.selectedVersion);
-                console.log('Emit Version');
                 this.closeModal();
             } else {
                 toast.error('Eine Version muss ausgewählt werden');
@@ -390,7 +386,6 @@ export default {
         },
         
         closeModal() {
-            console.log("Erhält Anweisung")
             this.$emit('close');
         },
     },

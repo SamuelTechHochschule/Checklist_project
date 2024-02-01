@@ -112,7 +112,8 @@ export default {
 
             // Überprüfung, ob es Aufgabe gibt
             if(tasksToExport.length === 0) {
-                console.warn('Keine Aufgaben zum Exportieren vorhanden');
+                const toast = useToast();
+                toast.warning('Keine Aufgaben zum Exportieren vorhanden');
                 return;
             }
 
@@ -157,7 +158,6 @@ export default {
 
         // Zwischen Checklist und Kalender wechseln
         toggleView(view) {
-            console.log('Selecting view:', view);
             this.$emit('toggleView', view);
         },
 
@@ -193,7 +193,6 @@ export default {
         // Navigiere zur SettingsModal.vue-Komponente
         navigateToSettings() {
             this.isSettingsModalVisible = true;
-            console.log('Navigating to Settings');
         },
 
         // Schließe Modal
@@ -210,7 +209,7 @@ export default {
             })
             .then(response => {
                 if(response.ok) {
-                    console.log('Logout erfolgreich');
+                    toast.success('Logout erfolgreich');
 
                     //User im Store abmelden
                     useAuthStore().logoutUser();
@@ -227,8 +226,6 @@ export default {
                 console.error('Logout fehlgeschlagen (Außerhalb):', error);
                 console.error('Response status:', error && error.status);
             });
-
-            console.log('Logging out');
         },
 
         // Link to Homepage

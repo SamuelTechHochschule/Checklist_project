@@ -57,7 +57,8 @@ import { useToast } from 'vue-toastification';
 
                         // User im Store anmelden
                         useAuthStore().loginUser(this.loginToken);
-                            
+                        
+                        toast.info('Dummy erfolgreich angemeldet');
                         console.log("Login successful (Dummy):", this.loginToken);
 
                         this.$router.push("/checklist");
@@ -83,7 +84,7 @@ import { useToast } from 'vue-toastification';
                             // User im Store anmelden
                             useAuthStore().loginUser(this.loginToken);
 
-                            console.log('Login successful:', user);
+                            toast.success('Login erfolgreich');
                             this.$router.push("/checklist");
                         } catch (jsonError) {
                             console.error('Error parsing json:', jsonError);

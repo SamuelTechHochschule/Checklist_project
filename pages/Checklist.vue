@@ -144,7 +144,6 @@ export default {
 
         // Markiert Aufgabe als gesendet
         markTaskAsNotified(taskId) {
-            console.log('Set item_id:', taskId);
             if (!this.isTaskAlreadyNotified(taskId)) {
                 localStorage.setItem(`emailNotified_${taskId}`, 'true');
             }
@@ -152,7 +151,6 @@ export default {
 
         // Prüfen, ob E-Mail zu Aufgaben schon gesendet wurde
         isTaskAlreadyNotified(taskId) {
-            console.log('Get item_id:', taskId);
             return localStorage.getItem(`emailNotified_${taskId}`) === 'true';
         },
 
@@ -195,7 +193,7 @@ export default {
                     this.selectedTaskId = -1;
                     this.showButtons = false;
                 } else {
-                    console.warn('Keine Aufgaben ausgewählt für Erinnerungs-E-Mail');
+                    toast.error('Keine Aufgabe zum Versenden der E-Mail ausgewählt!');
                 }
             } catch(error) {
                 toast.error('Fehler beim Senden der Erinnerungs-E-Mails!\n Für mehr Informationen öffnen Sie die Konsole!')
@@ -206,7 +204,6 @@ export default {
 
         // Senden der Reminder-E-Mails
         async sendEmailForTask(task) {
-            console.log(task);
             const toast = useToast();
             if(task) {
                 const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
@@ -229,7 +226,7 @@ export default {
                 toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${this.reminderEmailRecipient} gesendet`)
                 this.markTaskAsNotified(task.id);
             } else {
-                console.warn('Ungültige Aufgabe für Erinnerungs-E-Mail');
+                toast.error('Ungültige Aufgabe zum Versenden der E-Mail!');
             }
         },
 
@@ -275,7 +272,6 @@ export default {
 
         // Fetchen wenn Version gewechselt wird
         async handleSelectedVersionChange(newSelectedVersion) {
-            console.log('Version ausgewählt:', newSelectedVersion);
             await this.fetchChecklistItems();
         },
 
@@ -294,11 +290,9 @@ export default {
             if(file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    console.log(e.target.result);
                     const content = e.target.result.replace(/^\uFEFF/, '');
                     try {
                         const importedData = JSON.parse(e.target.result);
-                        console.log('Parsed importierte Daten:', importedData);
                         this.importChecklistItems(importedData);
                     } catch (error) {
                         console.error('Error parsing imported JSON:', error);
@@ -311,7 +305,6 @@ export default {
         // Importierte Daten an Backend senden
         importChecklistItems(importedData) {
             const toast = useToast();
-            console.log('Importierten Daten:', importedData);
             fetch('http://localhost:5500/api/checklist/import', {
                 method: 'POST',
                 headers: {
@@ -329,7 +322,6 @@ export default {
                 return response.json();
             })
             .then(data => {
-                console.log('Importierte Checklist-Aufgaben:', data);
                 this.fetchChecklistItems();
             })
             .catch(error => {
@@ -345,7 +337,6 @@ export default {
 
         // Schließt Version-Modal
         closeVersionModal() {
-            console.log("Weiß Bescheid");
             this.isVersionModalVisible = false;
         },
 
@@ -372,7 +363,6 @@ export default {
         // Aktualisiert Überschrift
         updateTitle() {
           const newTitle = this.generateTitle();
-          console.log("Updating title:", newTitle);  
         },
 
         // Zwischen Checklist und Kalender wechseln
@@ -426,7 +416,6 @@ export default {
 
         // Handler für Änderung im FilterModal
         handleFilterChanges(filterOptions) {
-            console.log('Filter options changed:', filterOptions);
             this.filterOptions = { ...this.filterOptions, ...filterOptions };
             this.fetchChecklistItems();
         },
@@ -498,7 +487,7 @@ export default {
                 this.selectedTask = null;
                 this.selectedTaskId = -1;
 
-                console.log('Task deleted successfully');
+                toast.success('Aufgabe wurde erfolgreich gelöscht');
             } catch (error) {
                 toast.error('Fehler beim Löschen der Aufgabe\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Error deleting task:', error);
@@ -515,9 +504,7 @@ export default {
         },
 
         // Aufruf des Modals für die Bearbeitung
-        editTask(taskId) {
-            console.log("editTask-Aufruf");
-            
+        editTask(taskId) {      
             this.selectedTask = this.checklistItems.find((item) => item.id === taskId);
             this.editedTask = { ...this.selectedTask };
             this.isEditModalVisible = true;
@@ -547,13 +534,11 @@ export default {
 
                 //Modal wird geschlossen
                 this.isEditModalVisible = false;
-                console.log('Task edited and saved successfully');
+                toast.success('Aufgabe wurde erfolgreich bearbeitet');
             } catch(error) {
                 toast.error('Fehler beim Bearbeiten der Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Error saving edited task:', error);
             }
-
-            console.log('Saving changes for edited task:', editedTask);
         },  
 
         // Modal wird geschlossen

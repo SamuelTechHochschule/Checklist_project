@@ -153,7 +153,6 @@ export default {
             for(const tasks of Object.values(this.groupedTasks)) {
                 const clickedTask = tasks.find(item => item.id === taskId);
                 if(clickedTask) {
-                    console.log('Handling task click for task ID:', taskId);
                     this.$emit('taskClicked', taskId);
                     return;
                 }
@@ -168,8 +167,6 @@ export default {
               this.selectedTasks.push(taskId);
             }
             this.showButtons = this.selectedTasks.length > 0;
-
-            console.log('Table:', this.selectedTasks);
 
             this.$emit('taskClicked', taskId);
         },
