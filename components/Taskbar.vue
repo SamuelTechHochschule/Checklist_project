@@ -67,6 +67,8 @@ import FilterModal from './Modals/FilterModal.vue';
 import SettingsModal from './Modals/SettingsModal.vue';
 import VersionModal from './Modals/VersionModal.vue';
 import { useAuthStore } from '~/store/authentication';
+import { useToast } from 'vue-toastification';
+
 
 export default {
 
@@ -100,9 +102,9 @@ export default {
 
         // Exportiere Checklist
         exportChecklist() {
-
+        const toast = useToast()
         if (!this.checklistItems || this.checklistItems.length === 0) {
-            console.error('Checklist is empty or undefined. Cannot export.');
+            toast.error('Eine leere Checkliste kann nicht exportiert werden!')
             return;
         }
 
@@ -201,6 +203,7 @@ export default {
 
         // User abmelden
         logout() {
+            const toast = useToast();
             fetch('/logout', {
                 method: 'POST',
                 credentials: 'include',
@@ -216,10 +219,11 @@ export default {
                     this.$router.push({ path: '/' });
                 } else {
                     console.log(response);
-                    console.error('Logout fehlgeschlagen (Innerhalb)');
+                    toast.error('Logout fehlgeschlagen!\n Für mehr Informationen öffnen Sie die Konsole!');
                 }
             })
             .catch(error => {
+                toast.error('Logout fehlgeschlagen!\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Logout fehlgeschlagen (Außerhalb):', error);
                 console.error('Response status:', error && error.status);
             });

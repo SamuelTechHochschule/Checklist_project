@@ -52,7 +52,7 @@
 </template>
 
 <script>
-
+import { useToast } from 'vue-toastification';
 export default {
 
     props: [
@@ -90,30 +90,7 @@ export default {
             this.isOpen = false;
             this.resetNewTask();
         },
-/*
-        // Methode für das ausgewählte Datum der Version
-        getSelectedVersionData() {
-            if(this.selectedVersion) {
-                if(this.selectedVersionType === 'preliminary') {
-                    return this.selectedVersion.preliminaryrelease;
-                } else if(this.selectedVersionType === 'release') {
-                    return this.selectedVersion.finalrelease;
-                }
-            } else {
-                return null;
-            }
-        },
-
-        updateSelectedVersionType() {
-            if(this.newTask.isPreliminary) {
-                this.selectedVersionType = 'preliminary';
-            } else if(this.newTask.isRelease) {
-                this.selectedVersionType = 'release';
-            } else {
-                this.selectedVersionType = null;
-            }
-        },
- */       
+    
         // Fügt Aufgabe hinzu
         addTask() {
             // Konfigurierung für Reihenfärbung
@@ -190,6 +167,7 @@ export default {
                 this.closeModal();
             })
             .catch(error => {
+                toast.error('Fehler beim Hinzufügen einer neuen Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Error adding task:', error);
             })
 

@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification';
 export default {
 
     props: {
@@ -148,6 +149,7 @@ export default {
 
         // Version bearbeiten
         editSelectedVersion() {
+            const toast = useToast();
             if(this.selectedVersion) {
                 this.loadSelectedVersionData(this.selectedVersion);
 
@@ -166,7 +168,7 @@ export default {
                 }
 
             } else {
-                console.error('Keine Version ausgewählt');
+                toast.error('Keine Version ausgewählt')
             }
             console.log('Version bearbeiten:', this.selectedVersion)
         },
@@ -179,6 +181,7 @@ export default {
 
         // Bearbeitete Version speichern
         async saveEditedVersion() {
+            const toast = useToast();
             console.log('saveEditedVersion wird aufgerufen')
             if(this.selectedVersion && this.editedVersionName) {
                 const editedVersion = {
@@ -217,14 +220,16 @@ export default {
                 
                     console.log('Version erfolgreich bearbeitet', this.selectedVersion);
                 } catch(error) {
+                    toast.error('Fehler beim Bearbeiten der Version!\n Für mehr Informationen öffnen Sie die Konsole!');
                     console.error('Fehler beim Bearbeiten der Version:', error);
                 } 
             } else {
-                    console.error('Ungültige Daten für die Bearbeitung');
+                toast.error('Ungültige Daten für die Bearbeitung');
             }
         },
 
         async fetchVersions() {
+            const toast = useToast();
             try {
                 const response = await fetch('http://localhost:5500/api/versions');
                 if(!response.ok) {
@@ -235,6 +240,7 @@ export default {
                 console.log(data);
                 this.versions = data.sort((a, b) => a.name.localeCompare(b.name));
             } catch(error) {
+                toast.error('Fehler beim fetchen der Versionen!\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Error fetching versions:', error);
             }
         },
@@ -250,6 +256,7 @@ export default {
         },
 
         async deleteVersion() {
+            const toast = useToast();
             if(this.selectedVersion) {
                 const confirmed = window.confirm(`Sind Sie sicher, dass Sie die Version '${this.selectedVersion.name}' löschen möchten? Alle Daten zu dieser Version werden mit gelöscht.`)
 
@@ -274,11 +281,12 @@ export default {
 
                         console.log('Version und zugehörige Aufgaben erfolgreich gelöscht');
                     } catch(error) {
+                        toast.error('Fehler beim Löschen der Version!\n Für mehr Informationen öffnen Sie die Konsole!');
                         console.error('Fehler beim Löschen der Version:', error);
                     }
                 }
             } else {
-                console.error('Keine Version ausgewählt');
+                toast.error('Keine Version ausgewählt!');
             }
         },
 
@@ -304,6 +312,7 @@ export default {
 
         // Bestätigung für eine neue Version
         async confirmNewVersion() {
+            const toast = useToast();
             if(this.newVersionName && this.preliminaryrelease && this.finalrelease) {
                 // 1 Tage hinzuzufügen für Datenbank
                 this.preliminaryrelease.setDate(this.preliminaryrelease.getDate() + this.daystoAdd);
@@ -348,10 +357,11 @@ export default {
                     this.finalrelease = '';
 
                 } catch(error) {
+                    toast.error('Fehler beim Erstellen einer neuen Version!\n Für mehr Informationen öffnen Sie die Konsole');
                     console.error('Error creating new version:', error);
                 }                
             } else {
-                console.error('Ungültige Daten für die Erstellung der neuen Version');
+                toast.error('Ungültige oder fehlende Daten für die Erstellung einer neuen Version!');
             }
         },
 
@@ -368,13 +378,13 @@ export default {
         },
 
         async confirmSelection() {
+            const toast = useToast();
             if(this.selectedVersion) {
                 this.$emit('versionSelected', this.selectedVersion);
                 console.log('Emit Version');
                 this.closeModal();
             } else {
-                alert("Bitte wählen Sie eine Version");
-                console.error('Version muss gewählt werden');
+                toast.error('Eine Version muss ausgewählt werden');
             }
 
         },

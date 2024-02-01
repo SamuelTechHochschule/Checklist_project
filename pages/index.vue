@@ -28,6 +28,7 @@
 <script>
 import LoadingModal from '~/components/Modals/LoadingModal.vue';
 import { useAuthStore } from '~/store/authentication'
+import { useToast } from 'vue-toastification';
 
     export default{
 
@@ -45,7 +46,8 @@ import { useAuthStore } from '~/store/authentication'
             };
         },
         methods: {
-            async loginUser() {
+            async loginUser() { 
+                const toast = useToast();
                 try {
                     // Daten werden geladen
                     this.isLoading = true;
@@ -88,9 +90,11 @@ import { useAuthStore } from '~/store/authentication'
                         }
                     } else {
                         this.loginError = true;
+                        toast.error('Falsche Anmeldedaten!');
                         console.error('Login error:', response.statusText);
                     }
                 } catch (error) {
+                    toast.error('Netzwerk-Fehler!\n Für mehr Informationen öffnen Sie die Konsole!')
                     console.error('Network error:', error);
                 } finally {
                     // Daten werden nicht mehr geladen

@@ -158,10 +158,11 @@ export default {
 
         // Bedingungsprüfen für Senden der Reminder-E-Mails
         async sendReminderEmail() {
+            const toast = useToast();
             try {
                 const toast = useToast();
                 if(!this.reminderEmailRecipient) {
-                    console.error('Reminder email recipient is not set');
+                    toast.error('Unbekannter Empfänger!\n Für mehr Informationen öffnen Sie die Konsole!');
                     return;
                 }
 
