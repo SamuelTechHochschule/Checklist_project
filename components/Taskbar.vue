@@ -22,18 +22,6 @@
                     <p>Version</p>
                 </div>
             </li>
-            <li @mouseenter="showViewMenu" @mouseleave="hideViewMenu">
-                <div class="view-block">
-                    <img src="~/assets/View.png" alt="View" class="view">
-                    <p>Ansicht</p>
-                </div>
-                <div v-if="isViewMenuVisible" class="view-menu">
-                    <ul>
-                        <li @click="toggleView('checklist')">Checklist</li>
-                        <li @click="toggleView('calendar')">Kalender</li>
-                    </ul>
-                </div>
-            </li>
             <li>
                 <div class="filter-block" @click="openFilterModal">
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
@@ -92,7 +80,6 @@ export default {
     data() {
         return{
             isUserMenuVisible: false,
-            isViewMenuVisible: false,
             isSettingsModalVisible: false,
             isFilterModalVisible: false,
         };
@@ -144,21 +131,6 @@ export default {
         // Öffnet VersionModal
         openVersionModal() {
             this.$emit('open-version-modal');
-        },
-
-        // Zeigt Dropdownmenü von Ansicht
-        showViewMenu() {
-            this.isViewMenuVisible = true;
-        },
-
-        // Schließt Dropdownmenü von Ansicht
-        hideViewMenu() {
-            this.isViewMenuVisible = false;
-        },
-
-        // Zwischen Checklist und Kalender wechseln
-        toggleView(view) {
-            this.$emit('toggleView', view);
         },
 
         // Zeigt Dropdownmenü
@@ -284,40 +256,6 @@ export default {
         width: 30px;
         height: 50px;
         margin-top: 15px;
-    }
-    .view-block{
-        padding-right: 30px;
-        padding-left: 30px;
-    }
-    .view-block:hover{
-        background-color: #d2e1f0;
-    }
-    .view{
-        max-width: 100%;
-        max-height: 100%;
-        width: 55px;
-        height: 50px;
-        margin-top: 15px;
-    }
-    .view-menu{
-        position: absolute;
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-        z-index: 1;
-        flex-direction: column;
-    }
-    .view-menu ul{
-        list-style-type: none;
-        padding: 0;
-        margin: 0;  
-    }
-    .view-menu li {
-        padding: 8px;
-        cursor: pointer;
-        border-bottom: 1px solid #ccc; 
-    }
-    .view-menu li:hover {
-        background-color: #f0f0f0;
     }
     .filter-block{
         padding-right: 30px;

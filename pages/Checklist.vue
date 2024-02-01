@@ -11,7 +11,6 @@
         <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
         <Taskbar @filterChanged="handleFilterChanges" 
-                 @toggleView="toggleView" 
                  @versionSelected="handleVersionSelected" 
                  @open-version-modal="openVersionModal" 
                  @importChecklist="importChecklist"
@@ -40,17 +39,14 @@
         
     </div>
 
-    <div class="table" v-if="selectedView === 'checklist'">
+    <div class="table">
             <ChecklistTable :checklistItems="checklistItems"
              :selectedTaskId="selectedTaskId" 
              :multiselectorActivated="multiselectorActivated"
              :clearSelectedTasks="multiselectorActivated"
              @taskClicked="handleTaskClick"  
              @deleteItemFromChecklist="deleteItemFromChecklist"/>        
-    </div>
-    <div v-else class="calendar-container">
-        <CalenderView :checklistItems="checklistItems" />
-    </div>    
+   </div>  
 
 </template>
 
@@ -61,7 +57,6 @@ import VersionModal from '~/components/Modals/VersionModal.vue';
 import LoadingModal from '~/components/Modals/LoadingModal.vue';
 import ChecklistTable from '~/components/ChecklistTable.vue';
 import Taskbar from '~/components/Taskbar.vue';
-import CalenderView from '~/components/CalenderView.vue';
 import { useAuthStore } from '~/store/authentication';
 
 import { useToast } from 'vue-toastification';
@@ -85,7 +80,6 @@ export default {
     components: {
         AddTaskModal,
         ChecklistTable,
-        CalenderView,
         EditTaskModal,
         Taskbar,
         VersionModal,
@@ -106,7 +100,6 @@ export default {
                 selectedDepartment: '',
                 showIncompleteTasks: false,
             },
-            selectedView: 'checklist',
             selectedVersion: null,
             isVersionModalVisible: false,
             isChecklistLoaded: false,
@@ -363,12 +356,6 @@ export default {
         // Aktualisiert Überschrift
         updateTitle() {
           const newTitle = this.generateTitle();
-        },
-
-        // Zwischen Checklist und Kalender wechseln
-        toggleView(view) {
-            console.log("Receive view:", view);
-            this.selectedView = view;
         },
 
         // Lädt die Checklist, wenn eine Version ausgewählt wurde
