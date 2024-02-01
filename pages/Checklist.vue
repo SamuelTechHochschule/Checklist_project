@@ -140,6 +140,20 @@ export default {
 
     methods: {
 
+        // Markiert Aufgabe als gesendet
+        markTaskAsNotified(taskId) {
+            console.log('Set item_id:', taskId);
+            if (!this.isTaskAlreadyNotified(taskId)) {
+                localStorage.setItem(`emailNotified_${taskId}`, 'true');
+            }
+        },
+
+        // Prüfen, ob E-Mail zu Aufgaben schon gesendet wurde
+        isTaskAlreadyNotified(taskId) {
+            console.log('Get item_id:', taskId);
+            return localStorage.getItem(`emailNotified_${taskId}`) === 'true';
+        },
+
         // Bedingungsprüfen für Senden der Reminder-E-Mails
         async sendReminderEmail() {
             try {
@@ -153,14 +167,27 @@ export default {
                     for(const taskId of this.selectedTasks) {
                         const task = this.checklistItems.find(item => item.id === taskId);
                         if(task) {
-                            await this.sendEmailForTask(task);
+                            if(!this.isTaskAlreadyNotified(taskId)) {
+                                await this.sendEmailForTask(task);
+                            } else {
+                                const confirm = window.confirm(`Zur Aufgabe: "${task.task}" wurde schon eine E-Mail gesendet. Sind Sie sicher, dass Sie eine weitere E-Mail senden wollen?`);
+                                if(confirm) {
+                                    await this.sendEmailForTask(task);
+                                }
+                            }
                         }
                     }
                     this.multiselectorActivated = false;
                 } else if(!this.multiselectorActivated && this.selectedTask) {
-                    console.log(this.selectedTask);
-                    await this.sendEmailForTask(this.selectedTask);
-                  
+                    if(!this.isTaskAlreadyNotified(this.selectedTask.id)) {
+                        await this.sendEmailForTask(this.selectedTask);
+                    } else {
+                        const confirm = window.confirm(`Zur Aufgabe: "${this.selectedTask.task}" wurde schon eine E-Mail gesendet. Sind Sie sicher, dass Sie eine weitere E-Mail senden wollen?`);
+                        if(confirm) {
+                            await this.sendEmailForTask(this.selectedTask);
+                        }
+                    } 
+
                     this.selectedTask = null;
                     this.selectedTaskId = -1;
                     this.showButtons = false;
@@ -194,6 +221,7 @@ export default {
                 }
 
                 alert(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${this.reminderEmailRecipient} gesendet`);
+                this.markTaskAsNotified(task.id);
             } else {
                 console.warn('Ungültige Aufgabe für Erinnerungs-E-Mail');
             }
