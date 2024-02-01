@@ -159,7 +159,7 @@ export default {
         // Bedingungsprüfen für Senden der Reminder-E-Mails
         async sendReminderEmail() {
             try {
-
+                const toast = useToast();
                 if(!this.reminderEmailRecipient) {
                     console.error('Reminder email recipient is not set');
                     return;
@@ -197,6 +197,7 @@ export default {
                     console.warn('Keine Aufgaben ausgewählt für Erinnerungs-E-Mail');
                 }
             } catch(error) {
+                toast.error('Fehler beim Senden der Erinnerungs-E-Mails!\n Für mehr Informationen öffnen Sie die Konsole!')
                 console.error('Fehler beim Senden der Erinnerungs-E-Mails:', error);
             }
             //window.open(`mailto:k.huebner@asc.de?subject=Test&body=Test`);
@@ -220,6 +221,7 @@ export default {
                 });
 
                 if(!response.ok) {
+                    toast.error('Fehler beim Senden der E-Mail!\n Für mehr Informationen öffnen Sie die Konsole!');
                     throw new Error(`Fehler beim Senden der E-Mail für Aufgabe ${task.task}`);
                 }
 
@@ -307,6 +309,7 @@ export default {
 
         // Importierte Daten an Backend senden
         importChecklistItems(importedData) {
+            const toast = useToast();
             console.log('Importierten Daten:', importedData);
             fetch('http://localhost:5500/api/checklist/import', {
                 method: 'POST',
@@ -329,6 +332,7 @@ export default {
                 this.fetchChecklistItems();
             })
             .catch(error => {
+                toast.error("Fehler beim Importieren der Checklist-Items!\n Für mehr Informationen öffnen Sie die Konsole!");
                 console.error('Error importing checklist items:', error);
             });
         },
@@ -386,6 +390,7 @@ export default {
 
         // Daten aus Datenbank bzw. Backend fetchen
         async fetchChecklistItems() {
+            const toast = useToast();
             try {
                 // Daten werden geladen
                 this.isLoading = true;
@@ -410,6 +415,7 @@ export default {
                     })).sort((a, b) => a.id - b.id);
                 }
             } catch (error) {
+                toast.error('Fehler beim fetchen der Checkliste!\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Error fetching checklist items:', error);
             } finally {
                 // Daten werden nicht mehr geladen
@@ -469,6 +475,7 @@ export default {
 
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
+            const toast = useToast();
             try{
                 // Proxy nicht funktionsfähig bei DELETE-Methode
                 const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
@@ -492,6 +499,7 @@ export default {
 
                 console.log('Task deleted successfully');
             } catch (error) {
+                toast.error('Fehler beim Löschen der Aufgabe\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Error deleting task:', error);
 
                 if(error.response) {
@@ -516,6 +524,7 @@ export default {
 
         // Änderungen werden gespeichert
         async saveEditedTask(editedTask) {
+            const toast = useToast();
             try{
                 const response = await fetch(`/editTask/${editedTask}`, {
                     method: 'PUT',
@@ -539,6 +548,7 @@ export default {
                 this.isEditModalVisible = false;
                 console.log('Task edited and saved successfully');
             } catch(error) {
+                toast.error('Fehler beim Bearbeiten der Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
                 console.error('Error saving edited task:', error);
             }
 
