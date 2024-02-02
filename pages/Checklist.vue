@@ -151,7 +151,6 @@ export default {
         async sendReminderEmail() {
             const toast = useToast();
             try {
-                const toast = useToast();
                 if(!this.reminderEmailRecipient) {
                     toast.error('Unbekannter Empfänger!\n Für mehr Informationen öffnen Sie die Konsole!');
                     return;
