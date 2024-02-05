@@ -63,36 +63,33 @@ import { useToast } from 'vue-toastification';
 
                         this.$router.push("/checklist");
                         return;
-                    }
-                    const response = await fetch('/login', {
+                    } else {
+                      // LDAP Authentifizierung
+                      const response = await fetch('http://localhost:3001/api/authenticate', {
                         method: 'POST', 
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({
-                            username: this.username,
-                            password: this.password,
-                        }),
-                        credentials: 'include',
-                    });
+                        body: JSON.stringify({ email: this.username, password: this.password }),
+                      });
 
-                    if (response.ok){
-                        try {
-                            const user = await response.json();
-                            this.loginToken = user.loginToken;
+                      if(response.ok) {
+                        const { isAuthenticated } = await response.json();
 
-                            // User im Store anmelden
+                        if(isAuthenticated) {
+                            this.loginToken = 'ldapToken';
                             useAuthStore().loginUser(this.loginToken);
 
                             toast.success('Login erfolgreich');
-                            this.$router.push("/checklist");
-                        } catch (jsonError) {
-                            console.error('Error parsing json:', jsonError);
+                            this.$router.push('/checklist');
+                        } else {
+                            this.loginError = true;
+                            toast.error('Die Anmeldedaten sind inkorrekt!');
                         }
-                    } else {
-                        this.loginError = true;
-                        toast.error('Falsche Anmeldedaten!');
-                        console.error('Login error:', response.statusText);
+                      } else {
+                        console.error('API request failed:', response.statusText);
+                        toast.error('Netzwerkfehler\n Für mehr Informationen öffnen Sie die Konsole!');
+                      }
                     }
                 } catch (error) {
                     toast.error('Netzwerk-Fehler!\n Für mehr Informationen öffnen Sie die Konsole!')
