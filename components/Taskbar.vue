@@ -79,7 +79,7 @@ export default {
 
     computed: {
         username() {
-            return useAuthStore().username;
+            return useAuthStore().displayUsername;
         },
         isAdmin() {
             return useAuthStore().isAdmin;

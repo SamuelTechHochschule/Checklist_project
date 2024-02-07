@@ -6,6 +6,7 @@ export const useAuthStore = defineStore('auth', {
         userToken: '',
         username: '',
         isAdmin: false,
+        displayUsername: '',
     }),
 
     actions: {
@@ -14,12 +15,15 @@ export const useAuthStore = defineStore('auth', {
             this.userToken = token;
             this.username = username;
             this.isAdmin = isAdmin;
+
+            this.displayUsername = username.split('@')[0];
         },
 
         logoutUser() {
             this.isLoggedIn = false;
             this.userToken = '';
             this.username = '';
+            this.displayUsername = '';
         },
     },
 });
