@@ -8,7 +8,7 @@
                     </div>
                 </NuxtLink>
             </li>
-            <li @click="navigateToMitarbeiterliste">
+            <li v-if="isAdmin" @click="navigateToMitarbeiterliste">
                 <NuxtLink to="/Mitarbeiterliste">
                     <div class="Mitarbeiterblock">
                         <img src="~/assets/Mitarbeiterliste.png" alt="Mitarbeiterliste" class="mitarbeiterliste">
@@ -80,7 +80,10 @@ export default {
     computed: {
         username() {
             return useAuthStore().username;
-        }
+        },
+        isAdmin() {
+            return useAuthStore().isAdmin;
+        },
     },
 
     data() {

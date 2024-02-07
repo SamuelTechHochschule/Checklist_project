@@ -23,7 +23,7 @@
             <!-- Datum der Versionsfreigabe -->
             <h2 v-if="selectedVersion">Preliminary Release: {{ formatDate(selectedVersion.preliminaryrelease) }} | Final Release: {{ formatDate(selectedVersion.finalrelease) }}</h2>
 
-            <button class="multiselektor" @click="toggleMultiselector">{{ multiselectorActivated ? 'Multiselektor deaktivieren' : 'Multiselektor aktivieren' }}</button>
+            <button v-if="isAdmin" class="multiselektor" @click="toggleMultiselector">{{ multiselectorActivated ? 'Multiselektor deaktivieren' : 'Multiselektor aktivieren' }}</button>
 
             <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
@@ -47,6 +47,36 @@
                 :clearSelectedTasks="multiselectorActivated"
                 @taskClicked="handleTaskClick"  
                 @deleteItemFromChecklist="deleteItemFromChecklist"/>        
+        </div>  
+    </div>
+    <div v-if="!isAdmin">
+        <div class="fixed_column">
+
+            <VersionModal :isVersionModalVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
+
+            <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
+
+            <Taskbar @filterChanged="handleFilterChanges" 
+                    @versionSelected="handleVersionSelected" 
+                    @open-version-modal="openVersionModal" 
+                    @importChecklist="importChecklist"
+                    :selectedVersion="selectedVersion"
+                    :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" --> 
+
+            <h2>{{ generateTitle() }}</h2>
+
+            <!-- Datum der Versionsfreigabe -->
+            <h2 v-if="selectedVersion">Preliminary Release: {{ formatDate(selectedVersion.preliminaryrelease) }} | Final Release: {{ formatDate(selectedVersion.finalrelease) }}</h2>
+
+            <div v-if="showButtons" class="edit-Task-Container">
+                <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
+            </div>
+        </div>
+
+        <div class="table">
+            <ChecklistTable :checklistItems="checklistItems"
+            :selectedTaskId="selectedTaskId" 
+            @taskClicked="handleTaskClick"/>        
         </div>  
     </div>
 </template>
@@ -540,10 +570,6 @@ export default {
 
 <style scoped>
 
-    .calendar-container{
-        flex-grow: 1;
-        padding: 0 250px;
-    }
     .fixed_column{
         position: fixed;
         width: 100%;
@@ -575,6 +601,16 @@ export default {
         margin-top: 20px;
         top: 169px;
         right: 290px;
+    }
+    .edit-Task-Container{
+        position: absolute;
+        margin-top: 20px;
+        top: 169px;
+        right: 10px; 
+    }
+    .edit-Task-Container button {
+        margin-right: 20px;
+        height: 30px;
     }
     .button-container button{
         margin-right: 20px;
