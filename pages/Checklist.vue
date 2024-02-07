@@ -2,52 +2,53 @@
 
     <LoadingModal :is-loading="isLoading" />
 
-    <div class="fixed_column">
+    <div v-if="isAdmin">
+        <div class="fixed_column">
 
-        <VersionModal :isVersionModalVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
+            <VersionModal :isVersionModalVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
 
-        <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" :selectedVersion="selectedVersion"/>
+            <AddTaskModal ref="addTaskModal" @taskAdded="fetchChecklistItems" :selectedVersion="selectedVersion"/>
 
-        <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
+            <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
-        <Taskbar @filterChanged="handleFilterChanges" 
-                 @versionSelected="handleVersionSelected" 
-                 @open-version-modal="openVersionModal" 
-                 @importChecklist="importChecklist"
-                 :selectedVersion="selectedVersion"
-                 :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" --> 
+            <Taskbar @filterChanged="handleFilterChanges" 
+                    @versionSelected="handleVersionSelected" 
+                    @open-version-modal="openVersionModal" 
+                    @importChecklist="importChecklist"
+                    :selectedVersion="selectedVersion"
+                    :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" --> 
 
-        <h2>{{ generateTitle() }}</h2>
+            <h2>{{ generateTitle() }}</h2>
 
-        <!-- Datum der Versionsfreigabe -->
-        <h2 v-if="selectedVersion">Preliminary Release: {{ formatDate(selectedVersion.preliminaryrelease) }} | Final Release: {{ formatDate(selectedVersion.finalrelease) }}</h2>
+            <!-- Datum der Versionsfreigabe -->
+            <h2 v-if="selectedVersion">Preliminary Release: {{ formatDate(selectedVersion.preliminaryrelease) }} | Final Release: {{ formatDate(selectedVersion.finalrelease) }}</h2>
 
-        <button class="multiselektor" @click="toggleMultiselector">{{ multiselectorActivated ? 'Multiselektor deaktivieren' : 'Multiselektor aktivieren' }}</button>
+            <button class="multiselektor" @click="toggleMultiselector">{{ multiselectorActivated ? 'Multiselektor deaktivieren' : 'Multiselektor aktivieren' }}</button>
 
-        <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
+            <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
-        <div v-if="showButtons && !multiselectorActivated" class="button-container">
-            <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
-            <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
-            <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
+            <div v-if="showButtons && !multiselectorActivated" class="button-container">
+                <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
+                <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
+                <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
+            </div>
+
+            <div v-if="showButtons && multiselectorActivated" class="button-container">
+                <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
+                <button @click="deleteSelectedTasks">Task löschen</button>
+            </div>
+            
         </div>
 
-        <div v-if="showButtons && multiselectorActivated" class="button-container">
-            <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
-            <button @click="deleteSelectedTasks">Task löschen</button>
-        </div>
-        
+        <div class="table">
+                <ChecklistTable :checklistItems="checklistItems"
+                :selectedTaskId="selectedTaskId" 
+                :multiselectorActivated="multiselectorActivated"
+                :clearSelectedTasks="multiselectorActivated"
+                @taskClicked="handleTaskClick"  
+                @deleteItemFromChecklist="deleteItemFromChecklist"/>        
+        </div>  
     </div>
-
-    <div class="table">
-            <ChecklistTable :checklistItems="checklistItems"
-             :selectedTaskId="selectedTaskId" 
-             :multiselectorActivated="multiselectorActivated"
-             :clearSelectedTasks="multiselectorActivated"
-             @taskClicked="handleTaskClick"  
-             @deleteItemFromChecklist="deleteItemFromChecklist"/>        
-   </div>  
-
 </template>
 
 <script>
@@ -106,11 +107,13 @@ export default {
             isLoading: false, // Variable für Loading Indicator
             multiselectorActivated: false, // Variable um Multiselektor zu aktivieren
             reminderEmailRecipient: 's.savasta@asc.de',
+            isAdmin: false,
         };
     },
 
     created() {
         this.openVersionModal();
+        this.isAdmin = useAuthStore().isAdmin;
     },
 
     watch: {

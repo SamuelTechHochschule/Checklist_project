@@ -32,7 +32,7 @@
             <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu">
                 <div class="account-block">
                     <img src="~/assets/User.png" alt="User" class="user">
-                    <p>User</p>
+                    <p>{{ this.username }}</p>
                 </div>
                 <div v-if="isUserMenuVisible" class="user-menu">
                     <ul>
@@ -75,6 +75,12 @@ export default {
         SettingsModal,
         FilterModal,
         VersionModal,
+    },
+
+    computed: {
+        username() {
+            return useAuthStore().username;
+        }
     },
 
     data() {
