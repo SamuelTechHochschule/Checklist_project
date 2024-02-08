@@ -52,19 +52,6 @@ import { useToast } from 'vue-toastification';
                 try {
                     // Daten werden geladen
                     this.isLoading = true;
-                    // Dummy-User
-                    if(this.username === "dummyUser" && this.password === "dummyPassword") {
-                        this.loginToken = "dummyToken";
-
-                        // User im Store anmelden
-                        useAuthStore().loginUser(this.loginToken);
-                        
-                        toast.info('Dummy erfolgreich angemeldet');
-                        console.log("Login successful (Dummy):", this.loginToken);
-
-                        this.$router.push("/checklist");
-                        return;
-                    } else {
                       // LDAP Authentifizierung
                       const response = await fetch('http://localhost:3001/api/authenticate', {
                         method: 'POST', 
@@ -92,7 +79,6 @@ import { useToast } from 'vue-toastification';
                         console.error('API request failed:', response.statusText);
                         toast.error('Netzwerkfehler\n Für mehr Informationen öffnen Sie die Konsole!');
                       }
-                    }
                 } catch (error) {
                     toast.error('Netzwerk-Fehler!\n Für mehr Informationen öffnen Sie die Konsole!')
                     console.error('Network error:', error);
