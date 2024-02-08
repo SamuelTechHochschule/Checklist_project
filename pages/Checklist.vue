@@ -406,11 +406,20 @@ export default {
                 this.isLoading = true;
 
                 if(!this.isChecklistLoaded) {
+                    const isAdmin = useAuthStore().isAdmin;
+                    let response;
                     const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
                     const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
                     const versionParam = `&version=${encodeURIComponent(this.selectedVersion.name)}`;
+                    
+                    // Wenn der Nutzer Admin-Rechte hat, werden alle Aufgaben ausgegeben
+                    if(isAdmin) {
+                        response = await fetch(`http://localhost:5500/api/checklist/admin?${departmentParam}${incompleteTaskParam}${versionParam}`);
+                    } else {
+                        const username = useAuthStore().displayUsername;
+                        response = await fetch(`http://localhost:5500/api/checklist/user?username=${username}${departmentParam}${incompleteTaskParam}${versionParam}`)
+                    }
 
-                    const response = await fetch(`http://localhost:5500/api/checklist?${departmentParam}${incompleteTaskParam}${versionParam}`);
                     if (!response.ok) {
                         throw new Error(`Server responded with status ${response.status}`);
                     }

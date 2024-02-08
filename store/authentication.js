@@ -16,7 +16,8 @@ export const useAuthStore = defineStore('auth', {
             this.username = username;
             this.isAdmin = isAdmin;
 
-            this.displayUsername = username.split('@')[0];
+            const usernameWithoutDomain = username.split('@')[0];
+            this.displayUsername = this.formatUsername(usernameWithoutDomain);
         },
 
         logoutUser() {
@@ -25,5 +26,23 @@ export const useAuthStore = defineStore('auth', {
             this.username = '';
             this.displayUsername = '';
         },
+
+        formatUsername(username) {
+            username = username 
+                .replace(/ae/g, 'ä')
+                .replace(/oe/g, 'ö')
+                .replace(/ue/g, 'ü')
+                .replace(/Ae/g, 'Ä')
+                .replace(/Oe/g, 'Ö')
+                .replace(/Ue/g, 'Ü');
+
+            return username.toLowerCase().replace(/\b\w/g, function(char, index, str) {
+                if(index > 0 && str[index - 1].match(/[äöüÄÖÜß]/)) {
+                    return char.toLowerCase();
+                } else {
+                    return char.toUpperCase();
+                }
+            });
+        }
     },
 });

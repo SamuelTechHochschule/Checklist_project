@@ -131,6 +131,9 @@ export default {
                 this.newTask.plannedDate = versionDate;
             }
 */
+            // Formatieren der zuständigen Person 
+            this.newTask.person = this.formatUsername(this.newTask.person);
+
             fetch('/addTask', {
                 method: 'POST',
                 headers:{
@@ -170,6 +173,17 @@ export default {
                 console.error('Error adding task:', error);
             })
 
+        },
+
+        // Richtiges Formatieren der zuständigen Person
+        formatUsername(username) {
+            return username.toLowerCase().replace(/\b\w/g, function(char, index, str) {
+                if(index > 0 && str[index - 1].match(/[äöüÄÖÜß]/)) {
+                    return char.toLowerCase();
+                } else {
+                    return char.toUpperCase();
+                }
+            });
         },
 
         // Cleared Eingabe im Modal

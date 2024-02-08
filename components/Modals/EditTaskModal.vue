@@ -114,9 +114,20 @@ export default {
     methods: {
         // Änderungen speichern
         saveChanges() {
-
+            this.editedTask.person = this.formatUsername(this.editedTask.person);
             this.$emit("save", this.editedTask);
             this.closeModal();
+        },
+
+        // Richtiges Formatieren der zuständigen Person
+        formatUsername(username) {
+            return username.toLowerCase().replace(/\b\w/g, function(char, index, str) {
+                if(index > 0 && str[index - 1].match(/[äöüÄÖÜß]/)) {
+                    return char.toLowerCase();
+                } else {
+                    return char.toUpperCase();
+                }
+            });
         },
 
         // Schließe das Modal

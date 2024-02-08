@@ -48,6 +48,7 @@ import { useToast } from 'vue-toastification';
         methods: {
             async loginUser() { 
                 const toast = useToast();
+                let isAdmin = false;
                 try {
                     // Daten werden geladen
                     this.isLoading = true;
@@ -78,7 +79,12 @@ import { useToast } from 'vue-toastification';
 
                         if(isAuthenticated) {
                             this.loginToken = 'ldapToken';
-                            const isAdmin = this.username === 's.savasta@asc.de';
+                            if(this.username === 's.savasta@asc.de') {
+                                isAdmin = true;
+                            } else {
+                                isAdmin = false
+                            }
+                          //  const isAdmin = this.username === 's.savasta@asc.de';
                             useAuthStore().loginUser(this.loginToken, this.username, isAdmin);
 
                             toast.success('Login erfolgreich');
