@@ -46,7 +46,7 @@ export const useAuthStore = defineStore('auth', {
         },
 
         checkAdmin(username) {
-            const adminEmails = ['s.savasta@asc.de'];
+            const adminEmails = ['s.savastas@asc.de'];
             return adminEmails.includes(username);
         }
     },

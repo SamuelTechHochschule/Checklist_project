@@ -49,21 +49,26 @@
                 <button @click="cancelEditVersion">Abbrechen</button>
             </div>
 
-            <button @click="createNewVersion" v-if="showCreateButton">Neue Version erstellen</button>
+            <button @click="createNewVersion" v-if="showCreateButton && isAdmin">Neue Version erstellen</button>
             <button @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
-            <button @click="deleteVersion" v-if="selectedVersion && showDeleteButton">Version löschen</button>
-            <button v-if="selectedVersion && showEditButton" @click="editSelectedVersion">Version bearbeiten</button>
+            <button @click="deleteVersion" v-if="selectedVersion && showDeleteButton && isAdmin">Version löschen</button>
+            <button v-if="selectedVersion && showEditButton && isAdmin" @click="editSelectedVersion">Version bearbeiten</button>
         </div>
 
     </div>
 </template>
 
 <script>
+import { useAuthStore } from '~/store/authentication';
 import { useToast } from 'vue-toastification';
 export default {
 
     props: {
         isVersionModalVisible: Boolean,
+    },
+
+    created() {
+        this.isAdmin = useAuthStore().isAdmin;
     },
 
     data() {
@@ -83,6 +88,7 @@ export default {
             showConfirmButton: true, // Variable für das Erscheinen des Knopfes
             showEditButton: true, // Variable für das Erscheinen des Knopfes
             showDeleteButton: true, // Variable für das Erscheinen des Knopfes
+            isAdmin: false,
         };
     },
 
