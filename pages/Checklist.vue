@@ -136,7 +136,6 @@ export default {
             isChecklistLoaded: false,
             isLoading: false, // Variable für Loading Indicator
             multiselectorActivated: false, // Variable um Multiselektor zu aktivieren
-            reminderEmailRecipient: 's.savasta@asc.de',
             isAdmin: false,
         };
     },
@@ -184,11 +183,6 @@ export default {
         async sendReminderEmail() {
             const toast = useToast();
             try {
-                if(!this.reminderEmailRecipient) {
-                    toast.error('Unbekannter Empfänger!\n Für mehr Informationen öffnen Sie die Konsole!');
-                    return;
-                }
-
                 if(this.multiselectorActivated && this.selectedTasks.length > 0) {
                     for(const taskId of this.selectedTasks) {
                         const task = this.checklistItems.find(item => item.id === taskId);
@@ -198,7 +192,7 @@ export default {
                             } else {
                                 const confirm = window.confirm(`Zur Aufgabe: "${task.task}" wurde schon eine E-Mail gesendet. Sind Sie sicher, dass Sie eine weitere E-Mail senden wollen?`);
                                 if(confirm) {
-                                    await this.sendEmailForTask(task);
+                                    await this.sendEmailForTask(task.person, task);
                                 }
                             }
                         }
@@ -206,11 +200,11 @@ export default {
                     this.multiselectorActivated = false;
                 } else if(!this.multiselectorActivated && this.selectedTask) {
                     if(!this.isTaskAlreadyNotified(this.selectedTask.id)) {
-                        await this.sendEmailForTask(this.selectedTask);
+                        await this.sendEmailForTask(this.selectedTask.person, this.selectedTask);
                     } else {
                         const confirm = window.confirm(`Zur Aufgabe: "${this.selectedTask.task}" wurde schon eine E-Mail gesendet. Sind Sie sicher, dass Sie eine weitere E-Mail senden wollen?`);
                         if(confirm) {
-                            await this.sendEmailForTask(this.selectedTask);
+                            await this.sendEmailForTask(this.selectedTask.person, this.selectedTask);
                         }
                     } 
 
@@ -224,20 +218,21 @@ export default {
                 toast.error('Fehler beim Senden der Erinnerungs-E-Mails!\n Für mehr Informationen öffnen Sie die Konsole!')
                 console.error('Fehler beim Senden der Erinnerungs-E-Mails:', error);
             }
-            //window.open(`mailto:k.huebner@asc.de?subject=Test&body=Test`);
         },
 
         // Senden der Reminder-E-Mails
-        async sendEmailForTask(task) {
+        async sendEmailForTask(recipient, task) {
             const toast = useToast();
             if(task) {
+                const sanitizedRecipient = this.sanitizeEmailRecipient(recipient);
+
                 const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        to: this.reminderEmailRecipient,
+                        to: sanitizedRecipient + '@asc.de',
                         subject: 'Erinnerung',
                         body: `Die folgende Aufgabe: "${task.task}" muss noch in der Checkliste erledigt werden. Bitte bearbeiten Sie die Aufgabe in den nächsten Tagen`,
                     }),
@@ -248,12 +243,17 @@ export default {
                     throw new Error(`Fehler beim Senden der E-Mail für Aufgabe ${task.task}`);
                 }
 
-                toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${this.reminderEmailRecipient} gesendet`)
+                toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${sanitizedRecipient} gesendet`)
                 this.markTaskAsNotified(task.id);
             } else {
                 toast.error('Ungültige Aufgabe zum Versenden der E-Mail!');
             }
         },
+
+        // Umlaute umwandeln, um Reminder-E-Mail zu schicken
+        sanitizeEmailRecipient(recipient) {
+            return recipient.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+        },  
 
         // Reminder nur bei orange markierten Aufgaben
         isTaskNearDue(item) {
