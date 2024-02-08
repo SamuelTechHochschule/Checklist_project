@@ -50,8 +50,10 @@ export default {
         isVisible: Boolean,
     },
 
-    created() {
-        this.isAdmin = useAuthStore().isAdmin;
+    computed: {
+        isAdmin() {
+            return useAuthStore().isAdmin;
+        },
     },
 
     data() {
@@ -60,7 +62,6 @@ export default {
             isDepartmentFilterActive: false,
             filterOptions: {},
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
-            isAdmin: false,
         };
     },
             

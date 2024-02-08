@@ -38,7 +38,7 @@
                     <ul>
                         <li @click="navigateToSettings">Einstellung</li>
                         <li @click="exportChecklist">Checkliste exportieren</li>
-                        <li @click="importChecklist">Checkliste importieren</li>
+                        <li v-if="isAdmin" @click="importChecklist">Checkliste importieren</li>
                         <li @click="logout">Logout</li>
                     </ul>
                 </div>

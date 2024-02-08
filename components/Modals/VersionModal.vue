@@ -67,8 +67,10 @@ export default {
         isVersionModalVisible: Boolean,
     },
 
-    created() {
-        this.isAdmin = useAuthStore().isAdmin;
+    computed: {
+        isAdmin() {
+            return useAuthStore().isAdmin;
+        },
     },
 
     data() {
@@ -88,7 +90,6 @@ export default {
             showConfirmButton: true, // Variable für das Erscheinen des Knopfes
             showEditButton: true, // Variable für das Erscheinen des Knopfes
             showDeleteButton: true, // Variable für das Erscheinen des Knopfes
-            isAdmin: false,
         };
     },
 
