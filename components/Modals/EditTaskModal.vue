@@ -4,10 +4,10 @@
 <!--            <span class="close" @click="closeModal">x</span> -->
             <h3>Task bearbeiten</h3>
                 <form @submit.prevent="saveChanges">
-                    <label for="task">Aufgabenbeschreibung: </label>
-                    <input type="text" v-model="editedTask.task" />
+                    <label for="task"  v-if="isAdmin">Aufgabenbeschreibung: </label>
+                    <input type="text" v-model="editedTask.task"  v-if="isAdmin"/>
 
-                    <div class="form-row">
+                    <div class="form-row" v-if="isAdmin">
                         <div class="form-column">
                             <label for="department">Verantwortliche Abteilung: </label>
                             <select v-model="editedTask.department">
@@ -21,7 +21,7 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    <div class="form-row" v-if="isAdmin">
                         <div class="form-column">
                             <label for="plannedDate" style="border-bottom: 1px solid #00315E;">Geplanter Termin: </label>
                             <p style="font-weight: bold;">Termin: {{ formatDate(editedTask.plannedDate) }}</p>
@@ -30,12 +30,11 @@
                     </div>
                     <div class="form-row">
                         <div class="form-column">
-                            <label for="completedDate" style="border-bottom: 1px solid #00315E;">Erledigter Termin: </label>
-                            <p style="font-weight: bold;">Termin: {{ formatDate(editedTask.completedDate) }}</p>
+                            <label for="completedDate">Erledigter Termin: </label>
                             <el-date-picker v-model="editedTask.completedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row" v-if="isAdmin">
                         <div class="form-column">
                             <label>Aufgabenart: </label>
                             <select v-model="editedTask.category">
@@ -60,6 +59,7 @@
 </template>
 
 <script>
+import { useAuthStore } from '~/store/authentication';
 export default {
 
     props: {
@@ -71,6 +71,10 @@ export default {
             type: Object,
             default: null,
         }
+    },
+
+    created() {
+        this.isAdmin = useAuthStore().isAdmin;
     },
 
     data() {
@@ -87,6 +91,7 @@ export default {
             },
             departmentOptions: ['AA', 'CS' ,'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
             categoryOptions: ['1. Dokumentation', '2. Tätigkeiten', '3. Erweiterungspunkte zum Standard PEP', '4. Projektspezifische Aufgaben', '5. Aufgaben nach der Freigabe des Meilensteins'],
+            isAdmin: false,
         };
     },
 

@@ -79,13 +79,8 @@ import { useToast } from 'vue-toastification';
 
                         if(isAuthenticated) {
                             this.loginToken = 'ldapToken';
-                            if(this.username === 's.savasta@asc.de') {
-                                isAdmin = true;
-                            } else {
-                                isAdmin = false
-                            }
-                          //  const isAdmin = this.username === 's.savasta@asc.de';
-                            useAuthStore().loginUser(this.loginToken, this.username, isAdmin);
+
+                            useAuthStore().loginUser(this.loginToken, this.username);
 
                             toast.success('Login erfolgreich');
                             this.$router.push('/checklist');
