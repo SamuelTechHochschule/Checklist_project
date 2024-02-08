@@ -2,7 +2,7 @@
     <div class="modal" v-if="isVisible">
         <div class="modal-content">
             <h3>Filter Einstellungen</h3>
-                <div class="form-row">
+                <div class="form-row" v-if="isAdmin">
                     <div class="column">
                         <input type="checkbox" v-model="isDepartmentFilterActive">
                         <label for="departmentFilter">Nach Abteilung filtern:</label>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <!-- Kann erst codiert werden, wenn ldap-Server funktioniert -->
-                <div class="form-row">
+                <div class="form-row" v-if="isAdmin">
                     <div class="form-column">
                         <input type="checkbox">
                         <label>Nach Person suchen:</label>
@@ -43,10 +43,15 @@
 </template>
 
 <script>
+import { useAuthStore } from '~/store/authentication';
 export default {
     
     props: {
         isVisible: Boolean,
+    },
+
+    created() {
+        this.isAdmin = useAuthStore().isAdmin;
     },
 
     data() {
@@ -55,6 +60,7 @@ export default {
             isDepartmentFilterActive: false,
             filterOptions: {},
             departmentOptions: ['AA', 'F&C', 'M&D', 'MPR&C', 'OP', 'P&P', 'PDM', 'QA', 'QM', 'R&D', 'SA', 'SC', 'SLS', 'TSC', 'WEB'],
+            isAdmin: false,
         };
     },
             
