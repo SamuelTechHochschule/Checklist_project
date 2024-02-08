@@ -184,29 +184,17 @@ export default {
         // User abmelden
         logout() {
             const toast = useToast();
-            fetch('/logout', {
-                method: 'POST',
-                credentials: 'include',
-            })
-            .then(response => {
-                if(response.ok) {
-                    toast.success('Logout erfolgreich');
+            const authStore = useAuthStore();
 
-                    //User im Store abmelden
-                    useAuthStore().logoutUser();
-
-                    // Zurückschicken an Index-Page
-                    this.$router.push({ path: '/' });
-                } else {
-                    console.log(response);
-                    toast.error('Logout fehlgeschlagen!\n Für mehr Informationen öffnen Sie die Konsole!');
-                }
-            })
-            .catch(error => {
-                toast.error('Logout fehlgeschlagen!\n Für mehr Informationen öffnen Sie die Konsole!');
-                console.error('Logout fehlgeschlagen (Außerhalb):', error);
-                console.error('Response status:', error && error.status);
-            });
+            try {
+                // Benutzer ausloggen
+                authStore.logoutUser();
+                toast.success('Erfolgreich ausgeloggt');
+                this.$router.push('/');
+            } catch(error) {
+                console.error('Fehler beim Ausloggen:', error);
+                toast.error('Fehler beim Ausloggen\n Für mehr Informationen öffnen Sie die Konsole!');
+            }
         },
 
         // Link to Homepage
