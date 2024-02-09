@@ -45,6 +45,7 @@ import { useToast } from 'vue-toastification';
                 isLoading: false, // Variable für Loading Indicator
             };
         },
+
         methods: {
             async loginUser() { 
                 const toast = useToast();
