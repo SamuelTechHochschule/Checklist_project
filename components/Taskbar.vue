@@ -8,14 +8,6 @@
                     </div>
                 </NuxtLink>
             </li>
-            <li v-if="isAdmin" @click="navigateToMitarbeiterliste">
-                <NuxtLink to="/Mitarbeiterliste">
-                    <div class="Mitarbeiterblock">
-                        <img src="~/assets/Mitarbeiterliste.png" alt="Mitarbeiterliste" class="mitarbeiterliste">
-                        <p>Mitarbeiterliste</p>
-                    </div>
-                </NuxtLink>
-            </li>
             <li> 
                 <div class="version-block" @click="openVersionModal">
                     <img src="~/assets/Version.png" alt="Version" class="version">
@@ -202,10 +194,6 @@ export default {
             this.$router.push({ name: 'Checklist'});
         },
 
-        // Link to Mitarbeiterliste
-        navigateToMitarbeiterliste() {
-            this.$router.push({ name: 'Mitarbeiterliste'});
-        },
     },
     
 }
@@ -303,19 +291,5 @@ export default {
     }
     .user-menu li:hover {
         background-color: #f0f0f0;
-    }
-    .Mitarbeiterblock{
-        padding-right: 30px;
-        padding-left: 30px;
-    }
-    .Mitarbeiterblock:hover{
-        background-color: #d2e1f0;
-    }
-    .mitarbeiterliste{
-        max-width: 100%;
-        max-height: 100%;
-        width: 60px;
-        height: 50px;  
-        margin-top: 15px;
     }
 </style>
