@@ -46,6 +46,13 @@ import { useToast } from 'vue-toastification';
             };
         },
 
+        mounted() {
+            const token = localStorage.getItem('userToken');
+            if(token) {
+                useAuthStore().loginUser(token, this.username);
+            }
+        },
+
         methods: {
             async loginUser() { 
                 const toast = useToast();
@@ -63,10 +70,10 @@ import { useToast } from 'vue-toastification';
                       });
 
                       if(response.ok) {
-                        const { isAuthenticated } = await response.json();
+                        const { isAuthenticated, token } = await response.json();
 
                         if(isAuthenticated) {
-                            this.loginToken = 'ldapToken';
+                            this.loginToken = token;
 
                             useAuthStore().loginUser(this.loginToken, this.username);
 
