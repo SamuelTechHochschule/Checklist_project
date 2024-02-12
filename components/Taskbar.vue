@@ -21,18 +21,16 @@
                 </div>
                 <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @close="closeFilterModal"/> <!-- @saveSort="handleSortChanges" -->
             </li>
-            <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu">
+            <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu" class="dropdown">
                 <div class="account-block">
                     <img src="~/assets/User.png" alt="User" class="user">
                     <p>{{ this.username }}</p>
                 </div>
                 <div v-if="isUserMenuVisible" class="user-menu">
-                    <ul>
-                        <li @click="navigateToSettings">Einstellung</li>
-                        <li @click="exportChecklist">Checkliste exportieren</li>
-                        <li v-if="isAdmin" @click="importChecklist">Checkliste importieren</li>
-                        <li @click="logout">Logout</li>
-                    </ul>
+                    <a @click="navigateToSettings">Einstellung</a>
+                    <a @click="exportChecklist">Checkliste exportieren</a>
+                    <a v-if="isAdmin" @click="importChecklist">Checkliste importieren</a>
+                    <a @click="logout">Logout</a>
                 </div>
             </li>
         </ul>
@@ -273,23 +271,21 @@ export default {
     }
     .user-menu{
         position: absolute;
-        right: 0;
+        right: 8px;
         background-color: #f1f1f1;
         border: 1px solid #ccc;
         z-index: 1;
         flex-direction: column;
-    }
-    .user-menu ul{
         list-style-type: none;
         padding: 0;
         margin: 0;  
     }
-    .user-menu li {
+    .user-menu a {
         padding: 8px;
         cursor: pointer;
         border-bottom: 1px solid #ccc; 
     }
-    .user-menu li:hover {
+    .user-menu a:hover {
         background-color: #f0f0f0;
     }
 </style>
