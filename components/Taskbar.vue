@@ -47,7 +47,6 @@ import VersionModal from './Modals/VersionModal.vue';
 import { useAuthStore } from '~/store/authentication';
 import { useToast } from 'vue-toastification';
 
-
 export default {
 
     props: {
@@ -153,13 +152,6 @@ export default {
         handleFilterChanges(filterOptions) {
             this.$emit('filterChanged', filterOptions);
         },
-
-/*     
-        // Handler für das Sortieren der Aufgaben
-        handleSortChanges() {
-
-        },
-*/
 
         // Navigiere zur SettingsModal.vue-Komponente
         navigateToSettings() {
