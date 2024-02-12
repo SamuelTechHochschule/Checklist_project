@@ -17,26 +17,9 @@
                         <label>Nach nicht-erledigten Aufgaben filtern</label>
                     </div>
                 </div>
-                <!-- Kann erst codiert werden, wenn ldap-Server funktioniert -->
-                <div class="form-row" v-if="isAdmin">
-                    <div class="form-column">
-                        <input type="checkbox">
-                        <label>Nach Person suchen:</label>
-                    </div>
-                </div>
-<!--                
-            <h3>Sortier Einstellungen</h3>
-                <div class="form-row">
-                    <div class="form-column">
-                        <input type="checkbox" >
-                        <label>Nach geplanten Datum sortieren</label>
-                    </div>
-                </div>
-            -->    
             <div class="form-row">
                 <button @click="closeModal">Abbrechen</button>
                 <button @click="saveChangesforfilter">Bestätigen</button>
-                <!--<button @click="saveChangesforSort">Sortierung bestätigen</button> -->
             </div>
         </div>
     </div>
@@ -101,7 +84,7 @@ export default {
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 60%;
+        width: 40%;
     }
     .form-row{
         display: flex;
