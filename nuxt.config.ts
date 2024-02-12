@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   modules: [
     '@element-plus/nuxt',
     '@pinia/nuxt',
+    '@nuxtjs/color-mode',
   ],
 
   routeRules: {
