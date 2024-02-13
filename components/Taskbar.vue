@@ -38,7 +38,6 @@
 
 <script>
 import FilterModal from './Modals/FilterModal.vue';
-import SettingsModal from './Modals/SettingsModal.vue';
 import VersionModal from './Modals/VersionModal.vue';
 import { useAuthStore } from '~/store/authentication';
 import { useToast } from 'vue-toastification';
@@ -57,7 +56,6 @@ export default {
     },
 
     components: {
-        SettingsModal,
         FilterModal,
         VersionModal,
     },
@@ -74,7 +72,6 @@ export default {
     data() {
         return{
             isUserMenuVisible: false,
-            isSettingsModalVisible: false,
             isFilterModalVisible: false,
         };
     },
