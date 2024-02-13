@@ -23,8 +23,7 @@
 
                     <div class="form-row" v-if="isAdmin">
                         <div class="form-column">
-                            <label for="plannedDate" style="border-bottom: 1px solid #00315E;">Geplanter Termin: </label>
-                            <p style="font-weight: bold;">Termin: {{ formatDate(editedTask.plannedDate) }}</p>
+                            <label for="plannedDate">Geplanter Termin: </label>
                             <el-date-picker v-model="editedTask.plannedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                         </div>
                     </div>

@@ -3,6 +3,15 @@
         <div class="modal-content">
             <h3>Fertigstellen der Version:</h3>
             <form @submit.prevent="saveChanges">
+                <label>Erledigter Termin: </label>
+                <el-date-picker type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+
+                <div class="form-row">
+                    <div class="form-column">
+                        <label>Unterschrift: </label>
+                        <input type="text" placeholder="Vornamenkürzel.Nachname"/>
+                    </div>
+                </div>
 
                 <div class="form-row">
                     <button @click="closeModal">Abbrechen</button>
@@ -24,7 +33,7 @@ export default {
     },
 
     methods: {
-        
+
         // Schließe das Modal
         closeModal() {
             this.$emit('close');
@@ -50,6 +59,18 @@ export default {
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 60%;
+        width: 40%;
     }
+    .form-row{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .form-column{
+        flex: 1;
+        margin-right: 10px;
+    }
+    .form-column:last-child{
+        margin-right: 0;
+    }  
 </style>
