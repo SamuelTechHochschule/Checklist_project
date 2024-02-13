@@ -27,16 +27,12 @@
                     <p>{{ this.username }}</p>
                 </div>
                 <div v-if="isUserMenuVisible" class="user-menu">
-                    <a @click="navigateToSettings">Einstellung</a>
                     <a @click="exportChecklist">Checkliste exportieren</a>
                     <a v-if="isAdmin" @click="importChecklist">Checkliste importieren</a>
                     <a @click="logout">Logout</a>
                 </div>
             </li>
         </ul>
-
-        <SettingsModal :isVisible="isSettingsModalVisible" @close="closeSettingsModal" />
-
     </div>
 </template>
 
@@ -151,16 +147,6 @@ export default {
         
         handleFilterChanges(filterOptions) {
             this.$emit('filterChanged', filterOptions);
-        },
-
-        // Navigiere zur SettingsModal.vue-Komponente
-        navigateToSettings() {
-            this.isSettingsModalVisible = true;
-        },
-
-        // Schließe Modal
-        closeSettingsModal() {
-            this.isSettingsModalVisible = false;
         },
 
         // User abmelden
