@@ -11,12 +11,14 @@
 
             <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
+            <CompletionModal :isVisible="isCompletionModalVisible" @close="closeCompletionModal"/>
+            
             <Taskbar @filterChanged="handleFilterChanges" 
                     @versionSelected="handleVersionSelected" 
                     @open-version-modal="openVersionModal" 
                     @importChecklist="importChecklist"
                     :selectedVersion="selectedVersion"
-                    :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" --> 
+                    :checklistItems="checklistItems"/>   
 
             <h2>{{ generateTitle() }}</h2>
 
@@ -26,6 +28,8 @@
             <button v-if="isAdmin" class="multiselektor" @click="toggleMultiselector">{{ multiselectorActivated ? 'Multiselektor deaktivieren' : 'Multiselektor aktivieren' }}</button>
 
             <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
+
+            <button v-if="showCompletionButton" @click="openCompletionModal" class="completion-Button">Fertigstellung der Version</button>
 
             <div v-if="showButtons && !multiselectorActivated" class="button-container">
                 <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
@@ -56,12 +60,14 @@
 
             <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
+            <CompletionModal :isVisible="isEditModalVisible"/>
+            
             <Taskbar @filterChanged="handleFilterChanges" 
                     @versionSelected="handleVersionSelected" 
                     @open-version-modal="openVersionModal" 
                     @importChecklist="importChecklist"
                     :selectedVersion="selectedVersion"
-                    :checklistItems="checklistItems"/>    <!-- @sortChanged="handleSortChanges" --> 
+                    :checklistItems="checklistItems"/>   
 
             <h2>{{ generateTitle() }}</h2>
 
@@ -86,6 +92,7 @@ import AddTaskModal from '~/components/Modals/AddTaskModal.vue';
 import EditTaskModal from '~/components/Modals/EditTaskModal.vue';
 import VersionModal from '~/components/Modals/VersionModal.vue';
 import LoadingModal from '~/components/Modals/LoadingModal.vue';
+import CompletionModal from '~/components/Modals/CompletionModal.vue';
 import ChecklistTable from '~/components/ChecklistTable.vue';
 import Taskbar from '~/components/Taskbar.vue';
 import { useAuthStore } from '~/store/authentication';
@@ -115,6 +122,7 @@ export default {
         Taskbar,
         VersionModal,
         LoadingModal,
+        CompletionModal,
     },
 
     data() {
@@ -124,6 +132,7 @@ export default {
             showButtons: false,
             selectedTask: null, // Variable für einzelne Selektierung der Aufgaben
             isEditModalVisible: false,
+            isCompletionModalVisible: false,
             selectedTaskId: -1,
             preliminaryVersions: {},
             releaseVersions: {},
@@ -150,6 +159,12 @@ export default {
             handler: 'handleSelectedVersionChange',
             immediate: true,
         },
+
+        showCompletionButton(newValue, oldValue) {
+            if(newValue && !oldValue) {
+                this.showCompletionMessage();
+            }
+        }
     },
 
     computed: {
@@ -163,9 +178,29 @@ export default {
                 return this.selectedTask ? (this.isTaskNearDue(this.selectedTask) || this.isTaskOverdue(this.selectedTask) && !this.selectedTask.completedDate && !this.selectedTask.signature) : false;
             }
         },
+
+        // Überprüfen, ob alle Aufgaben außer Kategorie 5 erledigt sind
+        showCompletionButton() {
+            return this.checklistItems.filter(item => item.category !== '5. Aufgaben nach der Freigabe des Meilensteins').every(item => item.completedDate && item.signature);
+        },
     },
 
     methods: {
+
+        // Ruft Fertigstellungsmodal auf
+        openCompletionModal() {
+            this.isCompletionModalVisible = true;
+        },
+
+        closeCompletionModal() {
+            this.isCompletionModalVisible = false;
+        },
+
+        // Meldung zeigen, wenn Fertigstellen-Knopf sichtbar ist
+        showCompletionMessage() {
+            const toast = useToast();
+            toast.info('Die Fertgstellung der Version ist nun möglich.');
+        },
 
         // Markiert Aufgabe als gesendet
         markTaskAsNotified(taskId) {
@@ -592,6 +627,12 @@ export default {
     }
     h2{
         color:#00315E;
+    }
+    .completion-Button{
+        position: absolute;
+        top: 140px;
+        right: 10px;
+        height: 30px;
     }
     .add-Task-Button{
         position: absolute;
