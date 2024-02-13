@@ -25,7 +25,7 @@
                     <el-date-picker v-model="finalrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                 </div>
 
-                <button @click="confirmNewVersion">Neue Version bestätigen</button>
+                <button style="margin-right: 15px;" @click="confirmNewVersion">Neue Version bestätigen</button>
                 <button @click="cancelNewVersion">Abbrechen</button>
             </div>
 
@@ -45,14 +45,15 @@
                     <label for="editedFinalRelease">Datum für das Final Release:</label>
                     <el-date-picker v-model="editedFinalRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
                 </div>
-                <button @click="saveEditedVersion">Bearbeitung bestätigen</button>
+                <button style="margin-right: 15px;" @click="saveEditedVersion">Bearbeitung bestätigen</button>
                 <button @click="cancelEditVersion">Abbrechen</button>
             </div>
-
-            <button @click="createNewVersion" v-if="showCreateButton && isAdmin">Neue Version erstellen</button>
-            <button @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
-            <button @click="deleteVersion" v-if="selectedVersion && showDeleteButton && isAdmin">Version löschen</button>
-            <button v-if="selectedVersion && showEditButton && isAdmin" @click="editSelectedVersion">Version bearbeiten</button>
+            <div>
+                <button style="margin-right: 15px;" @click="createNewVersion" v-if="showCreateButton && isAdmin">Neue Version erstellen</button>
+                <button style="margin-right: 15px;" @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
+                <button style="margin-right: 15px;" @click="deleteVersion" v-if="selectedVersion && showDeleteButton && isAdmin">Version löschen</button>
+                <button style="margin-right: 15px;" v-if="selectedVersion && showEditButton && isAdmin" @click="editSelectedVersion">Version bearbeiten</button>
+            </div>
         </div>
 
     </div>
