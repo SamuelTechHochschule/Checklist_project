@@ -483,12 +483,6 @@ export default {
             this.fetchChecklistItems();
         },
 
-/*
-        handleSortChanges() {
-
-        },
-*/
-
         // Modal öffnen
         openModal() {
             this.$refs.addTaskModal.openModal();

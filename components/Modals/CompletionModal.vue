@@ -4,12 +4,12 @@
             <h3>Freigabe der Version:</h3>
             <form @submit.prevent="saveChanges">
                 <label>Erledigter Termin: </label>
-                <el-date-picker v-model="formattedFinishedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
 
                 <div class="form-row">
                     <div class="form-column">
                         <label>Unterschrift: </label>
-                        <input v-model="selectedVersion.signature" type="text" placeholder="Vornamenkürzel.Nachname"/>
+                        <input v-model="signature" type="text" placeholder="Vornamenkürzel.Nachname"/>
                     </div>
                 </div>
 
@@ -36,16 +36,23 @@ export default {
             required: true,
         }
     },
-    
-    computed: {
-        formattedFinishedDate() {
-            if (this.selectedVersion.finishedDate && !(this.selectedVersion.finishedDate instanceof Date)) {
-                return new Date(this.selectedVersion.finishedDate).toISOString().slice(0, 10);
+
+    watch: {
+        isVisible(newVal) {
+            if(newVal) {
+                this.setInitialValues();
             }
-            return '';
+        },
+
+        finishedDate(newValue) {
+            this.updateSelectedVersion();
+        },
+
+        signature(newValue) {
+            this.updateSelectedVersion();
         }
     },
-
+    
     data() {
         return {
             finishedDate: '',
@@ -55,6 +62,12 @@ export default {
 
     methods: {
 
+        // Werte der selektierten Version darstellen
+        setInitialValues() {
+            this.finishedDate = this.selectedVersion.finishedDate ? new Date(this.selectedVersion.finishedDate) : null;
+            this.signature = this.selectedVersion.signature || '';
+        },
+        
         // Schließe das Modal
         closeModal() {
             this.$emit('close');
@@ -65,8 +78,8 @@ export default {
             const toast = useToast();
             // Vorbereitung der Daten für die Anfrage
             const requestData = {
-                finishedDate: this.selectedVersion.finishedDate,
-                signature: this.selectedVersion.signature,
+                finishedDate: this.finishedDate,
+                signature: this.signature,
                 released: true,
             };
 
@@ -89,6 +102,11 @@ export default {
                 console.error('Fehler beim Freigeben der Version', error);
             });
         },
+
+        updateSelectedVersion() {
+            this.selectedVersion.finishedDate = this.finishedDate;
+            this.selectedVersion.signature = this.signature;
+        }
     }
     
 }
