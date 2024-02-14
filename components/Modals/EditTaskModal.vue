@@ -107,7 +107,7 @@ export default {
                         newTask.completedDate = new Date(newTask.completedDate);
                     }                    
                     this.editedTask = { ...newTask};
-                }else{
+                } else {
                     this.resetEditedTask();
                 }
             },

@@ -4,12 +4,12 @@
             <h3>Freigabe der Version:</h3>
             <form @submit.prevent="saveChanges">
                 <label>Erledigter Termin: </label>
-                <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                <el-date-picker v-model="formattedFinishedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
 
                 <div class="form-row">
                     <div class="form-column">
                         <label>Unterschrift: </label>
-                        <input v-model="signature" type="text" placeholder="Vornamenkürzel.Nachname"/>
+                        <input v-model="selectedVersion.signature" type="text" placeholder="Vornamenkürzel.Nachname"/>
                     </div>
                 </div>
 
@@ -36,6 +36,15 @@ export default {
             required: true,
         }
     },
+    
+    computed: {
+        formattedFinishedDate() {
+            if (this.selectedVersion.finishedDate && !(this.selectedVersion.finishedDate instanceof Date)) {
+                return new Date(this.selectedVersion.finishedDate).toISOString().slice(0, 10);
+            }
+            return '';
+        }
+    },
 
     data() {
         return {
@@ -56,8 +65,8 @@ export default {
             const toast = useToast();
             // Vorbereitung der Daten für die Anfrage
             const requestData = {
-                finishedDate: this.finishedDate,
-                signature: this.signature,
+                finishedDate: this.selectedVersion.finishedDate,
+                signature: this.selectedVersion.signature,
                 released: true,
             };
 
