@@ -11,7 +11,7 @@
 
             <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
 
-            <CompletionModal :isVisible="isCompletionModalVisible" @close="closeCompletionModal"/>
+            <CompletionModal :isVisible="isCompletionModalVisible" @close="closeCompletionModal" :selectedVersion="selectedVersion"/>
             
             <Taskbar @filterChanged="handleFilterChanges" 
                     @versionSelected="handleVersionSelected" 
@@ -29,7 +29,7 @@
 
             <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
-            <button v-if="showCompletionButton" @click="openCompletionModal" class="completion-Button">Fertigstellung der Version</button>
+            <button v-if="showCompletionButton" @click="openCompletionModal" class="completion-Button">Freigeben der Version</button>
 
             <div v-if="showButtons && !multiselectorActivated" class="button-container">
                 <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
