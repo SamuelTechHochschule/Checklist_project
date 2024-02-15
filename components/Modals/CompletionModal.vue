@@ -3,8 +3,17 @@
         <div class="modal-content">
             <h3>Freigabe der Version:</h3>
             <form @submit.prevent="saveChanges">
-                <label>Erledigter Termin: </label>
-                <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+
+                <div v-if="selectedVersion.released" class="message-container">
+                    Diese Version ist bereits freigegeben. Um dies rückgängig zu machen, entfernen Sie die Eingaben und klicken Sie auf Bestätigen.
+                </div>
+
+                <div class="form-row">
+                    <div class="form-column">
+                        <label>Erledigter Termin: </label>
+                        <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                    </div>
+                </div>
 
                 <div class="form-row">
                     <div class="form-column">
@@ -113,6 +122,10 @@ export default {
 </script>
 
 <style scoped>
+    .message-container{
+        text-align: center;
+        background-color: lightgreen;
+    }
     .modal{
         position: fixed;
         z-index: 1;
@@ -128,7 +141,7 @@ export default {
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 40%;
+        width: 50%;
     }
     .form-row{
         display: flex;

@@ -471,7 +471,7 @@ export default {
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 35.5%;
+        width: 40%;
         color: #00315E;
     }
     .form-row{
