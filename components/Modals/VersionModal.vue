@@ -3,8 +3,9 @@
         <div class="modal-content">
             <h3>Wählen/Erstellen/Bearbeiten Sie eine Versionsfreigabe:</h3>
             <ul>
-                <li v-for="version in versions" :key="version.id" @click="selectVersion(version)" :class="{ selected: selectedVersion === version }">
-                    {{ version.name }}
+                <li v-for="version in versions" :key="version.id" @click="selectVersion(version)" :class="{ selected: selectedVersion === version, released: version.released }">
+                    <span>{{ version.name }}</span>
+                    <span v-if="version.released">&#10004;</span>
                 </li>
             </ul>
 
@@ -48,7 +49,7 @@
                 <button style="margin-right: 15px;" @click="saveEditedVersion">Bearbeitung bestätigen</button>
                 <button @click="cancelEditVersion">Abbrechen</button>
             </div>
-            <div>
+            <div class="button-container">
                 <button style="margin-right: 15px;" @click="createNewVersion" v-if="showCreateButton && isAdmin">Neue Version erstellen</button>
                 <button style="margin-right: 15px;" @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
                 <button style="margin-right: 15px;" @click="deleteVersion" v-if="selectedVersion && showDeleteButton && isAdmin">Version löschen</button>
@@ -407,16 +408,16 @@ export default {
 </script>
 
 <style scoped>
-
-    .dashed-line{
-        width: 970px;
-        height: 1px;
-        border-bottom: 1px dashed #000000;
-        position: absolute;
-        top: 56%;
-        transform: translateY(-0.5px);
+    .button-container{
+        margin-top: 10px;
     }
-
+    .released{
+        background-color: lightgreen;
+        padding-right: 20px;
+    }
+    .released span:last-child{
+        margin-left: 5px;
+    }
     ul{
         list-style-type: none;
         padding: 0;
@@ -448,7 +449,7 @@ export default {
         margin: 15% auto;
         padding: 20px;
         border: 1px solid #888;
-        width: 60%;
+        width: 35.5%;
         color: #00315E;
     }
     .form-row{
