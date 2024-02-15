@@ -1,62 +1,78 @@
 <template>
-    <div class="modal" v-if="isVersionModalVisible">
-        <div class="modal-content">
-            <h3>Wählen/Erstellen/Bearbeiten Sie eine Versionsfreigabe:</h3>
-            <ul>
-                <li v-for="version in versions" :key="version.id" @click="selectVersion(version)" :class="{ selected: selectedVersion === version, released: version.released }">
-                    <span>{{ version.name }}</span>
-                    <span v-if="version.released">&#10004;</span>
-                </li>
-            </ul>
+    <div v-if="isAdmin">
+        <div class="modal" v-if="isVersionModalVisible">
+            <div class="modal-content">
+                <h3>Wählen/Erstellen/Bearbeiten Sie eine Versionsfreigabe:</h3>
+                <ul>
+                    <li v-for="version in versions" :key="version.id" @click="selectVersion(version)" :class="{ selected: selectedVersion === version, released: version.released }">
+                        <span>{{ version.name }}</span>
+                        <span v-if="version.released">&#10004;</span>
+                    </li>
+                </ul>
 
-            <div v-if="creatingNewVersion" class="form-column">
-                <h3>Daten für neue Version angeben:</h3>
-                <div class="form-row">
-                    <label for="newVersionName">Name der Versionsfreigabe:</label>
-                    <input v-model="newVersionName" type="text" id="newVersionName" required>
+                <div v-if="creatingNewVersion" class="form-column">
+                    <h3>Daten für neue Version angeben:</h3>
+                    <div class="form-row">
+                        <label for="newVersionName">Name der Versionsfreigabe:</label>
+                        <input v-model="newVersionName" type="text" id="newVersionName" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="preliminaryrelease">Datum für das Preliminary Release angeben:</label>
+                        <el-date-picker v-model="preliminaryrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="finalrelease">Datum für das Final Release angeben:</label>
+                        <el-date-picker v-model="finalrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                    </div>
+
+                    <button style="margin-right: 15px;" @click="confirmNewVersion">Neue Version bestätigen</button>
+                    <button @click="cancelNewVersion">Abbrechen</button>
                 </div>
 
-                <div class="form-row">
-                    <label for="preliminaryrelease">Datum für das Preliminary Release angeben:</label>
-                    <el-date-picker v-model="preliminaryrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
-                </div>
+                <div v-if="editingVersion">
+                    <h3>Version {{ selectedVersion.name }} bearbeiten</h3>
+                    <div class="form-row">
+                        <label for="editedVersionName">Name der Versionsfreigabe:</label>
+                        <input v-model="editedVersionName" type="text" id="editedVersionName">
+                    </div>
 
-                <div class="form-row">
-                    <label for="finalrelease">Datum für das Final Release angeben:</label>
-                    <el-date-picker v-model="finalrelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
-                </div>
+                    <div class="form-row">
+                        <label for="editedPreliminaryRelease">Datum für das Preliminary Release:</label>
+                        <el-date-picker v-model="editedPreliminaryRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                    </div>
 
-                <button style="margin-right: 15px;" @click="confirmNewVersion">Neue Version bestätigen</button>
-                <button @click="cancelNewVersion">Abbrechen</button>
-            </div>
-
-            <div v-if="editingVersion">
-                <h3>Version {{ selectedVersion.name }} bearbeiten</h3>
-                <div class="form-row">
-                    <label for="editedVersionName">Name der Versionsfreigabe:</label>
-                    <input v-model="editedVersionName" type="text" id="editedVersionName">
+                    <div class="form-row">
+                        <label for="editedFinalRelease">Datum für das Final Release:</label>
+                        <el-date-picker v-model="editedFinalRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                    </div>
+                    <button style="margin-right: 15px;" @click="saveEditedVersion">Bearbeitung bestätigen</button>
+                    <button @click="cancelEditVersion">Abbrechen</button>
                 </div>
-
-                <div class="form-row">
-                    <label for="editedPreliminaryRelease">Datum für das Preliminary Release:</label>
-                    <el-date-picker v-model="editedPreliminaryRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                <div class="button-container">
+                    <button style="margin-right: 15px;" @click="createNewVersion" v-if="showCreateButton">Neue Version erstellen</button>
+                    <button style="margin-right: 15px;" @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
+                    <button style="margin-right: 15px;" @click="deleteVersion" v-if="selectedVersion && showDeleteButton">Version löschen</button>
+                    <button style="margin-right: 15px;" v-if="selectedVersion && showEditButton" @click="editSelectedVersion">Version bearbeiten</button>
                 </div>
-
-                <div class="form-row">
-                    <label for="editedFinalRelease">Datum für das Final Release:</label>
-                    <el-date-picker v-model="editedFinalRelease" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
-                </div>
-                <button style="margin-right: 15px;" @click="saveEditedVersion">Bearbeitung bestätigen</button>
-                <button @click="cancelEditVersion">Abbrechen</button>
-            </div>
-            <div class="button-container">
-                <button style="margin-right: 15px;" @click="createNewVersion" v-if="showCreateButton && isAdmin">Neue Version erstellen</button>
-                <button style="margin-right: 15px;" @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
-                <button style="margin-right: 15px;" @click="deleteVersion" v-if="selectedVersion && showDeleteButton && isAdmin">Version löschen</button>
-                <button style="margin-right: 15px;" v-if="selectedVersion && showEditButton && isAdmin" @click="editSelectedVersion">Version bearbeiten</button>
             </div>
         </div>
-
+    </div>
+    <div v-if="!isAdmin">
+        <div class="modal" v-if="isVersionModalVisible">
+            <div class="modal-content">
+                <h3>Wählen Sie eine Versionsfreigabe:</h3>
+                <ul>
+                    <li v-for="version in versions" :key="version.id" @click="selectVersion(version)" :class="{ selected: selectedVersion === version, released: version.released }">
+                        <span>{{ version.name }}</span>
+                    </li>
+                </ul>
+                <div class="button-container">
+                    <button style="margin-right: 15px;" @click="confirmSelection" v-if="showConfirmButton" >Bestätigen</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -237,8 +253,14 @@ export default {
 
         async fetchVersions() {
             const toast = useToast();
+            let response;
             try {
-                const response = await fetch('http://localhost:5500/api/versions');
+                if(this.isAdmin) {
+                    response = await fetch('http://localhost:5500/api/versions/admin');
+                } else {
+                    response = await fetch('http://localhost:5500/api/versions/user');
+                }
+
                 if(!response.ok) {
                     throw new Error(`Server responded with status ${response.status}`);
                 }
