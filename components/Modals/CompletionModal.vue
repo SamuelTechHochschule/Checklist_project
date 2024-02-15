@@ -5,7 +5,8 @@
             <form @submit.prevent="saveChanges">
 
                 <div v-if="selectedVersion.released" class="message-container">
-                    Diese Version ist bereits freigegeben. Um dies rückgängig zu machen, entfernen Sie die Eingaben und klicken Sie auf Bestätigen.
+                    Diese Version ist bereits freigegeben. Um die Freigabe zurückzunehmen drücken Sie bitte auf
+                    <button class="link-button" @click="revertRelease">Zurückstellen</button> 
                 </div>
 
                 <div class="form-row">
@@ -85,9 +86,16 @@ export default {
         // Freigabe speichern
         saveChanges() {
             const toast = useToast();
+
+                // Parsen des Datums
+                let updatedDate = new Date(this.finishedDate);
+
+                // Hinzufügen eines Tags
+                updatedDate.setDate(updatedDate.getDate() + 1);
+
             // Vorbereitung der Daten für die Anfrage
             const requestData = {
-                finishedDate: this.finishedDate,
+                finishedDate: updatedDate,
                 signature: this.signature,
                 released: true,
             };
@@ -112,16 +120,58 @@ export default {
             });
         },
 
+        // Zurückstellen der Freigabe
+        revertRelease() {
+            this.finishedDate = '';
+            this.signature = '';
+            this.selectedVersion.released = false;
+            this.updateSelectedVersion();
+            this.undoRelease();
+        },
+
+        undoRelease() {
+            const toast = useToast();
+
+            const requestData = {
+                finishedDate: '',
+                signature: '',
+                released: false,
+            };
+
+            fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if(!response.ok) {
+                    throw new Error('Fehler beim Zurücksetzen der Versions')
+                }
+                toast.success('Version wurde zurückgesetzt');
+                this.closeModal();
+            })
+            .catch(error => {
+                toast.error('Fehler beim Zurücksetzen der Version\n Für mehr Informationen öffnen Sie die Konsole');
+                console.error('Fehler beim Zurücksetzen der Version', error);
+            });
+        },
+
         updateSelectedVersion() {
             this.selectedVersion.finishedDate = this.finishedDate;
             this.selectedVersion.signature = this.signature;
-        }
+        },
     }
     
 }
 </script>
 
 <style scoped>
+    .link-button{
+        height: 30px;
+        background-color: lightgreen;
+    }
     .message-container{
         text-align: center;
         background-color: lightgreen;

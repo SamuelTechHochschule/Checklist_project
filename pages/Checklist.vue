@@ -29,7 +29,7 @@
 
             <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
-            <button v-if="showCompletionButton" @click="openCompletionModal" class="completion-Button">Freigeben der Version</button>
+            <button v-if="showCompletionButton" @click="openCompletionModal" class="completion-Button">Versionsfreigabe</button>
 
             <div v-if="showButtons && !multiselectorActivated" class="button-container">
                 <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
