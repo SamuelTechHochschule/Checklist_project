@@ -27,6 +27,7 @@
                     <p>{{ this.username }}</p>
                 </div>
                 <div v-if="isUserMenuVisible" class="user-menu">
+                    <a @click="saveChecklist">Speichern als csv</a>
                     <a @click="exportChecklist">Checkliste exportieren</a>
                     <a v-if="isAdmin" @click="importChecklist">Checkliste importieren</a>
                     <a @click="logout">Logout</a>
@@ -77,6 +78,41 @@ export default {
     },
 
     methods: {
+
+        // Checkliste als csv exportieren
+        saveChecklist() {
+            const toast = useToast();
+
+            if(!this.checklistItems || this.checklistItems.length === 0) {
+                toast.error('Eine leere Checkliste kann nicht exportiert werden!');
+                return;
+            }
+
+            // Kopfzeile für CSV-Datei
+            let csvContent = "Erledigungspunkte aus dem PEP, FB/Abt., Person, Termin geplant, Termin erledigt, Unterschrift erledigt\n";
+
+            // Zeilen für die CSV-Datei erstellen
+            this.checklistItems.forEach(task => {
+                const taskData = `${task.task}, ${task.department}, ${task.person}, ${task.plannedDate}, ${task.completedDate}, ${task.signature}`;
+                csvContent += taskData;
+            });
+
+            // Blob mit CSV-Inhalt erstellen
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+
+            // Dateinamen für Exportdatei erstellen
+            const filename = `Checkliste_${this.selectedVersion.name}.csv`;
+
+            // Download-Link erstellen
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+
+            // Aufräumen
+            document.body.removeChild(link);
+        },  
 
         // Exportiere Checklist
         exportChecklist() {
