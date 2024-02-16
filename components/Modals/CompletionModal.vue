@@ -5,8 +5,7 @@
             <form @submit.prevent="saveChanges">
 
                 <div v-if="selectedVersion.released" class="message-container">
-                    Diese Version ist bereits freigegeben. Um die Freigabe zurückzunehmen drücken Sie bitte auf
-                    <button class="link-button" @click="revertRelease">Zurückstellen</button> 
+                    Diese Version ist bereits freigegeben.
                 </div>
 
                 <div class="form-row">
@@ -92,7 +91,7 @@ export default {
 
                 // Hinzufügen eines Tags
                 updatedDate.setDate(updatedDate.getDate() + 1);
-
+               
             // Vorbereitung der Daten für die Anfrage
             const requestData = {
                 finishedDate: updatedDate,
@@ -100,62 +99,28 @@ export default {
                 released: true,
             };
 
-            fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
+            const confirm = window.confirm('Sind Sie sich sicher, die Version freizugeben?\nDie Freigabe kann nicht zurückgenommen werden!');
+            if(confirm) {
+                fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestData)
-            })
-            .then(response => {
-                if(!response.ok) {
-                    throw new Error('Fehler beim Freigeben der Versions')
-                }
-                toast.success('Version wurde freigegeben');
-                this.closeModal();
-            })
-            .catch(error => {
-                toast.error('Fehler beim Freigeben der Version\n Für mehr Informationen öffnen Sie die Konsole');
-                console.error('Fehler beim Freigeben der Version', error);
-            });
-        },
+                })
+                .then(response => {
+                    if(!response.ok) {
+                        throw new Error('Fehler beim Freigeben der Versions')
+                    }
+                    toast.success('Version wurde freigegeben');
+                    this.closeModal();
+                })
+                .catch(error => {
+                    toast.error('Fehler beim Freigeben der Version\n Für mehr Informationen öffnen Sie die Konsole');
+                    console.error('Fehler beim Freigeben der Version', error);
+                });
+            }
 
-        // Zurückstellen der Freigabe
-        revertRelease() {
-            this.finishedDate = '';
-            this.signature = '';
-            this.selectedVersion.released = false;
-            this.updateSelectedVersion();
-            this.undoRelease();
-        },
-
-        undoRelease() {
-            const toast = useToast();
-
-            const requestData = {
-                finishedDate: '',
-                signature: '',
-                released: false,
-            };
-
-            fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => {
-                if(!response.ok) {
-                    throw new Error('Fehler beim Zurücksetzen der Versions')
-                }
-                toast.success('Version wurde zurückgesetzt');
-                this.closeModal();
-            })
-            .catch(error => {
-                toast.error('Fehler beim Zurücksetzen der Version\n Für mehr Informationen öffnen Sie die Konsole');
-                console.error('Fehler beim Zurücksetzen der Version', error);
-            });
         },
 
         updateSelectedVersion() {
