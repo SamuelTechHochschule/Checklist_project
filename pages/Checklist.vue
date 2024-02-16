@@ -269,7 +269,7 @@ export default {
                     body: JSON.stringify({
                         to: sanitizedRecipient + '@asc.de',
                         subject: 'Erinnerung',
-                        body: `Die folgende Aufgabe: "${task.task}" muss noch in der Checkliste erledigt werden. Bitte bearbeiten Sie die Aufgabe in den nächsten Tagen`,
+                        body: `Die folgende Aufgabe: "${task.task}" muss noch in der PEP-Checkliste erledigt werden. Bitte bearbeiten Sie die Aufgabe in den nächsten Tagen`,
                     }),
                 });
 
