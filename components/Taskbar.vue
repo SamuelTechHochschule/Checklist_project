@@ -19,7 +19,7 @@
                     <img src="~/assets/Filter.png" alt="Filter" class="filter">
                     <p>Filter</p>
                 </div>
-                <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @close="closeFilterModal"/> <!-- @saveSort="handleSortChanges" -->
+                <FilterModal :isVisible="isFilterModalVisible" @save="handleFilterChanges" @close="closeFilterModal"/>
             </li>
             <li @mouseenter="showUserMenu" @mouseleave="hideUserMenu" class="dropdown">
                 <div class="account-block">
@@ -89,12 +89,12 @@ export default {
             }
 
             // Kopfzeile für CSV-Datei
-            let csvContent = "Erledigungspunkte aus dem PEP, FB/Abt., Person, Termin geplant, Termin erledigt, Unterschrift erledigt\n";
+            let csvContent = "Erledigungspunkte aus dem PEP,FB/Abt.,Person,Termin geplant,Termin erledigt,Unterschrift erledigt\n";
 
             // Zeilen für die CSV-Datei erstellen
             this.checklistItems.forEach(task => {
-                const taskData = `${task.task}, ${task.department}, ${task.person}, ${task.plannedDate}, ${task.completedDate}, ${task.signature}`;
-                csvContent += taskData;
+                const taskData = `${task.task},${task.department},${task.person},${task.plannedDate},${task.completedDate},${task.signature}`;
+                csvContent += taskData + '\n';
             });
 
             // Blob mit CSV-Inhalt erstellen
