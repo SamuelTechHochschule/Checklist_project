@@ -27,9 +27,9 @@
                     <p>{{ this.username }}</p>
                 </div>
                 <div v-if="isUserMenuVisible" class="user-menu">
-                    <a @click="saveChecklist">Speichern als csv</a>
-                    <a @click="exportChecklist">Checkliste exportieren</a>
-                    <a v-if="isAdmin" @click="importChecklist">Checkliste importieren</a>
+                    <a @click="saveChecklist">Checkliste als CSV exportieren</a>
+                    <a @click="exportChecklist">Checkliste als JSON exportieren</a>
+                    <a v-if="isAdmin" @click="importChecklist">Checkliste als JSON importieren</a>
                     <a @click="logout">Logout</a>
                 </div>
             </li>
