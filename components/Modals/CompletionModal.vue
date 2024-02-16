@@ -11,14 +11,14 @@
                 <div class="form-row">
                     <div class="form-column">
                         <label>Erledigter Termin: </label>
-                        <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD"></el-date-picker>
+                        <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD" :disabled="selectedVersion.released"></el-date-picker>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-column">
                         <label>Unterschrift: </label>
-                        <input v-model="signature" type="text" placeholder="Vornamenkürzel.Nachname"/>
+                        <input v-model="signature" type="text" placeholder="Vornamenkürzel.Nachname" :disabled="selectedVersion.released"/>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@ export default {
             this.finishedDate = this.selectedVersion.finishedDate ? new Date(this.selectedVersion.finishedDate) : null;
             this.signature = this.selectedVersion.signature || '';
         },
-        
+ 
         // Schließe das Modal
         closeModal() {
             this.$emit('close');
