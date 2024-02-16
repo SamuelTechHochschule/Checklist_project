@@ -114,6 +114,8 @@ export default {
                     }
                     toast.success('Version wurde freigegeben');
                     this.closeModal();
+
+                    window.location.reload();
                 })
                 .catch(error => {
                     toast.error('Fehler beim Freigeben der Version\n Für mehr Informationen öffnen Sie die Konsole');
@@ -144,13 +146,10 @@ export default {
 </script>
 
 <style scoped>
-    .link-button{
-        height: 30px;
-        background-color: lightgreen;
-    }
     .message-container{
         text-align: center;
         background-color: lightgreen;
+        height: 19px;
     }
     .modal{
         position: fixed;
