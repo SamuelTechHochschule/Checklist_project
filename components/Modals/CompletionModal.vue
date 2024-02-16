@@ -95,7 +95,7 @@ export default {
             // Vorbereitung der Daten für die Anfrage
             const requestData = {
                 finishedDate: updatedDate,
-                signature: this.signature,
+                signature: this.formatUsername(this.signature),
                 released: true,
             };
 
@@ -126,6 +126,17 @@ export default {
         updateSelectedVersion() {
             this.selectedVersion.finishedDate = this.finishedDate;
             this.selectedVersion.signature = this.signature;
+        },
+
+        // Richtiges Formatieren der zuständigen Person
+        formatUsername(username) {
+            return username.toLowerCase().replace(/\b\w/g, function(char, index, str) {
+                if(index > 0 && str[index - 1].match(/[äöüÄÖÜß]/)) {
+                    return char.toLowerCase();
+                } else {
+                    return char.toUpperCase();
+                }
+            });
         },
     }
     

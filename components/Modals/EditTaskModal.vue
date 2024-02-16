@@ -120,6 +120,7 @@ export default {
         // Änderungen speichern
         saveChanges() {
             this.editedTask.person = this.formatUsername(this.editedTask.person);
+            this.editedTask.signature = this.formatUsername(this.editedTask.signature);
             this.$emit("save", this.editedTask);
             this.closeModal();
         },
