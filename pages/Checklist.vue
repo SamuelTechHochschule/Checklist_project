@@ -417,7 +417,7 @@ export default {
         // Generiert Überschrift auf ausgewählte Version 
         generateTitle() {
             const versionName = this.selectedVersion ? this.selectedVersion.name : 'XX';
-            return `Checkliste zur Versionsfreigabe: ${versionName}`;
+            return `PEP-Checkliste zur Versionsfreigabe: ${versionName}`;
         },
 
         // Aktualisiert Überschrift

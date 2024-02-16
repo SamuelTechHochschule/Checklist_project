@@ -150,6 +150,7 @@ export default {
         text-align: center;
         background-color: lightgreen;
         height: 19px;
+        font-weight: bold;
     }
     .modal{
         position: fixed;
