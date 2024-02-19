@@ -589,6 +589,7 @@ export default {
                     this.checklistItems.splice(index, 1, editedTask);
                 }
 
+                this.fetchChecklistItems();
                 //Modal wird geschlossen
                 this.isEditModalVisible = false;
                 toast.success('Aufgabe wurde erfolgreich bearbeitet');

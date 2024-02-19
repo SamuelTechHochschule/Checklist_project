@@ -124,6 +124,30 @@ export default {
                 this.sendEmailToNewResponsiblePerson(this.editedTask.person);
             }
 
+        // Überprüfen, ob das geplante Datum geändert wurde
+        if (this.editedTask.plannedDate !== this.taskToEdit.plannedDate) {
+            // Das geplante Datum in ein Date-Objekt konvertieren
+            let plannedDate = new Date(this.editedTask.plannedDate);
+        
+            // Einen Tag zum geplanten Datum hinzufügen
+            plannedDate.setDate(plannedDate.getDate() + 1);
+        
+            // Das Datum wieder in das ISO-Format konvertieren
+            this.editedTask.plannedDate = plannedDate.toISOString();
+        }
+    
+        // Überprüfen, ob das abgeschlossene Datum geändert wurde
+        if (this.editedTask.completedDate !== this.taskToEdit.completedDate) {
+            // Das abgeschlossene Datum in ein Date-Objekt konvertieren
+            let completedDate = new Date(this.editedTask.completedDate);
+        
+            // Einen Tag zum abgeschlossenen Datum hinzufügen
+            completedDate.setDate(completedDate.getDate() + 1);
+        
+            // Das Datum wieder in das ISO-Format konvertieren
+            this.editedTask.completedDate = completedDate.toISOString();
+        }
+    
             this.editedTask.person = this.formatUsername(this.editedTask.person);
             this.editedTask.signature = this.formatUsername(this.editedTask.signature);
             this.$emit("save", this.editedTask);
