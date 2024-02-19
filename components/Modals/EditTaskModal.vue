@@ -59,6 +59,7 @@
 
 <script>
 import { useAuthStore } from '~/store/authentication';
+import { useToast } from 'vue-toastification';
 export default {
 
     props: {
@@ -119,21 +120,59 @@ export default {
     methods: {
         // Änderungen speichern
         saveChanges() {
+            if(this.editedTask.person !== this.taskToEdit.person) {
+                this.sendEmailToNewResponsiblePerson(this.editedTask.person);
+            }
+
             this.editedTask.person = this.formatUsername(this.editedTask.person);
             this.editedTask.signature = this.formatUsername(this.editedTask.signature);
             this.$emit("save", this.editedTask);
             this.closeModal();
         },
 
+        // Senden der E-Mail für neue zuständige Person
+        async sendEmailToNewResponsiblePerson(newResponsiblePerson) {
+            const toast = useToast();
+
+            try {
+                const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        to: newResponsiblePerson + '@asc.de',
+                        subject: 'Änderung der Zuständigkeit',
+                        body: `Sie sind nun für die Aufgabe "${this.editedTask.task}" zuständig`,
+                    }),
+                });
+
+                if(!response.ok) {
+                    toast.error('Fehler beim Senden der E-Mail!\n Für mehr Informationen öffnen Sie die Konsole!');
+                    console.error('Fehler beim Senden der E-Mail:', response.statusText);
+                } else {
+                    toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${this.editedTask.task}" an die Mail ${newResponsiblePerson} gesendet`)
+                }        
+            } catch(error) {
+                toast.error('Fehler beim Senden der E-Mail!\n Für mehr Informationen öffnen Sie die Konsole!');
+                console.error('Fehler beim Senden der E-Mail:', error);
+            }
+        },
+
         // Richtiges Formatieren der zuständigen Person
         formatUsername(username) {
-            return username.toLowerCase().replace(/\b\w/g, function(char, index, str) {
-                if(index > 0 && str[index - 1].match(/[äöüÄÖÜß]/)) {
-                    return char.toLowerCase();
-                } else {
-                    return char.toUpperCase();
-                }
-            });
+            if(username !== null) {
+                return username.toLowerCase().replace(/\b\w/g, function(char, index, str) {
+                    if(index > 0 && str[index - 1].match(/[äöüÄÖÜß]/)) {
+                        return char.toLowerCase();
+                    } else {
+                        return char.toUpperCase();
+                    }
+                });
+            } else {
+                return '';
+            }
+
         },
 
         // Schließe das Modal
