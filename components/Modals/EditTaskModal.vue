@@ -151,7 +151,7 @@ export default {
                     toast.error('Fehler beim Senden der E-Mail!\n Für mehr Informationen öffnen Sie die Konsole!');
                     console.error('Fehler beim Senden der E-Mail:', response.statusText);
                 } else {
-                    toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${this.editedTask.task}" an die Mail ${newResponsiblePerson} gesendet`)
+                    toast.info(`Die neue zuständige Person ${newResponsiblePerson} wurde informiert`)
                 }        
             } catch(error) {
                 toast.error('Fehler beim Senden der E-Mail!\n Für mehr Informationen öffnen Sie die Konsole!');
