@@ -125,6 +125,15 @@ export default {
           // Formatieren der zuständigen Person 
           this.newTask.person = this.formatUsername(this.newTask.person);
 
+          // Das geplante Datum in ein Date-Objekt konvertieren
+          let plannedDate = new Date(this.newTask.plannedDate);
+          
+          // Einen Tag zum geplanten Datum hinzufügen
+          plannedDate.setDate(plannedDate.getDate() + 1);
+          
+          // Das Datum wieder in das ISO-Format konvertieren
+          this.newTask.plannedDate = plannedDate.toISOString();
+          
           fetch('/addTask', {
               method: 'POST',
               headers:{
