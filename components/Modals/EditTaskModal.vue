@@ -143,7 +143,7 @@ export default {
                     body: JSON.stringify({
                         to: newResponsiblePerson + '@asc.de',
                         subject: 'Änderung der Zuständigkeit',
-                        body: `Sie sind nun für die Aufgabe "${this.editedTask.task}" zuständig`,
+                        body: `Sie sind nun für die Aufgabe "${this.editedTask.task}" in der PEP-Checkliste zuständig`,
                     }),
                 });
 
