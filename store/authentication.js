@@ -10,11 +10,11 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     actions: {
-        loginUser(token, username) {
+        loginUser(token, username, isAdmin) {
             this.isLoggedIn = true;
             this.userToken = token;
             this.username = username;
-            this.isAdmin = this.checkAdmin(username);
+            this.isAdmin = isAdmin;
 
             const usernameWithoutDomain = username.split('@')[0];
             this.displayUsername = this.formatUsername(usernameWithoutDomain);
@@ -59,10 +59,6 @@ export const useAuthStore = defineStore('auth', {
                 }
             });
         },
-
-        checkAdmin(username) {
-            const adminEmails = ['s.savasta@asc.de'];
-            return adminEmails.includes(username);
-        }
+    
     },
 });

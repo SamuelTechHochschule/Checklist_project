@@ -56,7 +56,6 @@ import { useToast } from 'vue-toastification';
         methods: {
             async loginUser() { 
                 const toast = useToast();
-                let isAdmin = false;
                 try {
                     // Daten werden geladen
                     this.isLoading = true;
@@ -70,12 +69,12 @@ import { useToast } from 'vue-toastification';
                       });
 
                       if(response.ok) {
-                        const { isAuthenticated, token } = await response.json();
+                        const { isAuthenticated, token, isAdmin } = await response.json();
 
                         if(isAuthenticated) {
                             this.loginToken = token;
 
-                            useAuthStore().loginUser(this.loginToken, this.username);
+                            useAuthStore().loginUser(this.loginToken, this.username, isAdmin);
 
                             toast.success('Login erfolgreich');
                             this.$router.push('/checklist');
