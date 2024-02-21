@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useToast } from "vue-toastification"; 
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -7,6 +8,7 @@ export const useAuthStore = defineStore('auth', {
         username: localStorage.getItem('username') || '',
         isAdmin: localStorage.getItem('isAdmin') === 'true',
         displayUsername: localStorage.getItem('displayUsername') || '',
+        isAdminStatusCheckRunning: false,
     }),
 
     actions: {
@@ -25,6 +27,8 @@ export const useAuthStore = defineStore('auth', {
             localStorage.setItem('username', username);
             localStorage.setItem('isAdmin', this.isAdmin ? 'true' : 'false');
             localStorage.setItem('displayUsername', this.displayUsername);
+
+            this.startAdminStatusCheck();
         },
 
         logoutUser() {
@@ -40,6 +44,10 @@ export const useAuthStore = defineStore('auth', {
             localStorage.removeItem('username');
             localStorage.removeItem('isAdmin');
             localStorage.removeItem('displayUsername');
+
+            this.stopAdminStatusCheck();
+            const router = useRouter();
+            router.push('/');
         },
 
         formatUsername(username) {
@@ -59,6 +67,44 @@ export const useAuthStore = defineStore('auth', {
                 }
             });
         },
-    
+
+        async checkAdminStatus() {
+            const toast = useToast();
+            console.log("Wird ausgeführt");
+            try {
+                const response = await fetch('http://localhost:3001/api/checkadminstatus', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${this.userToken}`,
+                    },
+                });
+                const data = await response.json();
+
+                if (this.isAdmin !== data.isAdmin) {
+                    // Admin-Status stimmt nicht überein, Benutzer ausloggen
+                    toast.warning('Ändern Sie nicht die Berechtigung ohne eines Administrators!')
+                    this.logoutUser();
+                }
+            } catch(error) {
+                console.error('Fehler beim Überprüfen des isAdmin-Status:', error);
+            }
+        },
+
+        startAdminStatusCheck() {
+            if (!this.isAdminStatusCheckRunning) {
+                // Überprüfung nur starten, wenn sie nicht bereits läuft
+                this.isAdminStatusCheckRunning = true;
+                this.intervalId = setInterval(() => this.checkAdminStatus(), 5000);
+            }
+        },
+        
+        stopAdminStatusCheck() {
+            // Nur stoppen, wenn die Überprüfung läuft
+            if (this.isAdminStatusCheckRunning) {
+                clearInterval(this.intervalId);
+                this.isAdminStatusCheckRunning = false;
+            }
+        }
+        
     },
 });
