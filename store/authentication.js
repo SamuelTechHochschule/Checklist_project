@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
         isAdmin: localStorage.getItem('isAdmin') === 'true',
         displayUsername: localStorage.getItem('displayUsername') || '',
         isAdminStatusCheckRunning: false,
+        adminImpersonatingCounter: 0,
     }),
 
     actions: {
@@ -82,7 +83,27 @@ export const useAuthStore = defineStore('auth', {
 
                 if (this.isAdmin !== data.isAdmin) {
                     // Admin-Status stimmt nicht überein, Benutzer ausloggen
-                    toast.warning('Ändern Sie nicht die Berechtigung ohne eines Administrators!')
+                    this.adminImpersonatingCounter++;
+                    if(this.adminImpersonatingCounter === 3) {
+                        toast.warning('Kannst du bitte aufhören, dich als Admin auszugeben!')
+                    } else if(this.adminImpersonatingCounter === 4) {
+                        toast.warning('Hallo? Warum machst du weiter?');
+                    } else if(this.adminImpersonatingCounter === 5) {
+                        toast.warning('Hast du nichts besseres zu tun?');
+                    } else if(this.adminImpersonatingCounter === 6) {
+                        toast.warning('Ok, du kannst jetzt aufhören, nichts ändert sich hier!');
+                    } else if(this.adminImpersonatingCounter === 7) {
+                        toast.warning('???');
+                    } else if(this.adminImpersonatingCounter === 8) {
+                        toast.warning('Letzte Warnung, hör auf!');
+                    } else if(this.adminImpersonatingCounter === 9) {
+                        toast.warning('Alles klar, du wolltest es nicht anderst!');
+                    } else if(this.adminImpersonatingCounter === 10) {
+                        window.location.href = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
+                    } else {
+                        toast.warning('Ändern Sie nicht die Berechtigung ohne eines Administrators!')
+                    }
+
                     this.logoutUser();
                 }
             } catch(error) {
