@@ -219,29 +219,39 @@ export default {
                 editedVersion.finalrelease.setDate(editedVersion.finalrelease.getDate() + this.daystoAdd);
 
                 try {
-                    const response = await fetch(`http://localhost:5500/api/version/editVersion/${this.selectedVersion.id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type' : 'application/json',
-                        },
-                        body: JSON.stringify(editedVersion),
-                    });
 
-                    if(!response.ok) {
-                        throw new Error(`Server responded with status ${response.status}`)
+                    const authStore = useAuthStore();
+                    await authStore.checkAdminStatus();
+
+                    if(authStore.isAdmin) {
+                        const response = await fetch(`http://localhost:5500/api/version/editVersion/${this.selectedVersion.id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type' : 'application/json',
+                            },
+                            body: JSON.stringify(editedVersion),
+                        });
+
+                        if(!response.ok) {
+                            throw new Error(`Server responded with status ${response.status}`)
+                        }
+
+                        // Aktualisieren der lokalen Version mit bearbeiteten Daten
+                        Object.assign(this.selectedVersion, editedVersion);
+
+                        // Bearbeitungs-Formular schließen
+                        this.editingVersion = false;
+                        this.showCreateButton = true;
+                        this.showConfirmButton = true;
+                        this.showEditButton = true;
+                        this.showDeleteButton = true;
+                    
+                        toast.success('Version wurde erfolgreich bearbeitet');
+                    } else {
+                        toast.error('Sie haben keine Berechtigung dazu!');
                     }
 
-                    // Aktualisieren der lokalen Version mit bearbeiteten Daten
-                    Object.assign(this.selectedVersion, editedVersion);
 
-                    // Bearbeitungs-Formular schließen
-                    this.editingVersion = false;
-                    this.showCreateButton = true;
-                    this.showConfirmButton = true;
-                    this.showEditButton = true;
-                    this.showDeleteButton = true;
-                
-                    toast.success('Version wurde erfolgreich bearbeitet');
                 } catch(error) {
                     toast.error('Fehler beim Bearbeiten der Version!\n Für mehr Informationen öffnen Sie die Konsole!');
                     console.error('Fehler beim Bearbeiten der Version:', error);
@@ -255,7 +265,11 @@ export default {
             const toast = useToast();
             let response;
             try {
-                if(this.isAdmin) {
+
+                const authStore = useAuthStore();
+                authStore.checkAdminStatus();
+
+                if(authStore.isAdmin) {
                     response = await fetch('http://localhost:5500/api/versions/admin');
                 } else {
                     response = await fetch('http://localhost:5500/api/versions/user');
@@ -290,24 +304,34 @@ export default {
 
                 if(confirmed) {
                     try {
-                        const response = await fetch(`http://localhost:5500/api/version/deleteVersion/${this.selectedVersion.name}`, {
+
+                        const authStore = useAuthStore();
+                        await authStore.checkAdminStatus();
+
+                        if(authStore.isAdmin) {
+                            const response = await fetch(`http://localhost:5500/api/version/deleteVersion/${this.selectedVersion.name}`, {
                             method: 'DELETE',
-                        });
+                            });
 
-                        if(!response.ok) {
-                            throw new Error(`Server responded with status: ${response.status}`);
+                            if(!response.ok) {
+                                throw new Error(`Server responded with status: ${response.status}`);
+                            }
+
+                            // Version wird aus der Liste gelöscht
+                            const index = this.versions.findIndex(version => version.name === this.selectedVersion.name);
+                            if(index !== -1) {
+                                this.versions.splice(index, 1);
+                            }
+
+                            // Auswahl zurücksetzen
+                            this.selectedVersion = null;
+
+                            toast.success('Version und ihre zugehörigen Aufgaben wurden erfolgreich gelöscht');
+                        } else {
+                            toast.error('Sie haben keine Berechtigung dazu!');
                         }
 
-                        // Version wird aus der Liste gelöscht
-                        const index = this.versions.findIndex(version => version.name === this.selectedVersion.name);
-                        if(index !== -1) {
-                            this.versions.splice(index, 1);
-                        }
 
-                        // Auswahl zurücksetzen
-                        this.selectedVersion = null;
-
-                        toast.success('Version und ihre zugehörigen Aufgaben wurden erfolgreich gelöscht');
                     } catch(error) {
                         toast.error('Fehler beim Löschen der Version!\n Für mehr Informationen öffnen Sie die Konsole!');
                         console.error('Fehler beim Löschen der Version:', error);
@@ -341,55 +365,64 @@ export default {
         // Bestätigung für eine neue Version
         async confirmNewVersion() {
             const toast = useToast();
-            if(this.newVersionName && this.preliminaryrelease && this.finalrelease) {
-                // 1 Tage hinzuzufügen für Datenbank
-                this.preliminaryrelease.setDate(this.preliminaryrelease.getDate() + this.daystoAdd);
-                this.finalrelease.setDate(this.finalrelease.getDate() + this.daystoAdd);
 
-                const newVersion = {
-                    name: this.newVersionName,
-                    preliminaryrelease: this.preliminaryrelease,
-                    finalrelease: this.finalrelease,
-                };
+            const authStore = useAuthStore();
+            await authStore.checkAdminStatus();
 
-                // Logik zum Hinzufügen der neuen Version in die Datenbank
-                try {
-                    const response = await fetch('http://localhost:5500/api/version/addVersion', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(newVersion),
-                    });
+            if(authStore.isAdmin) {
 
-                    if(!response.ok) {
-                        throw new Error(`Server responded with status ${response.status}`);
-                    }
+                if(this.newVersionName && this.preliminaryrelease && this.finalrelease) {
+                    // 1 Tage hinzuzufügen für Datenbank
+                    this.preliminaryrelease.setDate(this.preliminaryrelease.getDate() + this.daystoAdd);
+                    this.finalrelease.setDate(this.finalrelease.getDate() + this.daystoAdd);
 
-                    const createdVersion = await response.json();
-                    toast.success(`Version wurde erfolgreich hinzugefügt`)
+                    const newVersion = {
+                        name: this.newVersionName,
+                        preliminaryrelease: this.preliminaryrelease,
+                        finalrelease: this.finalrelease,
+                    };
 
-                    // Fügt erstellte Version der Liste hinzu
-                    this.versions.push(newVersion);
+                    // Logik zum Hinzufügen der neuen Version in die Datenbank
+                    try {
 
-                    // Bearbeitungs-Formular schließen
-                    this.creatingNewVersion = false;
-                    this.showCreateButton = true;
-                    this.showConfirmButton = true;
-                    this.showEditButton = true;
-                    this.showDeleteButton = true;
+                        const response = await fetch('http://localhost:5500/api/version/addVersion', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(newVersion),
+                        });
 
-                    // Eingabefelder zurücksetzen
-                    this.newVersionName = '';
-                    this.preliminaryrelease = '';
-                    this.finalrelease = '';
+                        if(!response.ok) {
+                            throw new Error(`Server responded with status ${response.status}`);
+                        }
 
-                } catch(error) {
-                    toast.error('Fehler beim Erstellen einer neuen Version!\n Für mehr Informationen öffnen Sie die Konsole');
-                    console.error('Error creating new version:', error);
-                }                
+                        toast.success(`Version wurde erfolgreich hinzugefügt`)
+
+                        // Fügt erstellte Version der Liste hinzu
+                        this.versions.push(newVersion);
+
+                        // Bearbeitungs-Formular schließen
+                        this.creatingNewVersion = false;
+                        this.showCreateButton = true;
+                        this.showConfirmButton = true;
+                        this.showEditButton = true;
+                        this.showDeleteButton = true;
+
+                        // Eingabefelder zurücksetzen
+                        this.newVersionName = '';
+                        this.preliminaryrelease = '';
+                        this.finalrelease = '';
+
+                    } catch(error) {
+                        toast.error('Fehler beim Erstellen einer neuen Version!\n Für mehr Informationen öffnen Sie die Konsole');
+                        console.error('Error creating new version:', error);
+                    }                
+                } else {
+                    toast.error('Ungültige oder fehlende Daten für die Erstellung einer neuen Version!');
+                }
             } else {
-                toast.error('Ungültige oder fehlende Daten für die Erstellung einer neuen Version!');
+                toast.error('Sie haben keine Berechtigung dazu!');
             }
         },
 

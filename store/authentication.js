@@ -8,7 +8,6 @@ export const useAuthStore = defineStore('auth', {
         username: localStorage.getItem('username') || '',
         isAdmin: localStorage.getItem('isAdmin') === 'true',
         displayUsername: localStorage.getItem('displayUsername') || '',
-        isAdminStatusCheckRunning: false,
         adminImpersonatingCounter: 0,
     }),
 
@@ -29,7 +28,7 @@ export const useAuthStore = defineStore('auth', {
             localStorage.setItem('isAdmin', this.isAdmin ? 'true' : 'false');
             localStorage.setItem('displayUsername', this.displayUsername);
 
-            this.startAdminStatusCheck();
+            this.checkAdminStatus();
         },
 
         logoutUser() {
@@ -46,7 +45,6 @@ export const useAuthStore = defineStore('auth', {
             localStorage.removeItem('isAdmin');
             localStorage.removeItem('displayUsername');
 
-            this.stopAdminStatusCheck();
             const router = useRouter();
             router.push('/');
         },
@@ -71,7 +69,7 @@ export const useAuthStore = defineStore('auth', {
 
         async checkAdminStatus() {
             const toast = useToast();
-            console.log("Wird ausgeführt");
+
             try {
                 const response = await fetch('http://localhost:3001/api/checkadminstatus', {
                     method: 'GET',
@@ -80,52 +78,11 @@ export const useAuthStore = defineStore('auth', {
                     },
                 });
                 const data = await response.json();
-
-                if (this.isAdmin !== data.isAdmin) {
-                    // Admin-Status stimmt nicht überein, Benutzer ausloggen
-                    this.adminImpersonatingCounter++;
-                    if(this.adminImpersonatingCounter === 3) {
-                        toast.warning('Kannst du bitte aufhören, dich als Admin auszugeben!')
-                    } else if(this.adminImpersonatingCounter === 4) {
-                        toast.warning('Hallo? Warum machst du weiter?');
-                    } else if(this.adminImpersonatingCounter === 5) {
-                        toast.warning('Hast du nichts besseres zu tun?');
-                    } else if(this.adminImpersonatingCounter === 6) {
-                        toast.warning('Ok, du kannst jetzt aufhören, nichts ändert sich hier!');
-                    } else if(this.adminImpersonatingCounter === 7) {
-                        toast.warning('???');
-                    } else if(this.adminImpersonatingCounter === 8) {
-                        toast.warning('Letzte Warnung, hör auf!');
-                    } else if(this.adminImpersonatingCounter === 9) {
-                        toast.warning('Alles klar, du wolltest es nicht anderst!');
-                    } else if(this.adminImpersonatingCounter === 10) {
-                        window.location.href = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
-                    } else {
-                        toast.warning('Ändern Sie nicht die Berechtigung ohne eines Administrators!')
-                    }
-
-                    this.logoutUser();
-                }
+                this.isAdmin = data.isAdmin;
             } catch(error) {
                 console.error('Fehler beim Überprüfen des isAdmin-Status:', error);
+                toast.error('Fehler beim Überprüfen des Admin-Status.');
             }
-        },
-
-        startAdminStatusCheck() {
-            if (!this.isAdminStatusCheckRunning) {
-                // Überprüfung nur starten, wenn sie nicht bereits läuft
-                this.isAdminStatusCheckRunning = true;
-                this.intervalId = setInterval(() => this.checkAdminStatus(), 5000);
-            }
-        },
-        
-        stopAdminStatusCheck() {
-            // Nur stoppen, wenn die Überprüfung läuft
-            if (this.isAdminStatusCheckRunning) {
-                clearInterval(this.intervalId);
-                this.isAdminStatusCheckRunning = false;
-            }
-        }
-        
+        },       
     },
 });
