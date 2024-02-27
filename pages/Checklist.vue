@@ -131,7 +131,6 @@ export default {
             isChecklistLoaded: false,
             isLoading: false, // Variable für Loading Indicator
             multiselectorActivated: false, // Variable um Multiselektor zu aktivieren
-            isAdmin: false,
         };
     },
 
@@ -244,30 +243,36 @@ export default {
         // Senden der Reminder-E-Mails
         async sendEmailForTask(recipient, task) {
             const toast = useToast();
-            if(task) {
-                const sanitizedRecipient = this.sanitizeEmailRecipient(recipient);
 
-                const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        to: sanitizedRecipient + '@asc.de',
-                        subject: 'Erinnerung',
-                        body: `Die folgende Aufgabe: "${task.task}" muss noch in der PEP-Checkliste erledigt werden. Bitte bearbeiten Sie die Aufgabe in den nächsten Tagen`,
-                    }),
-                });
+            const authStore = useAuthStore();
+            await authStore.checkAdminStatus();
 
-                if(!response.ok) {
-                    toast.error('Fehler beim Senden der E-Mail!\n Für mehr Informationen öffnen Sie die Konsole!');
-                    throw new Error(`Fehler beim Senden der E-Mail für Aufgabe ${task.task}`);
+            if(authStore.isAdmin) {
+                if(task) {
+                    const sanitizedRecipient = this.sanitizeEmailRecipient(recipient);
+
+                    const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            to: sanitizedRecipient + '@asc.de',
+                            subject: 'Erinnerung',
+                            body: `Die folgende Aufgabe: "${task.task}" muss noch in der PEP-Checkliste erledigt werden. Bitte bearbeiten Sie die Aufgabe in den nächsten Tagen`,
+                        }),
+                    });
+
+                    if(!response.ok) {
+                        toast.error('Fehler beim Senden der E-Mail!\n Für mehr Informationen öffnen Sie die Konsole!');
+                        throw new Error(`Fehler beim Senden der E-Mail für Aufgabe ${task.task}`);
+                    }
+
+                    toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${sanitizedRecipient} gesendet`)
+                    this.markTaskAsNotified(task.id);
+                } else {
+                    toast.error('Ungültige Aufgabe zum Versenden der E-Mail!');
                 }
-
-                toast.info(`Die Reminder-E-Mail wurde für die Aufgabe: "${task.task}" an die Mail ${sanitizedRecipient} gesendet`)
-                this.markTaskAsNotified(task.id);
-            } else {
-                toast.error('Ungültige Aufgabe zum Versenden der E-Mail!');
             }
         },
 
@@ -322,12 +327,20 @@ export default {
         },
 
         // Importiere Checklist
-        importChecklist() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.addEventListener('change', this.handleFileSelect);
-            input.click();
+        async importChecklist() {
+
+            const authStore = useAuthStore();
+            await authStore.checkAdminStatus();
+
+            if(authStore.isAdmin) {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.addEventListener('change', this.handleFileSelect);
+                input.click();
+            } else {
+                toast.error('Sie haben keine Berechtigung dazu!');
+            }
         },
 
         // Handler für Dateiauswahl
@@ -427,14 +440,17 @@ export default {
                 this.isLoading = true;
 
                 if(!this.isChecklistLoaded) {
-                    const isAdmin = useAuthStore().isAdmin;
+
+                    const authStore = useAuthStore();
+                    await authStore.checkAdminStatus();
+
                     let response;
                     const departmentParam = this.filterOptions.selectedDepartment ? `&department=${encodeURIComponent(this.filterOptions.selectedDepartment)}` : '';
                     const incompleteTaskParam = this.filterOptions.showIncompleteTasks ? '&showIncompleteTasks=true' : '';
                     const versionParam = `&version=${encodeURIComponent(this.selectedVersion.name)}`;
                     
                     // Wenn der Nutzer Admin-Rechte hat, werden alle Aufgaben ausgegeben
-                    if(isAdmin) {
+                    if(authStore.isAdmin) {
                         response = await fetch(`http://localhost:5500/api/checklist/admin?${departmentParam}${incompleteTaskParam}${versionParam}`);
                     } else {
                         const username = useAuthStore().displayUsername;
@@ -509,40 +525,48 @@ export default {
         // Aufgaben löschen
         async deleteItemFromChecklist(taskId) {
             const toast = useToast();
-            try{
-                // Proxy nicht funktionsfähig bei DELETE-Methode
-                const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
-                    method: 'DELETE',
-                });
 
-                if (!response.ok) {
-                    throw new Error(`Failed to delete task. Server responded with status ${response.status}`);
+            const authStore = useAuthStore();
+            await authStore.checkAdminStatus();
+
+            if(authStore.isAdmin) {
+                try{
+                    // Proxy nicht funktionsfähig bei DELETE-Methode
+                    const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to delete task. Server responded with status ${response.status}`);
+                    }
+
+                    // Aufgabe aus Array manuell löschen
+                    const index = this.checklistItems.findIndex(item => item.id === taskId);
+                    if (index !== -1) {
+                        this.checklistItems.splice(index, 1);
+                    }
+
+                    // Selected task resetten
+                    this.showButtons = false;
+                    this.selectedTask = null;
+                    this.selectedTaskId = -1;
+
+                    toast.success('Aufgabe wurde erfolgreich gelöscht');
+                } catch (error) {
+                    toast.error('Fehler beim Löschen der Aufgabe\n Für mehr Informationen öffnen Sie die Konsole!');
+                    console.error('Error deleting task:', error);
+
+                    if(error.response) {
+                        console.error('Server responded with status:', error.response.status);
+                        console.error('Response data:', error.response.data);
+                    } else if(error.request) {
+                        console.error('No response received from the server');
+                    } else {
+                        console.error('Error setting up the request', error.message);
+                    }
                 }
-
-                // Aufgabe aus Array manuell löschen
-                const index = this.checklistItems.findIndex(item => item.id === taskId);
-                if (index !== -1) {
-                    this.checklistItems.splice(index, 1);
-                }
-
-                // Selected task resetten
-                this.showButtons = false;
-                this.selectedTask = null;
-                this.selectedTaskId = -1;
-
-                toast.success('Aufgabe wurde erfolgreich gelöscht');
-            } catch (error) {
-                toast.error('Fehler beim Löschen der Aufgabe\n Für mehr Informationen öffnen Sie die Konsole!');
-                console.error('Error deleting task:', error);
-
-                if(error.response) {
-                    console.error('Server responded with status:', error.response.status);
-                    console.error('Response data:', error.response.data);
-                } else if(error.request) {
-                    console.error('No response received from the server');
-                } else {
-                    console.error('Error setting up the request', error.message);
-                }
+            } else {
+                toast.error('Sie haben keine Berechtigung dazu!');
             }
         },
 
@@ -556,32 +580,40 @@ export default {
         // Änderungen werden gespeichert
         async saveEditedTask(editedTask) {
             const toast = useToast();
-            try{
-                const response = await fetch(`/editTask/${editedTask}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(editedTask),
-                });
 
-                if(!response.ok) {
-                    throw new Error(`Failed to save edited task. Server responded with status ${response.status}`);
+            const authStore = useAuthStore();
+            await authStore.checkAdminStatus();
+
+            if(authStore.isAdmin) {
+                try{
+                    const response = await fetch(`/editTask/${editedTask}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(editedTask),
+                    });
+
+                    if(!response.ok) {
+                        throw new Error(`Failed to save edited task. Server responded with status ${response.status}`);
+                    }
+
+                    // checklistItems-Array wird mit der bearbeiteten Aufgabe aktualisiert
+                    const index = this.checklistItems.findIndex((item) => item.id === editedTask.id);
+                    if(index !== -1) {
+                        this.checklistItems.splice(index, 1, editedTask);
+                    }
+
+                    this.fetchChecklistItems();
+                    //Modal wird geschlossen
+                    this.isEditModalVisible = false;
+                    toast.success('Aufgabe wurde erfolgreich bearbeitet');
+                } catch(error) {
+                    toast.error('Fehler beim Bearbeiten der Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
+                    console.error('Error saving edited task:', error);
                 }
-
-                // checklistItems-Array wird mit der bearbeiteten Aufgabe aktualisiert
-                const index = this.checklistItems.findIndex((item) => item.id === editedTask.id);
-                if(index !== -1) {
-                    this.checklistItems.splice(index, 1, editedTask);
-                }
-
-                this.fetchChecklistItems();
-                //Modal wird geschlossen
-                this.isEditModalVisible = false;
-                toast.success('Aufgabe wurde erfolgreich bearbeitet');
-            } catch(error) {
-                toast.error('Fehler beim Bearbeiten der Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
-                console.error('Error saving edited task:', error);
+            } else {
+                toast.error('Sie haben keine Berechtigung dazu!');
             }
         },  
 

@@ -53,6 +53,7 @@
 
 <script>
 import { useToast } from 'vue-toastification';
+import { useAuthStore } from '~/store/authentication';
 export default {
 
   props: [
@@ -92,87 +93,94 @@ export default {
       },
   
       // Fügt Aufgabe hinzu
-      addTask() {
-          const toast = useToast();
-          // Konfigurierung für Reihenfärbung
-          const colorClass_pv = this.newTask.isPreliminary ? 'Preliminary-row' : '';
-          const colorClass_rv = this.newTask.isRelease ? 'Release-row' : '';
+      async addTask() {
+            const toast = useToast();
 
-          // Prüfen ob alle Felder ausgefüllt sind
-          if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
-              alert('Bitte füllen Sie alle Felder aus!');
-              return;
-          }
+            const authStore = useAuthStore();
+            await authStore.checkAdminStatus();
 
-          // Prüfen, ob nur eins der Checkboxen gewählt ist
-          if (this.newTask.isPreliminary && this.newTask.isRelease) {
-              alert('Bitte wählen sie nur eine Checkbox aus.');
-              return;
-          }
+            if(authStore.isAdmin) {
+                // Konfigurierung für Reihenfärbung
+                const colorClass_pv = this.newTask.isPreliminary ? 'Preliminary-row' : '';
+                const colorClass_rv = this.newTask.isRelease ? 'Release-row' : '';
 
-          // Änderung der Aufgabenbeschreibung am Ende
-          if (this.newTask.isPreliminary) {
-              this.newTask.task += ' - Preliminary Version';
-          }
+                // Prüfen ob alle Felder ausgefüllt sind
+                if (!this.newTask.task || !this.newTask.department || !this.newTask.person || !this.newTask.plannedDate) {
+                    alert('Bitte füllen Sie alle Felder aus!');
+                    return;
+                }
+            
+                // Prüfen, ob nur eins der Checkboxen gewählt ist
+                if (this.newTask.isPreliminary && this.newTask.isRelease) {
+                    alert('Bitte wählen sie nur eine Checkbox aus.');
+                    return;
+                }
+            
+                // Änderung der Aufgabenbeschreibung am Ende
+                if (this.newTask.isPreliminary) {
+                    this.newTask.task += ' - Preliminary Version';
+                }
+            
+                if (this.newTask.isRelease) {
+                    this.newTask.task += ' - Release Version';
+                }
+            
+                // Hinzufügen der Versionsinformationen
+                this.newTask.version = this.selectedVersion.name;
+            
+                // Formatieren der zuständigen Person 
+                this.newTask.person = this.formatUsername(this.newTask.person);
+            
+                // Das geplante Datum in ein Date-Objekt konvertieren
+                let plannedDate = new Date(this.newTask.plannedDate);
 
-          if (this.newTask.isRelease) {
-              this.newTask.task += ' - Release Version';
-          }
+                // Einen Tag zum geplanten Datum hinzufügen
+                plannedDate.setDate(plannedDate.getDate() + 1);
 
-          // Hinzufügen der Versionsinformationen
-          this.newTask.version = this.selectedVersion.name;
+                // Das Datum wieder in das ISO-Format konvertieren
+                this.newTask.plannedDate = plannedDate.toISOString();
 
-          // Formatieren der zuständigen Person 
-          this.newTask.person = this.formatUsername(this.newTask.person);
-
-          // Das geplante Datum in ein Date-Objekt konvertieren
-          let plannedDate = new Date(this.newTask.plannedDate);
-          
-          // Einen Tag zum geplanten Datum hinzufügen
-          plannedDate.setDate(plannedDate.getDate() + 1);
-          
-          // Das Datum wieder in das ISO-Format konvertieren
-          this.newTask.plannedDate = plannedDate.toISOString();
-          
-          fetch('/addTask', {
-              method: 'POST',
-              headers:{
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                  task: this.newTask.task,
-                  department: this.newTask.department,
-                  person: this.newTask.person,
-                  plannedDate: this.newTask.plannedDate,
-                  completedDate: '',
-                  signature: '',
-                  category: this.newTask.category,
-                  colorClass_pv,
-                  colorClass_rv,
-                  version: this.newTask.version,
-              }),
-          })
-          .then(response => {
-              if(!response.ok){
-                  throw new Error(`Server responded with status ${response.status}`);
-              }
-              return response.json();
-          })
-          .then(data => {
-              toast.success('Aufgabe wurde erfolgreich hinzugefügt');
-              if (!data || !data.id) {   
-                  console.error('Invalid data received from server:', data);
-                  return;
-              }
-
-              this.$emit('taskAdded');
-              this.closeModal();
-          })
-          .catch(error => {
-              toast.error('Fehler beim Hinzufügen einer neuen Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
-              console.error('Error adding task:', error);
-          })
-
+                fetch('/addTask', {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        task: this.newTask.task,
+                        department: this.newTask.department,
+                        person: this.newTask.person,
+                        plannedDate: this.newTask.plannedDate,
+                        completedDate: '',
+                        signature: '',
+                        category: this.newTask.category,
+                        colorClass_pv,
+                        colorClass_rv,
+                        version: this.newTask.version,
+                    }),
+                })
+                .then(response => {
+                    if(!response.ok){
+                        throw new Error(`Server responded with status ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    toast.success('Aufgabe wurde erfolgreich hinzugefügt');
+                    if (!data || !data.id) {   
+                        console.error('Invalid data received from server:', data);
+                        return;
+                    }
+                
+                    this.$emit('taskAdded');
+                    this.closeModal();
+                })
+                .catch(error => {
+                    toast.error('Fehler beim Hinzufügen einer neuen Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
+                    console.error('Error adding task:', error);
+                })
+            } else {
+                toast.error('Sie haben keine Berechtigung dazu!');
+            }
       },
 
       // Richtiges Formatieren der zuständigen Person

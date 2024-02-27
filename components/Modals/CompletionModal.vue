@@ -33,6 +33,7 @@
 
 <script>
 import { useToast } from 'vue-toastification';
+import { useAuthStore } from '~/store/authentication';
 export default {
 
     props: {
@@ -83,45 +84,55 @@ export default {
         },
 
         // Freigabe speichern
-        saveChanges() {
-            const toast = useToast();
+        async saveChanges() {
+
+            const authStore = useAuthStore();
+            await authStore.checkAdminStatus();
+
+            if(authStore.isAdmin) {
+                const toast = useToast();
 
                 // Parsen des Datums
                 let updatedDate = new Date(this.finishedDate);
 
                 // Hinzufügen eines Tags
                 updatedDate.setDate(updatedDate.getDate() + 1);
-               
-            // Vorbereitung der Daten für die Anfrage
-            const requestData = {
-                finishedDate: updatedDate,
-                signature: this.formatUsername(this.signature),
-                released: true,
-            };
 
-            const confirm = window.confirm('Sind Sie sich sicher, die Version freizugeben?\nDie Freigabe kann nicht zurückgenommen werden!');
-            if(confirm) {
-                fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-                })
-                .then(response => {
-                    if(!response.ok) {
-                        throw new Error('Fehler beim Freigeben der Versions')
-                    }
-                    toast.success('Version wurde freigegeben');
-                    this.closeModal();
+                // Vorbereitung der Daten für die Anfrage
+                const requestData = {
+                    finishedDate: updatedDate,
+                    signature: this.formatUsername(this.signature),
+                    released: true,
+                };
 
-                    window.location.reload();
-                })
-                .catch(error => {
-                    toast.error('Fehler beim Freigeben der Version\n Für mehr Informationen öffnen Sie die Konsole');
-                    console.error('Fehler beim Freigeben der Version', error);
-                });
-            }
+                const confirm = window.confirm('Sind Sie sich sicher, die Version freizugeben?\nDie Freigabe kann nicht zurückgenommen werden!');
+                if(confirm) {
+                    fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    })
+                    .then(response => {
+                        if(!response.ok) {
+                            throw new Error('Fehler beim Freigeben der Versions')
+                        }
+                        toast.success('Version wurde freigegeben');
+                        this.closeModal();
+                    
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        toast.error('Fehler beim Freigeben der Version\n Für mehr Informationen öffnen Sie die Konsole');
+                        console.error('Fehler beim Freigeben der Version', error);
+                    });
+                }
+            } else {
+                toast.error('Sie haben keine Berechtigung dazu!');
+        }
+
+            
 
         },
 
