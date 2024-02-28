@@ -228,6 +228,7 @@ export default {
                             method: 'PUT',
                             headers: {
                                 'Content-Type' : 'application/json',
+                                'Authorization': `Bearer ${authStore.userToken}`,
                             },
                             body: JSON.stringify(editedVersion),
                         });
