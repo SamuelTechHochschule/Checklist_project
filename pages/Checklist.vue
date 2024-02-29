@@ -2,7 +2,7 @@
 
     <LoadingModal :is-loading="isLoading" />
 
-    <div v-if="isAdmin">
+    <div>
         <div class="fixed_column">
 
             <VersionModal :isVersionModalVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
@@ -27,19 +27,19 @@
 
             <button v-if="isAdmin" class="multiselektor" @click="toggleMultiselector">{{ multiselectorActivated ? 'Multiselektor deaktivieren' : 'Multiselektor aktivieren' }}</button>
 
-            <button class="add-Task-Button" @click="openModal">Task hinzufügen</button>
+            <button v-if="isAdmin" class="add-Task-Button" @click="openModal">Task hinzufügen</button>
 
-            <button v-if="showCompletionButton" @click="openCompletionModal" class="completion-Button">Versionsfreigabe</button>
+            <button v-if="showCompletionButton && isAdmin" @click="openCompletionModal" class="completion-Button">Versionsfreigabe</button>
 
             <div v-if="showButtons && !multiselectorActivated" class="button-container">
-                <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
-                <button @click="deleteItemFromChecklist(selectedTask.id)">Task löschen</button>
+                <button v-if="showReminderButton && isAdmin" @click="sendReminderEmail">Reminder schicken</button>
+                <button @click="deleteItemFromChecklist(selectedTask.id)" v-if="isAdmin">Task löschen</button>
                 <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
             </div>
 
             <div v-if="showButtons && multiselectorActivated" class="button-container">
-                <button v-if="showReminderButton" @click="sendReminderEmail">Reminder schicken</button>
-                <button @click="deleteSelectedTasks">Task löschen</button>
+                <button v-if="showReminderButton && isAdmin" @click="sendReminderEmail">Reminder schicken</button>
+                <button @click="deleteSelectedTasks && isAdmin">Task löschen</button>
             </div>
             
         </div>
@@ -51,38 +51,6 @@
                 :clearSelectedTasks="multiselectorActivated"
                 @taskClicked="handleTaskClick"  
                 @deleteItemFromChecklist="deleteItemFromChecklist"/>        
-        </div>  
-    </div>
-    <div v-if="!isAdmin">
-        <div class="fixed_column">
-
-            <VersionModal :isVersionModalVisible="isVersionModalVisible" @versionSelected="handleVersionSelected" @close="closeVersionModal"/> 
-
-            <EditTaskModal :isVisible="isEditModalVisible" :taskToEdit="selectedTask" @save="saveEditedTask" @close="closeEditModal" />
-
-            <CompletionModal :isVisible="isEditModalVisible"/>
-            
-            <Taskbar @filterChanged="handleFilterChanges" 
-                    @versionSelected="handleVersionSelected" 
-                    @open-version-modal="openVersionModal" 
-                    @importChecklist="importChecklist"
-                    :selectedVersion="selectedVersion"
-                    :checklistItems="checklistItems"/>   
-
-            <h2>{{ generateTitle() }}</h2>
-
-            <!-- Datum der Versionsfreigabe -->
-            <h2 v-if="selectedVersion">Preliminary Release: {{ formatDate(selectedVersion.preliminaryrelease) }} | Final Release: {{ formatDate(selectedVersion.finalrelease) }}</h2>
-
-            <div v-if="showButtons" class="edit-Task-Container">
-                <button @click="editTask(selectedTask.id)">Task bearbeiten</button>
-            </div>
-        </div>
-
-        <div class="table">
-            <ChecklistTable :checklistItems="checklistItems"
-            :selectedTaskId="selectedTaskId" 
-            @taskClicked="handleTaskClick"/>        
         </div>  
     </div>
 </template>

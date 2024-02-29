@@ -11,14 +11,14 @@
                 <div class="form-row">
                     <div class="form-column">
                         <label>Erledigter Termin: </label>
-                        <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD" :disabled="selectedVersion.released"></el-date-picker>
+                        <el-date-picker v-model="finishedDate" type="date" placeholder="YYYY-MM-DD" :disabled="selectedVersion && selectedVersion.released"></el-date-picker>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-column">
                         <label>Unterschrift: </label>
-                        <input v-model="signature" type="text" placeholder="Vornamenkürzel.Nachname" :disabled="selectedVersion.released"/>
+                        <input v-model="signature" type="text" placeholder="Vornamenkürzel.Nachname" :disabled="selectedVersion && selectedVersion.released"/>
                     </div>
                 </div>
 
@@ -74,8 +74,13 @@ export default {
 
         // Werte der selektierten Version darstellen
         setInitialValues() {
-            this.finishedDate = this.selectedVersion.finishedDate ? new Date(this.selectedVersion.finishedDate) : null;
-            this.signature = this.selectedVersion.signature || '';
+            if (this.selectedVersion && this.selectedVersion.finishedDate) {
+                this.finishedDate = new Date(this.selectedVersion.finishedDate);
+            } else {
+                this.finishedDate = '';
+            }
+            this.signature = this.selectedVersion && this.selectedVersion.signature ? this.selectedVersion.signature : '';
+
         },
  
         // Schließe das Modal
@@ -85,7 +90,6 @@ export default {
 
         // Freigabe speichern
         async saveChanges() {
-
             const authStore = useAuthStore();
             await authStore.checkAdminStatus();
 

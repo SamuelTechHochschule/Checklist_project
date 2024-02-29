@@ -6,7 +6,7 @@
                 <ul>
                     <li v-for="version in versions" :key="version.id" @click="selectVersion(version)" :class="{ selected: selectedVersion === version, released: version.released }">
                         <span>{{ version.name }}</span>
-                        <span v-if="version.released">&#10004;</span>
+                        <span v-if="version && version.released">&#10004;</span>
                     </li>
                 </ul>
 
