@@ -103,7 +103,6 @@ export default {
             editedVersionName: '',
             editedPreliminaryRelease: new Date(),
             editedFinalRelease: new Date(),
-            daystoAdd: 1,
             showCreateButton: true, // Variable für das Erscheinen des Knopfes
             showConfirmButton: true, // Variable für das Erscheinen des Knopfes
             showEditButton: true, // Variable für das Erscheinen des Knopfes
@@ -156,9 +155,13 @@ export default {
         },
     },
 
-
-    
     methods: {
+
+        addOneDayToDate(date) {
+            const newDate = new Date(date);
+            newDate.setDate(newDate.getDate() + 1);
+            return newDate.toISOString().split('T')[0];
+        },
 
         // Bearbeitung abbrechen
         cancelEditVersion() {
@@ -214,9 +217,9 @@ export default {
                     finalrelease: this.editedFinalRelease,
                 };
 
-                // Tag hinzufügen zu Datum
-                editedVersion.preliminaryrelease.setDate(editedVersion.preliminaryrelease.getDate() + this.daystoAdd);
-                editedVersion.finalrelease.setDate(editedVersion.finalrelease.getDate() + this.daystoAdd);
+                // Datum um einen Tag erhöhen
+                editedVersion.preliminaryrelease = this.addOneDayToDate(editedVersion.preliminaryrelease);
+                editedVersion.finalrelease = this.addOneDayToDate(editedVersion.finalrelease);
 
                 try {
 
@@ -376,14 +379,14 @@ export default {
             if(authStore.isAdmin) {
 
                 if(this.newVersionName && this.preliminaryrelease && this.finalrelease) {
-                    // 1 Tage hinzuzufügen für Datenbank
-                    this.preliminaryrelease.setDate(this.preliminaryrelease.getDate() + this.daystoAdd);
-                    this.finalrelease.setDate(this.finalrelease.getDate() + this.daystoAdd);
+                    // Datum um einen Tag erhöhen
+                    const preliminaryReleaseWithOneDayAdded = this.addOneDayToDate(this.preliminaryrelease);
+                    const finalReleaseWithOneDayAdded = this.addOneDayToDate(this.finalrelease);
 
                     const newVersion = {
                         name: this.newVersionName,
-                        preliminaryrelease: this.preliminaryrelease,
-                        finalrelease: this.finalrelease,
+                        preliminaryrelease: preliminaryReleaseWithOneDayAdded,
+                        finalrelease: finalReleaseWithOneDayAdded,
                     };
 
                     // Logik zum Hinzufügen der neuen Version in die Datenbank
