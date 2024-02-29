@@ -590,13 +590,11 @@ export default {
             const authStore = useAuthStore();
             await authStore.checkAdminStatus();
 
-            if(authStore.isAdmin) {
                 try{
                     const response = await fetch(`/editTask/${editedTask}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authStore.userToken}`,
                         },
                         body: JSON.stringify(editedTask),
                     });
@@ -619,9 +617,7 @@ export default {
                     toast.error('Fehler beim Bearbeiten der Aufgabe!\n Für mehr Informationen öffnen Sie die Konsole!');
                     console.error('Error saving edited task:', error);
                 }
-            } else {
-                toast.error('Sie haben keine Berechtigung dazu!');
-            }
+
         },  
 
         // Modal wird geschlossen

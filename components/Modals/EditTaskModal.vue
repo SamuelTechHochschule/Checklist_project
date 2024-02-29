@@ -118,34 +118,24 @@ export default {
     },
 
     methods: {
+        addOneDayToDate(date) {
+            const newDate = new Date(date);
+            newDate.setDate(newDate.getDate() + 1);
+            return newDate.toISOString().split('T')[0]; // Formatieren Sie das Datum im Format YYYY-MM-DD
+        },
+
         // Änderungen speichern
         saveChanges() {
             if(this.editedTask.person !== this.taskToEdit.person) {
                 this.sendEmailToNewResponsiblePerson(this.editedTask.person);
             }
 
-            // Überprüfen, ob das geplante Datum geändert wurde
-            if (this.editedTask.plannedDate !== this.taskToEdit.plannedDate) {
-                // Das geplante Datum in ein Date-Objekt konvertieren
-                let plannedDate = new Date(this.editedTask.plannedDate);
-            
-                // Einen Tag zum geplanten Datum hinzufügen
-                plannedDate.setDate(plannedDate.getDate() + 1);
-            
-                // Das Datum wieder in das ISO-Format konvertieren
-                this.editedTask.plannedDate = plannedDate.toISOString();
+            if(this.editedTask.plannedDate) {
+                this.editedTask.plannedDate = this.addOneDayToDate(this.editedTask.plannedDate);
             }
-        
-            // Überprüfen, ob das abgeschlossene Datum geändert wurde
-            if (this.editedTask.completedDate !== this.taskToEdit.completedDate) {
-                // Das abgeschlossene Datum in ein Date-Objekt konvertieren
-                let completedDate = new Date(this.editedTask.completedDate);
-            
-                // Einen Tag zum abgeschlossenen Datum hinzufügen
-                completedDate.setDate(completedDate.getDate() + 1);
-            
-                // Das Datum wieder in das ISO-Format konvertieren
-                this.editedTask.completedDate = completedDate.toISOString();
+
+            if(this.editedTask.completedDate) {
+                this.editedTask.completedDate = this.addOneDayToDate(this.editedTask.completedDate);
             }
 
             this.editedTask.person = this.formatUsername(this.editedTask.person);
