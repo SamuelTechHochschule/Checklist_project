@@ -1,7 +1,6 @@
 <template>
     <div class="modal" v-if="isVisible">
         <div class="modal-content">
-<!--            <span class="close" @click="closeModal">x</span> -->
             <h3>Task bearbeiten</h3>
                 <form @submit.prevent="saveChanges">
                     <label for="task"  v-if="isAdmin">Aufgabenbeschreibung: </label>
