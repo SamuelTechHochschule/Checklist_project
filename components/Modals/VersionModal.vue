@@ -312,6 +312,9 @@ export default {
                         if(authStore.isAdmin) {
                             const response = await fetch(`http://localhost:5500/api/version/deleteVersion/${this.selectedVersion.name}`, {
                             method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${authStore.userToken}`,
+                            }
                             });
 
                             if(!response.ok) {
@@ -390,6 +393,7 @@ export default {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${authStore.userToken}`,
                             },
                             body: JSON.stringify(newVersion),
                         });

@@ -110,7 +110,8 @@ export default {
                     fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authStore.userToken}`,
                     },
                     body: JSON.stringify(requestData)
                     })

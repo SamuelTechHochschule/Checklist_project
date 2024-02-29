@@ -144,6 +144,7 @@ export default {
                     method: 'POST',
                     headers:{
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authStore.userToken}`,
                     },
                     body: JSON.stringify({
                         task: this.newTask.task,
@@ -164,7 +165,7 @@ export default {
                     }
                     return response.json();
                 })
-                .then(data => {
+                .then(data => {                                                                                                                                             
                     toast.success('Aufgabe wurde erfolgreich hinzugefügt');
                     if (!data || !data.id) {   
                         console.error('Invalid data received from server:', data);

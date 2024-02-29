@@ -255,6 +255,7 @@ export default {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authStore.userToken}`,
                         },
                         body: JSON.stringify({
                             to: sanitizedRecipient + '@asc.de',
@@ -363,11 +364,13 @@ export default {
 
         // Importierte Daten an Backend senden
         importChecklistItems(importedData) {
+            const authStore = useAuthStore();
             const toast = useToast();
             fetch('http://localhost:5500/api/checklist/import', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json',
+                    'Authorization': `Bearer ${authStore.userToken}`,
                 },
                 body: JSON.stringify({
                     version: this.selectedVersion.name,
@@ -534,6 +537,9 @@ export default {
                     // Proxy nicht funktionsfähig bei DELETE-Methode
                     const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
                         method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${authStore.userToken}`,
+                        }
                     });
 
                     if (!response.ok) {
@@ -590,6 +596,7 @@ export default {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authStore.userToken}`,
                         },
                         body: JSON.stringify(editedTask),
                     });

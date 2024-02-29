@@ -156,6 +156,8 @@ export default {
 
         // Senden der E-Mail für neue zuständige Person
         async sendEmailToNewResponsiblePerson(newResponsiblePerson) {
+
+            const authStore = useAuthStore();
             const toast = useToast();
 
             try {
@@ -163,6 +165,7 @@ export default {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authStore.userToken}`
                     },
                     body: JSON.stringify({
                         to: newResponsiblePerson + '@asc.de',
