@@ -636,16 +636,6 @@ export default {
         top: 169px;
         right: 290px;
     }
-    .edit-Task-Container{
-        position: absolute;
-        margin-top: 20px;
-        top: 169px;
-        right: 10px; 
-    }
-    .edit-Task-Container button {
-        margin-right: 20px;
-        height: 30px;
-    }
     .button-container button{
         margin-right: 20px;
         height: 30px;
