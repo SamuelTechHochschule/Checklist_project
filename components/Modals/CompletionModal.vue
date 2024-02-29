@@ -131,10 +131,7 @@ export default {
                 }
             } else {
                 toast.error('Sie haben keine Berechtigung dazu!');
-        }
-
-            
-
+            }
         },
 
         updateSelectedVersion() {

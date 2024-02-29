@@ -100,6 +100,11 @@ export default {
             await authStore.checkAdminStatus();
 
             if(authStore.isAdmin) {
+                if (this.selectedVersion.released && this.newTask.category !== '5. Aufgaben nach der Freigabe des Meilensteins') {
+                    toast.error('Nur Aufgaben für die Kategorie "5. Aufgaben nach der Freigabe des Meilensteins" können nach der Freigabe der Version hinzugefügt werden.');
+                    return;
+                }
+
                 // Konfigurierung für Reihenfärbung
                 const colorClass_pv = this.newTask.isPreliminary ? 'Preliminary-row' : '';
                 const colorClass_rv = this.newTask.isRelease ? 'Release-row' : '';
