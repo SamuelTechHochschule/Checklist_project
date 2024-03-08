@@ -39,7 +39,7 @@
 
             <div v-if="showButtons && multiselectorActivated" class="button-container">
                 <button v-if="showReminderButton && isAdmin" @click="sendReminderEmail">Reminder schicken</button>
-                <button @click="deleteSelectedTasks && isAdmin">Task löschen</button>
+                <button v-if="isAdmin" @click="deleteSelectedTasks">Task löschen</button>
             </div>
             
         </div>
