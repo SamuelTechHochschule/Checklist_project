@@ -117,6 +117,18 @@ export default {
             if(newValue && !oldValue) {
                 this.showCompletionMessage();
             }
+        },
+
+        checklistItems: {
+            handler(newChecklistItems) {
+                newChecklistItems.forEach(task => {
+                    if(this.isTaskOverdue(task) && !this.isTaskAlreadyNotified(task.id)) {
+                        this.sendEmailForTask(task.person, task);
+                        this.markTaskAsNotified(task.id);
+                    }
+                });
+            },
+            deep: true,
         }
     },
 
@@ -559,7 +571,7 @@ export default {
             await authStore.checkAdminStatus();
 
                 try{
-                    const response = await fetch(`http://localhost:5500/api/checklist/editTask/${editedTask}`, {
+                    const response = await fetch(`http://localhost:5500/api/checklist/edit/${editedTask.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
