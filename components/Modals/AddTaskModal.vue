@@ -145,7 +145,7 @@ export default {
                 // Das Datum wieder in das ISO-Format konvertieren
                 this.newTask.plannedDate = plannedDate.toISOString();
 
-                fetch('/addTask', {
+                fetch('http://localhost:5500/api/checklist/addTask', {
                     method: 'POST',
                     headers:{
                         'Content-Type': 'application/json',

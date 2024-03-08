@@ -559,7 +559,7 @@ export default {
             await authStore.checkAdminStatus();
 
                 try{
-                    const response = await fetch(`/editTask/${editedTask}`, {
+                    const response = await fetch(`http://localhost:5500/api/checklist/editTask/${editedTask}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
