@@ -71,7 +71,7 @@ export const useAuthStore = defineStore('auth', {
             const toast = useToast();
 
             try {
-                const response = await fetch('http://localhost:3001/api/checkadminstatus', {
+                const response = await fetch('http://localhost:3004/api/checkadminstatus', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${this.userToken}`,
