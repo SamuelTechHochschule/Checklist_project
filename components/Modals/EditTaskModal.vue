@@ -150,7 +150,7 @@ export default {
             const toast = useToast();
 
             try {
-                const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
+                const response = await fetch('https://pep-check.asc.de/api/checklist/sendReminderEmail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

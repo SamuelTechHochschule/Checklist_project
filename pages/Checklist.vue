@@ -231,7 +231,7 @@ export default {
                 if(task) {
                     const sanitizedRecipient = this.sanitizeEmailRecipient(recipient);
 
-                    const response = await fetch('http://localhost:5500/api/checklist/sendReminderEmail', {
+                    const response = await fetch('https://pep-check.asc.de/api/checklist/sendReminderEmail', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -346,7 +346,7 @@ export default {
         importChecklistItems(importedData) {
             const authStore = useAuthStore();
             const toast = useToast();
-            fetch('http://localhost:5500/api/checklist/import', {
+            fetch('https://pep-check.asc.de/api/checklist/import', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json',
@@ -434,10 +434,10 @@ export default {
                     
                     // Wenn der Nutzer Admin-Rechte hat, werden alle Aufgaben ausgegeben
                     if(authStore.isAdmin) {
-                        response = await fetch(`http://localhost:5500/api/checklist/admin?${departmentParam}${incompleteTaskParam}${versionParam}`);
+                        response = await fetch(`https://pep-check.asc.de/api/checklist/admin?${departmentParam}${incompleteTaskParam}${versionParam}`);
                     } else {
                         const username = useAuthStore().displayUsername;
-                        response = await fetch(`http://localhost:5500/api/checklist/user?username=${username}${departmentParam}${incompleteTaskParam}${versionParam}`)
+                        response = await fetch(`https://pep-check.asc.de/api/checklist/user?username=${username}${departmentParam}${incompleteTaskParam}${versionParam}`)
                     }
 
                     if (!response.ok) {
@@ -515,7 +515,7 @@ export default {
             if(authStore.isAdmin) {
                 try{
                     // Proxy nicht funktionsfähig bei DELETE-Methode
-                    const response = await fetch(`http://localhost:5500/api/checklist/delete/${taskId}`, {
+                    const response = await fetch(`https://pep-check.asc.de/api/checklist/delete/${taskId}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${authStore.userToken}`,
@@ -571,7 +571,7 @@ export default {
             await authStore.checkAdminStatus();
 
                 try{
-                    const response = await fetch(`http://localhost:5500/api/checklist/edit/${editedTask.id}`, {
+                    const response = await fetch(`https://pep-check.asc.de/api/checklist/edit/${editedTask.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',

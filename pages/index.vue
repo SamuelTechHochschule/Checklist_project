@@ -60,7 +60,7 @@ import { useToast } from 'vue-toastification';
                     // Daten werden geladen
                     this.isLoading = true;
                       // LDAP Authentifizierung
-                      const response = await fetch('http://localhost:3004/api/authenticate', {
+                      const response = await fetch('https://pep-check.asc.de/ldap/authenticate', {
                         method: 'POST', 
                         headers: {
                             'Content-Type': 'application/json',

@@ -111,7 +111,7 @@ export default {
 
                 const confirm = window.confirm('Sind Sie sich sicher, die Version freizugeben?\nDie Freigabe kann nicht zurückgenommen werden!');
                 if(confirm) {
-                    fetch(`http://localhost:5500/api/version/completeVersion/${this.selectedVersion.id}`, {
+                    fetch(`https://pep-check.asc.de/api/version/completeVersion/${this.selectedVersion.id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

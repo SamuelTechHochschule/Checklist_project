@@ -227,7 +227,7 @@ export default {
                     await authStore.checkAdminStatus();
 
                     if(authStore.isAdmin) {
-                        const response = await fetch(`http://localhost:5500/api/version/editVersion/${this.selectedVersion.id}`, {
+                        const response = await fetch(`https://pep-check.asc.de/api/version/editVersion/${this.selectedVersion.id}`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type' : 'application/json',
@@ -274,9 +274,9 @@ export default {
                 authStore.checkAdminStatus();
 
                 if(authStore.isAdmin) {
-                    response = await fetch('http://localhost:5500/api/versions/admin');
+                    response = await fetch('https://pep-check.asc.de/api/versions/admin');
                 } else {
-                    response = await fetch('http://localhost:5500/api/versions/user');
+                    response = await fetch('https://pep-check.asc.de/api/versions/user');
                 }
 
                 if(!response.ok) {
@@ -313,7 +313,7 @@ export default {
                         await authStore.checkAdminStatus();
 
                         if(authStore.isAdmin) {
-                            const response = await fetch(`http://localhost:5500/api/version/deleteVersion/${this.selectedVersion.name}`, {
+                            const response = await fetch(`https://pep-check.asc.de/api/version/deleteVersion/${this.selectedVersion.name}`, {
                             method: 'DELETE',
                             headers: {
                                 'Authorization': `Bearer ${authStore.userToken}`,
@@ -392,7 +392,7 @@ export default {
                     // Logik zum Hinzufügen der neuen Version in die Datenbank
                     try {
 
-                        const response = await fetch('http://localhost:5500/api/version/addVersion', {
+                        const response = await fetch('https://pep-check.asc.de/api/version/addVersion', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
